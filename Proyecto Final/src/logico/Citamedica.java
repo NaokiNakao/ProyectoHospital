@@ -1,9 +1,20 @@
 package logico;
 
 public class Citamedica {
+	
+	private String codigo;
 
 	public Citamedica() {
-		// TODO Auto-generated constructor stub
+		
+		
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 }
