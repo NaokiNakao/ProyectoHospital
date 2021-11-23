@@ -153,7 +153,7 @@ public class Clinica {
 	
 	/*
 	 * Retorna un ArrayList<Vacuna> con las vacunas que ofrecen protección
-	 * para cierta enfermedad.
+	 * para cierta enfermedad dado su código.
 	*/
 	public ArrayList<Vacuna> vacunasParaEnfermedad(String codigoEnfermedad) {
 		ArrayList<Vacuna> vacunasDisponibles = new ArrayList<Vacuna>();
