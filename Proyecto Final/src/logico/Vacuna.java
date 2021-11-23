@@ -4,15 +4,15 @@ import java.util.ArrayList;
 
 public class Vacuna {
 	
-	private String codigoVacuna;
+	private String codigo;
 	private String nombreVacuna;
 	private String fabricante;
 	private ArrayList<Enfermedad> proteccion; // enfermedades para la cual ofrece protección
 	private String tipoVacuna; // inactivada, atenuada, vector, ARN
 	private String formaAdministracion; // instramuscular, intradérmica, subcutánea, endovenosa, oral
 	
-	public Vacuna(String codigoVacuna, String nombreVacuna, String fabricante, ArrayList<Enfermedad> proteccion, String tipoVacuna, String formaAdministracion) {
-		this.codigoVacuna = codigoVacuna;
+	public Vacuna(String codigo, String nombreVacuna, String fabricante, ArrayList<Enfermedad> proteccion, String tipoVacuna, String formaAdministracion) {
+		this.codigo = codigo;
 		this.nombreVacuna = nombreVacuna;
 		this.fabricante = fabricante;
 		this.proteccion = proteccion;
@@ -20,8 +20,8 @@ public class Vacuna {
 		this.formaAdministracion = formaAdministracion;
 	}
 
-	public String getCodigoVacuna() {
-		return codigoVacuna;
+	public String getCodigo() {
+		return codigo;
 	}
 
 	public String getNombreVacuna() {
@@ -44,8 +44,8 @@ public class Vacuna {
 		return formaAdministracion;
 	}
 
-	public void setCodigoVacuna(String codigoVacuna) {
-		this.codigoVacuna = codigoVacuna;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	public void setNombreVacuna(String nombreVacuna) {

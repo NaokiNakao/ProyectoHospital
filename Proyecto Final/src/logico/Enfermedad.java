@@ -2,20 +2,20 @@ package logico;
 
 public class Enfermedad {
 
-	private String codigoEnfermedad;
+	private String codigo;
 	private String nombreEnfermedad;
 	private String tipoEnfermedad;
 	private String descripcionEnfermedad;
 	
-	public Enfermedad(String codigoEnfermedad, String nombreEnfermedad, String tipoEnfermedad, String descripcionEnfermedad) {
-		this.codigoEnfermedad = codigoEnfermedad;
+	public Enfermedad(String codigo, String nombreEnfermedad, String tipoEnfermedad, String descripcionEnfermedad) {
+		this.codigo = codigo;
 		this.nombreEnfermedad = nombreEnfermedad;
 		this.tipoEnfermedad = tipoEnfermedad;
 		this.descripcionEnfermedad = descripcionEnfermedad;
 	}
 
-	public String getCodigoEnfermedad() {
-		return codigoEnfermedad;
+	public String getCodigo() {
+		return codigo;
 	}
 
 	public String getNombreEnfermedad() {
@@ -30,8 +30,8 @@ public class Enfermedad {
 		return descripcionEnfermedad;
 	}
 
-	public void setCodigoEnfermedad(String codigoEnfermedad) {
-		this.codigoEnfermedad = codigoEnfermedad;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	public void setNombreEnfermedad(String nombreEnfermedad) {

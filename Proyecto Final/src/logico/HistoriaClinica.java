@@ -4,18 +4,18 @@ import java.util.ArrayList;
 
 public class HistoriaClinica {
 
-	private String codigoHistorial;
+	private String codigo;
 	private ArrayList<Consulta> misConsultas;
 	private ArrayList<Vacuna> misVacunas;
 	
-	public HistoriaClinica(String codigoHistorial) {
-		this.codigoHistorial = codigoHistorial;
+	public HistoriaClinica(String codigo) {
+		this.codigo = codigo;
 		this.misConsultas = new ArrayList<Consulta>();
 		this.misVacunas = new ArrayList<Vacuna>();
 	}
 
-	public String getCodigoHistorial() {
-		return codigoHistorial;
+	public String getCodigo() {
+		return codigo;
 	}
 
 	public ArrayList<Consulta> getMisConsultas() {
@@ -26,8 +26,8 @@ public class HistoriaClinica {
 		return misVacunas;
 	}
 
-	public void setCodigoHistorial(String codigoHistorial) {
-		this.codigoHistorial = codigoHistorial;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	public void setMisConsultas(ArrayList<Consulta> misConsultas) {

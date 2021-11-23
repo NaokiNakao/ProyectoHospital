@@ -4,21 +4,21 @@ import java.util.Date;
 
 public class Consulta {
 
-	private String codigoConsulta;
+	private String codigo;
 	private Date fechaConsulta;
 	private String sintomas;
 	private String diagnostico;
 	private Enfermedad enfermedad;
 	
-	public Consulta(String codigoConsulta, Date fechaConsulta, String sintomas, String diagnostico) {
-		this.codigoConsulta = codigoConsulta;
+	public Consulta(String codigo, Date fechaConsulta, String sintomas, String diagnostico) {
+		this.codigo = codigo;
 		this.fechaConsulta = fechaConsulta;
 		this.sintomas = sintomas;
 		this.diagnostico = diagnostico;
 	}
 
-	public String getCodigoConsulta() {
-		return codigoConsulta;
+	public String getCodigo() {
+		return codigo;
 	}
 
 	public Date getFechaConsulta() {
@@ -37,8 +37,8 @@ public class Consulta {
 		return enfermedad;
 	}
 
-	public void setCodigoConsulta(String codigoConsulta) {
-		this.codigoConsulta = codigoConsulta;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	public void setFechaConsulta(Date fechaConsulta) {

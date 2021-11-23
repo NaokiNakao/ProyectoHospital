@@ -4,22 +4,22 @@ import java.util.Date;
 
 public class CitaMedica {
 
-	private String codigoCita;
+	private String codigo;
 	private Date fechaCita;
 	private String nombrePersona;
 	private String telefono;
 	private Medico medico;
 	
-	public CitaMedica(String codigoCita, Date fechaCita, String nombrePersona, String telefono, Medico medico) {
-		this.codigoCita = codigoCita;
+	public CitaMedica(String codigo, Date fechaCita, String nombrePersona, String telefono, Medico medico) {
+		this.codigo = codigo;
 		this.fechaCita = fechaCita;
 		this.nombrePersona = nombrePersona;
 		this.telefono = telefono;
 		this.medico = medico;
 	}
 
-	public String getCodigoCita() {
-		return codigoCita;
+	public String getCodigo() {
+		return codigo;
 	}
 
 	public Date getFechaCita() {
@@ -38,8 +38,8 @@ public class CitaMedica {
 		return medico;
 	}
 
-	public void setCodigoCita(String codigoCita) {
-		this.codigoCita = codigoCita;
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
 	}
 
 	public void setFechaCita(Date fechaCita) {
