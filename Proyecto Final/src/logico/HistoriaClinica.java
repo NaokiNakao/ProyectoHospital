@@ -7,11 +7,13 @@ public class HistoriaClinica {
 	private String codigo;
 	private ArrayList<Consulta> misConsultas;
 	private ArrayList<Vacuna> misVacunas;
+	private ArrayList<Enfermedad> padecimientos;
 	
 	public HistoriaClinica(String codigo) {
 		this.codigo = codigo;
 		this.misConsultas = new ArrayList<Consulta>();
 		this.misVacunas = new ArrayList<Vacuna>();
+		this.padecimientos = new ArrayList<Enfermedad>();
 	}
 
 	public String getCodigo() {
@@ -24,6 +26,10 @@ public class HistoriaClinica {
 
 	public ArrayList<Vacuna> getMisVacunas() {
 		return misVacunas;
+	}
+	
+	public ArrayList<Enfermedad> getPadecimientos() {
+		return padecimientos;
 	}
 
 	public void setCodigo(String codigo) {
@@ -38,12 +44,20 @@ public class HistoriaClinica {
 		this.misVacunas = misVacunas;
 	}
 	
+	public void setPadecimientos(ArrayList<Enfermedad> padecimientos) {
+		this.padecimientos = padecimientos;
+	}
+	
 	public void agregarConsulta(Consulta consulta) {
 		misConsultas.add(consulta);
 	}
 	
 	public void agregarVacuna(Vacuna vacuna) {
 		misVacunas.add(vacuna);
+	}
+	
+	public void agregarPadecimiento(Enfermedad padecimiento) {
+		padecimientos.add(padecimiento);
 	}
 	
 }
