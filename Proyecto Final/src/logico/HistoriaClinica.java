@@ -2,12 +2,16 @@ package logico;
 
 import java.util.ArrayList;
 
+import javax.swing.table.DefaultTableModel;
+
 public class HistoriaClinica {
 
 	private String codigo;
 	private ArrayList<Consulta> misConsultas;
 	private ArrayList<Vacuna> misVacunas;
 	private ArrayList<Enfermedad> padecimientos;
+	private DefaultTableModel modelEnfermedades;
+	private Object[] rowsEnfermedades;
 	
 	public HistoriaClinica(String codigo) {
 		this.codigo = codigo;
