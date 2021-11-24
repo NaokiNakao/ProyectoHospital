@@ -15,10 +15,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logico.Clinica;
+import logico.Paciente;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class HistorialPaciente extends JDialog {
 
@@ -36,8 +39,13 @@ public class HistorialPaciente extends JDialog {
 	private DefaultTableModel modelEnfermedades;
 	private Object[] rowsEnfermedades;
 
-	//private DefaultTableModel modelEnfermedades;
-	//private Object[] rowsEnfermedades;
+	private DefaultTableModel modelVacunas;
+	private Object[] rowsVacunas;
+	
+	private DefaultTableModel modelConsultas;
+	private Object[] rowsConsultas;
+	
+	private Paciente paciente;
 	
 	/**
 	 * Launch the application.
@@ -160,6 +168,10 @@ public class HistorialPaciente extends JDialog {
 			panelVacunas.add(scrollPane_1, BorderLayout.CENTER);
 			
 			tableVacunas = new JTable();
+			String[] heardersVacunas = {"Codigo","Nombre","Fabricante","Tipo de Vacuna"};
+			modelVacunas = new DefaultTableModel();
+			tableVacunas.setModel(modelVacunas);
+			modelVacunas.setColumnIdentifiers(heardersVacunas);
 			scrollPane_1.setViewportView(tableVacunas);
 			
 			panelDatosConsulta = new JPanel();
@@ -172,6 +184,10 @@ public class HistorialPaciente extends JDialog {
 			panelDatosConsulta.add(scrollPane_2, BorderLayout.CENTER);
 			
 			tableDatosConsulta = new JTable();
+			String [] heardersConsultas = {"Codigo","Fecha","Diagnostico","Doctor"};
+			modelConsultas = new DefaultTableModel();
+			tableDatosConsulta.setModel(modelConsultas);
+			modelConsultas.setColumnIdentifiers(rowsConsultas);
 			scrollPane_2.setViewportView(tableDatosConsulta);
 		}
 		{
@@ -186,13 +202,19 @@ public class HistorialPaciente extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancel");
+				JButton cancelButton = new JButton("Salir");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
 		}
 		
 	//	loadEnfermedades();
+	//	loadVacunas();
 	}
 	
 	private void loadEnfermedades() {
@@ -200,12 +222,40 @@ public class HistorialPaciente extends JDialog {
 		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
 		
 		for (int i = 0; i < rowsEnfermedades.length; i++) {
-			rowsEnfermedades[0]= Clinica.getInstance().getMisEnfermedades().get(i).getCodigo();
-			rowsEnfermedades[1]= Clinica.getInstance().getMisEnfermedades().get(i).getNombreEnfermedad();
-			rowsEnfermedades[2]= Clinica.getInstance().getMisEnfermedades().get(i).getTipoEnfermedad();
+			
+			for (int j = 0; j < paciente.getHistorial().getPadecimientos().size(); j++) {
+				rowsEnfermedades[0]= paciente.getHistorial().getPadecimientos().get(i).getCodigo();
+				rowsEnfermedades[1]= paciente.getHistorial().getPadecimientos().get(i).getNombreEnfermedad();
+				rowsEnfermedades[2]= paciente.getHistorial().getPadecimientos().get(i).getTipoEnfermedad();
+			}
+		}
+		
+	}
+	
+	private void loadVacunas() {
+		modelVacunas.setRowCount(0);
+		rowsVacunas = new Object[modelVacunas.getColumnCount()];
+		
+		for (int i = 0; i < rowsVacunas.length; i++) {
+			rowsVacunas[0]= Clinica.getInstance().getMisVacunas().get(i).getCodigo();
+			rowsVacunas[1]=  Clinica.getInstance().getMisVacunas().get(i).getNombreVacuna();
+			rowsVacunas[2]= Clinica.getInstance().getMisVacunas().get(i).getFabricante();
+			rowsVacunas[3]= Clinica.getInstance().getMisVacunas().get(i).getTipoVacuna();
 		}
 		
 		
 	}
+	/*
+	private void loadConsultas() {
+		modelConsultas.setRowCount(0);
+		rowsConsultas = new Object[modelConsultas.getColumnCount()];
+		
+		for (int i = 0; i < rowsConsultas.length; i++) {
+			rowsConsultas[0] = 
+			
+		}
+		
+	}*/
+	
 	
 }

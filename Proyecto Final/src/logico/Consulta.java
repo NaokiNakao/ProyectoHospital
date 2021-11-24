@@ -9,12 +9,14 @@ public class Consulta {
 	private String sintomas;
 	private String diagnostico;
 	private Enfermedad enfermedad;
+	private Medico miMedico;
 	
-	public Consulta(String codigo, Date fechaConsulta, String sintomas, String diagnostico) {
+	public Consulta(String codigo, Date fechaConsulta, String sintomas, String diagnostico,Medico medico) {
 		this.codigo = codigo;
 		this.fechaConsulta = fechaConsulta;
 		this.sintomas = sintomas;
 		this.diagnostico = diagnostico;
+		this.miMedico = medico;
 	}
 
 	public String getCodigo() {
@@ -55,6 +57,14 @@ public class Consulta {
 
 	public void setEnfermedad(Enfermedad enfermedad) {
 		this.enfermedad = enfermedad;
+	}
+
+	public Medico getMiMedico() {
+		return miMedico;
+	}
+
+	public void setMiMedico(Medico miMedico) {
+		this.miMedico = miMedico;
 	}
 
 }
