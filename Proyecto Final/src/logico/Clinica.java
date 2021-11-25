@@ -184,7 +184,7 @@ public class Clinica {
 		int i = 0;
 		
 		while (disponible && i < citasMedicas.size()) {
-			if (citasMedicas.get(i).getFechaCita().equals(idMedico) && citasMedicas.get(i).getMedico().getId().equalsIgnoreCase(idMedico)) {
+			if (citasMedicas.get(i).getFechaCita().equals(fecha) && citasMedicas.get(i).getMedico().getId().equalsIgnoreCase(idMedico)) {
 				disponible = false;
 			}
 			i++;
