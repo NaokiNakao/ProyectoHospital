@@ -9,6 +9,7 @@ public class Clinica {
 	private ArrayList<Paciente> misPacientes;
 	private ArrayList<Usuario> misUsuarios;
 	private ArrayList<CitaMedica> citasMedicas;
+	private ArrayList<Consulta> misConsultas;
 	private ArrayList<Enfermedad> misEnfermedades;
 	private ArrayList<Vacuna> misVacunas;
 	public static Clinica clinica = null;
@@ -17,10 +18,11 @@ public class Clinica {
 		this.misPacientes = new ArrayList<Paciente>();
 		this.misUsuarios = new ArrayList<Usuario>();
 		this.citasMedicas = new ArrayList<CitaMedica>();
+		this.misConsultas = new ArrayList<Consulta>();
 		this.misEnfermedades = new ArrayList<Enfermedad>();
 		this.misVacunas = new ArrayList<Vacuna>();
 	}
-	
+
 	public static Clinica getInstance() {
 		if (clinica == null) {
 			clinica = new Clinica();
@@ -38,6 +40,10 @@ public class Clinica {
 
 	public ArrayList<CitaMedica> getCitasMedicas() {
 		return citasMedicas;
+	}
+	
+	public ArrayList<Consulta> getMisConsultas() {
+		return misConsultas;
 	}
 
 	public ArrayList<Enfermedad> getMisEnfermedades() {
@@ -58,6 +64,10 @@ public class Clinica {
 
 	public void setCitasMedicas(ArrayList<CitaMedica> citasMedicas) {
 		this.citasMedicas = citasMedicas;
+	}
+	
+	public void setMisConsultas(ArrayList<Consulta> misConsultas) {
+		this.misConsultas = misConsultas;
 	}
 
 	public void setMisEnfermedades(ArrayList<Enfermedad> misEnfermedades) {

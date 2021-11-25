@@ -11,12 +11,12 @@ public class Consulta {
 	private Enfermedad enfermedad;
 	private Medico miMedico;
 	
-	public Consulta(String codigo, Date fechaConsulta, String sintomas, String diagnostico,Medico medico) {
+	public Consulta(String codigo, Date fechaConsulta, String sintomas, String diagnostico, Medico miMedico) {
 		this.codigo = codigo;
 		this.fechaConsulta = fechaConsulta;
 		this.sintomas = sintomas;
 		this.diagnostico = diagnostico;
-		this.miMedico = medico;
+		this.miMedico = miMedico;
 	}
 
 	public String getCodigo() {
@@ -38,6 +38,10 @@ public class Consulta {
 	public Enfermedad getEnfermedad() {
 		return enfermedad;
 	}
+	
+	public Medico getMiMedico() {
+		return miMedico;
+	}
 
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
@@ -57,10 +61,6 @@ public class Consulta {
 
 	public void setEnfermedad(Enfermedad enfermedad) {
 		this.enfermedad = enfermedad;
-	}
-
-	public Medico getMiMedico() {
-		return miMedico;
 	}
 
 	public void setMiMedico(Medico miMedico) {
