@@ -178,6 +178,20 @@ public class Clinica {
 		
 		return vacunasDisponibles;
 	}
+	
+	public boolean medicoDisponible(Date fecha, String idMedico) {
+		boolean disponible = true;
+		int i = 0;
+		
+		while (disponible && i < citasMedicas.size()) {
+			if (citasMedicas.get(i).getFechaCita().equals(idMedico) && citasMedicas.get(i).getMedico().getId().equalsIgnoreCase(idMedico)) {
+				disponible = false;
+			}
+			i++;
+		}
+		
+		return disponible;
+	}
 
 }
 
