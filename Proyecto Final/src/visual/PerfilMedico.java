@@ -16,7 +16,7 @@ import javax.swing.JList;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 
-public class Perfilmedico extends JDialog {
+public class PerfilMedico extends JDialog {
 
 	/**
 	 * 
@@ -32,7 +32,7 @@ public class Perfilmedico extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			Perfilmedico dialog = new Perfilmedico();
+			PerfilMedico dialog = new PerfilMedico();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -43,7 +43,7 @@ public class Perfilmedico extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Perfilmedico() {
+	public PerfilMedico() {
 		setModalExclusionType(ModalExclusionType.TOOLKIT_EXCLUDE);
 		setTitle("Perfil del m\u00E9dico");
 		setResizable(false);
@@ -55,7 +55,7 @@ public class Perfilmedico extends JDialog {
 		setLocationRelativeTo(null);
 		{
 			JLabel lblNewLabel = new JLabel("New label");
-			lblNewLabel.setIcon(new ImageIcon(Perfilmedico.class.getResource("/pictures/medicoperfil.png")));
+			lblNewLabel.setIcon(new ImageIcon(PerfilMedico.class.getResource("/pictures/medicoperfil.png")));
 			lblNewLabel.setBounds(10, 48, 144, 177);
 			contentPanel.add(lblNewLabel);
 		}

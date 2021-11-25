@@ -15,7 +15,7 @@ import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class CitaMedica extends JDialog {
+public class RegistroCita extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtCedula;
@@ -33,7 +33,7 @@ public class CitaMedica extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			CitaMedica dialog = new CitaMedica();
+			RegistroCita dialog = new RegistroCita();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -44,7 +44,7 @@ public class CitaMedica extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public CitaMedica() {
+	public RegistroCita() {
 		setTitle("Citas Medicas\r\n");
 		setResizable(false);
 		setModal(true);

@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 
-public class Iniciosesion extends JDialog {
+public class InicioSesion extends JDialog {
 
 	/**
 	 * 
@@ -30,7 +30,7 @@ public class Iniciosesion extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			Iniciosesion dialog = new Iniciosesion();
+			InicioSesion dialog = new InicioSesion();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -41,7 +41,7 @@ public class Iniciosesion extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Iniciosesion() {
+	public InicioSesion() {
 		setModalExclusionType(ModalExclusionType.TOOLKIT_EXCLUDE);
 		setResizable(false);
 		setTitle("Inicio de sesi\u00F3n");
@@ -53,7 +53,7 @@ public class Iniciosesion extends JDialog {
 		setLocationRelativeTo(null);
 		
 		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setIcon(new ImageIcon(Iniciosesion.class.getResource("/pictures/cuenta.jpg")));
+		lblNewLabel_2.setIcon(new ImageIcon(InicioSesion.class.getResource("/pictures/cuenta.jpg")));
 		lblNewLabel_2.setBounds(310, 30, 166, 187);
 		contentPanel.add(lblNewLabel_2);
 		

@@ -67,7 +67,7 @@ public class Principal extends JFrame {
 		JButton btnNewButton = new JButton("Iniciar sesi\u00F3n");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Iniciosesion ini = new Iniciosesion();
+				InicioSesion ini = new InicioSesion();
 				ini.setVisible(true);
 			}
 		});
