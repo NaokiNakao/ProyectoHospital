@@ -65,21 +65,45 @@ public class PerfilAdmin extends JDialog {
 			contentPanel.add(panel);
 			{
 				JButton button = new JButton("Listado de  pacientes");
+				button.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Adminlispac lispac = new Adminlispac();
+						lispac.setVisible(true);
+					}
+				});
 				button.setBounds(10, 34, 184, 34);
 				panel.add(button);
 			}
 			{
 				JButton button = new JButton("Listado de enfermedades");
+				button.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Adminlisenfer enf = new Adminlisenfer();
+						enf.setVisible(true);
+					}
+				});
 				button.setBounds(10, 102, 184, 34);
 				panel.add(button);
 			}
 			{
 				JButton button = new JButton("Listado de vacunas");
+				button.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Adminlisvac  vac = new Adminlisvac();
+						vac.setVisible(true);
+					}
+				});
 				button.setBounds(10, 170, 184, 34);
 				panel.add(button);
 			}
 			{
 				JButton btnListadoDeUsuarios = new JButton("Listado de usuarios");
+				btnListadoDeUsuarios.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Adminlisusu usu = new Adminlisusu();
+						usu.setVisible(true);
+					}
+				});
 				btnListadoDeUsuarios.setBounds(10, 238, 184, 34);
 				panel.add(btnListadoDeUsuarios);
 			}

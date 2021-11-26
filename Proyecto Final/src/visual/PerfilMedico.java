@@ -15,6 +15,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class PerfilMedico extends JDialog {
 
@@ -80,15 +82,33 @@ public class PerfilMedico extends JDialog {
 			contentPanel.add(Menu);
 			Menu.setLayout(null);
 			
-			JButton btnNewButton = new JButton("Listado de  pacientes");
+			JButton btnNewButton = new JButton("Historial de los pacientes");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					HistorialPaciente his = new HistorialPaciente();
+					his.setVisible(true);
+				}
+			});
 			btnNewButton.setBounds(10, 42, 184, 34);
 			Menu.add(btnNewButton);
 			
 			JButton btnListadoDeEnfermedades = new JButton("Listado de enfermedades");
+			btnListadoDeEnfermedades.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Listadoenfer enf = new Listadoenfer();
+					enf.setVisible(true);
+				}
+			});
 			btnListadoDeEnfermedades.setBounds(10, 107, 184, 34);
 			Menu.add(btnListadoDeEnfermedades);
 			
 			JButton btnListadoDeVacunas = new JButton("Listado de vacunas");
+			btnListadoDeVacunas.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					Listadovac vac = new Listadovac();
+					vac.setVisible(true);
+				}
+			});
 			btnListadoDeVacunas.setBounds(10, 172, 184, 34);
 			Menu.add(btnListadoDeVacunas);
 		}
