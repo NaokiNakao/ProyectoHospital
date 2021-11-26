@@ -22,8 +22,8 @@ public class InicioSesion extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JTextField txtusucode;
-	private JPasswordField pfusucontrase;
+	private JTextField txtCodigoUsuario;
+	private JPasswordField pfPassword;
 
 	/**
 	 * Launch the application.
@@ -71,14 +71,14 @@ public class InicioSesion extends JDialog {
 		lblContrasea.setBounds(10, 64, 82, 14);
 		Datosnecesarios.add(lblContrasea);
 		
-		txtusucode = new JTextField();
-		txtusucode.setBounds(93, 36, 112, 20);
-		Datosnecesarios.add(txtusucode);
-		txtusucode.setColumns(10);
+		txtCodigoUsuario = new JTextField();
+		txtCodigoUsuario.setBounds(93, 36, 112, 20);
+		Datosnecesarios.add(txtCodigoUsuario);
+		txtCodigoUsuario.setColumns(10);
 		
-		pfusucontrase = new JPasswordField();
-		pfusucontrase.setBounds(93, 61, 112, 20);
-		Datosnecesarios.add(pfusucontrase);
+		pfPassword = new JPasswordField();
+		pfPassword.setBounds(93, 61, 112, 20);
+		Datosnecesarios.add(pfPassword);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -91,7 +91,7 @@ public class InicioSesion extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Salir");
+				JButton cancelButton = new JButton("Cancelar");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
