@@ -12,6 +12,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
 import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class EstadisticasEnfermades extends JDialog {
 
@@ -38,7 +40,7 @@ public class EstadisticasEnfermades extends JDialog {
 	public EstadisticasEnfermades() {
 		setModal(true);
 		setResizable(false);
-		setBounds(100, 100, 846, 550);
+		setBounds(100, 100, 855, 550);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
@@ -72,7 +74,7 @@ public class EstadisticasEnfermades extends JDialog {
 			
 			JPanel panel_4 = new JPanel();
 			panel_4.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Lista de Vacunas", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-			panel_4.setBounds(637, 21, 166, 432);
+			panel_4.setBounds(637, 21, 183, 432);
 			panel.add(panel_4);
 			panel_4.setLayout(new BorderLayout(0, 0));
 			
@@ -95,6 +97,11 @@ public class EstadisticasEnfermades extends JDialog {
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
