@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
+
 public class Clinica {
 
 	private ArrayList<Paciente> misPacientes;
@@ -192,8 +193,31 @@ public class Clinica {
 		
 		return disponible;
 	}
+	
+	
+	public Paciente buscarPaciente(String cod) {
+		
+		Paciente aux = null;
+		boolean encontrado = false;
+		int i = 0;
+		
+		while(!encontrado && i<misPacientes.size()) {
+			if(misPacientes.get(i).getCedula().equalsIgnoreCase(cod)) {
+				aux = misPacientes.get(i);
+				encontrado = true;
+			}
+			i++;
+		}
+		return aux;
+	
+	}
+	
 
+		
+		
 }
+
+
 
 
 

@@ -8,6 +8,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Font;
 import javax.swing.JRadioButton;
@@ -46,6 +47,9 @@ public class HistorialPaciente extends JDialog {
 	private Object[] rowsConsultas;
 	
 	private Paciente paciente;
+	private JRadioButton rdbtnEnfermedades;
+	private JRadioButton rdbtnVacunas;
+	private JRadioButton rdbtnDatosDeConsultas;
 	
 	/**
 	 * Launch the application.
@@ -67,6 +71,7 @@ public class HistorialPaciente extends JDialog {
 		setBounds(100, 100, 816, 867);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setLocationRelativeTo(null);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
@@ -80,6 +85,25 @@ public class HistorialPaciente extends JDialog {
 			panel.add(lblNewLabel);
 			
 			JButton btnNewButton = new JButton("Buscar\r\n");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					if(Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null) {
+						paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText().toString());
+						txtNombre.setText(paciente.getNombre());
+						txtTelefono.setText(paciente.getTelefono());
+						
+						loadEnfermedades(paciente);
+						loadVacunas(paciente);
+						loadConsultas(paciente);
+						
+					}else {
+						JOptionPane.showMessageDialog(null, "Este paciente no existe", "Error", JOptionPane.ERROR_MESSAGE);
+						txtNombre.setEditable(true);
+						txtTelefono.setEditable(true);
+					}
+				}
+			});
 			btnNewButton.setBounds(221, 72, 89, 23);
 			panel.add(btnNewButton);
 			
@@ -98,15 +122,48 @@ public class HistorialPaciente extends JDialog {
 			panel.add(panel_1);
 			panel_1.setLayout(null);
 			
-			JRadioButton rdbtnEnfermedades = new JRadioButton("Enfermedades");
+			rdbtnEnfermedades = new JRadioButton("Enfermedades");
+			rdbtnEnfermedades.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					rdbtnDatosDeConsultas.setSelected(false);
+					rdbtnVacunas.setSelected(false);
+					
+					panelEnfermedades.setVisible(true);
+					panelDatosConsulta.setVisible(false);
+					panelVacunas.setVisible(false);
+				}
+			});
 			rdbtnEnfermedades.setBounds(110, 15, 109, 23);
 			panel_1.add(rdbtnEnfermedades);
 			
-			JRadioButton rdbtnVacunas = new JRadioButton("Vacunas");
+			rdbtnVacunas = new JRadioButton("Vacunas");
+			rdbtnVacunas.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					rdbtnDatosDeConsultas.setSelected(false);
+					rdbtnEnfermedades.setSelected(false);
+					
+					panelEnfermedades.setVisible(false);
+					panelDatosConsulta.setVisible(false);
+					panelVacunas.setVisible(true);
+				}
+			});
 			rdbtnVacunas.setBounds(329, 15, 109, 23);
 			panel_1.add(rdbtnVacunas);
 			
-			JRadioButton rdbtnDatosDeConsultas = new JRadioButton("Datos de consultas");
+			rdbtnDatosDeConsultas = new JRadioButton("Datos de consultas");
+			rdbtnDatosDeConsultas.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					rdbtnVacunas.setSelected(false);
+					rdbtnEnfermedades.setSelected(false);
+					
+					panelEnfermedades.setVisible(false);
+					panelDatosConsulta.setVisible(true);
+					panelVacunas.setVisible(false);
+					
+				}
+			});
 			rdbtnDatosDeConsultas.setBounds(548, 15, 159, 23);
 			panel_1.add(rdbtnDatosDeConsultas);
 			
@@ -184,10 +241,10 @@ public class HistorialPaciente extends JDialog {
 			panelDatosConsulta.add(scrollPane_2, BorderLayout.CENTER);
 			
 			tableDatosConsulta = new JTable();
-			String [] heardersConsultas = {"Codigo","Fecha","Diagnostico","Doctor"};
+			String [] heardersConsultas = {"Codigo","Fecha","Doctor"};
 			modelConsultas = new DefaultTableModel();
 			tableDatosConsulta.setModel(modelConsultas);
-			modelConsultas.setColumnIdentifiers(rowsConsultas);
+			modelConsultas.setColumnIdentifiers(heardersConsultas);
 			scrollPane_2.setViewportView(tableDatosConsulta);
 		}
 		{
@@ -213,49 +270,52 @@ public class HistorialPaciente extends JDialog {
 			}
 		}
 		
-	//	loadEnfermedades();
-	//	loadVacunas();
 	}
 	
-	private void loadEnfermedades() {
+	private void loadEnfermedades(Paciente paciente) {
+		
 		modelEnfermedades.setRowCount(0);
 		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
 		
-		for (int i = 0; i < rowsEnfermedades.length; i++) {
-			
-			for (int j = 0; j < paciente.getHistorial().getPadecimientos().size(); j++) {
-				rowsEnfermedades[0]= paciente.getHistorial().getPadecimientos().get(i).getCodigo();
-				rowsEnfermedades[1]= paciente.getHistorial().getPadecimientos().get(i).getNombreEnfermedad();
-				rowsEnfermedades[2]= paciente.getHistorial().getPadecimientos().get(i).getTipoEnfermedad();
-			}
+		if(paciente!= null) {
+				
+				for (int i = 0; i < paciente.getHistorial().getPadecimientos().size(); i++) {
+					rowsEnfermedades[0]= paciente.getHistorial().getPadecimientos().get(i).getCodigo();
+					rowsEnfermedades[1]= paciente.getHistorial().getPadecimientos().get(i).getNombreEnfermedad();
+					rowsEnfermedades[2]= paciente.getHistorial().getPadecimientos().get(i).getTipoEnfermedad();
+				}
 		}
 		
 	}
 	
-	private void loadVacunas() {
+	private void loadVacunas(Paciente paciente) {
 		modelVacunas.setRowCount(0);
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
 		
-		for (int i = 0; i < rowsVacunas.length; i++) {
-			rowsVacunas[0]= Clinica.getInstance().getMisVacunas().get(i).getCodigo();
-			rowsVacunas[1]=  Clinica.getInstance().getMisVacunas().get(i).getNombreVacuna();
-			rowsVacunas[2]= Clinica.getInstance().getMisVacunas().get(i).getFabricante();
-			rowsVacunas[3]= Clinica.getInstance().getMisVacunas().get(i).getTipoVacuna();
+		if(paciente!= null) {
+			for (int i = 0; i < rowsVacunas.length; i++) {
+				rowsVacunas[0]= paciente.getHistorial().getMisVacunas().get(i).getCodigo();
+				rowsVacunas[1]=  paciente.getHistorial().getMisVacunas().get(i).getNombreVacuna();
+				rowsVacunas[2]= paciente.getHistorial().getMisVacunas().get(i).getFabricante();
+				rowsVacunas[3]= paciente.getHistorial().getMisVacunas().get(i).getTipoVacuna();
+			}
+		
 		}
-		
-		
 	}
-	/*
-	private void loadConsultas() {
+	
+	private void loadConsultas(Paciente paciente) {
 		modelConsultas.setRowCount(0);
 		rowsConsultas = new Object[modelConsultas.getColumnCount()];
 		
-		for (int i = 0; i < rowsConsultas.length; i++) {
-			rowsConsultas[0] = 
-			
+		if(paciente!= null) {
+			for (int i = 0; i < rowsConsultas.length; i++) {
+				rowsConsultas[0] = paciente.getMisConsultas().get(i).getCodigo();
+				rowsConsultas[1] = paciente.getMisConsultas().get(i).getFechaConsulta();
+				rowsConsultas[2] = paciente.getMisConsultas().get(i).getMiMedico().getNombre();
+				
+			}
 		}
-		
-	}*/
+	}
 	
 	
 }
