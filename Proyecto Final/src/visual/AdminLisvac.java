@@ -16,7 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 
-public class Adminlisvac extends JDialog {
+public class AdminLisvac extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
@@ -32,7 +32,7 @@ public class Adminlisvac extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			Adminlisvac dialog = new Adminlisvac();
+			AdminLisvac dialog = new AdminLisvac();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -43,7 +43,7 @@ public class Adminlisvac extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Adminlisvac() {
+	public AdminLisvac() {
 		setResizable(false);
 		setTitle("Listado de vacunas");
 		setBounds(100, 100, 578, 540);

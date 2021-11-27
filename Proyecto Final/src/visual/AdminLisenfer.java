@@ -15,7 +15,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
 
-public class Adminlisenfer extends JDialog {
+public class AdminLisenfer extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
@@ -30,7 +30,7 @@ public class Adminlisenfer extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			Adminlisenfer dialog = new Adminlisenfer();
+			AdminLisenfer dialog = new AdminLisenfer();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -41,7 +41,7 @@ public class Adminlisenfer extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Adminlisenfer() {
+	public AdminLisenfer() {
 		setResizable(false);
 		setTitle("Listado de enfermedades");
 		setBounds(100, 100, 521, 533);

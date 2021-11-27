@@ -14,7 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class Adminlisusu extends JDialog {
+public class AdminLisusu extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtusuidregis;
@@ -30,7 +30,7 @@ public class Adminlisusu extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			Adminlisusu dialog = new Adminlisusu();
+			AdminLisusu dialog = new AdminLisusu();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -41,7 +41,7 @@ public class Adminlisusu extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Adminlisusu() {
+	public AdminLisusu() {
 		setResizable(false);
 		setTitle("Listado de usuarios");
 		setBounds(100, 100, 583, 534);

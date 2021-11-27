@@ -20,7 +20,7 @@ import javax.swing.SpinnerDateModel;
 import java.util.Date;
 import java.util.Calendar;
 
-public class Adminlispac extends JDialog {
+public class AdminLispac extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
@@ -40,7 +40,7 @@ public class Adminlispac extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			Adminlispac dialog = new Adminlispac();
+			AdminLispac dialog = new AdminLispac();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -51,7 +51,7 @@ public class Adminlispac extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Adminlispac() {
+	public AdminLispac() {
 		setResizable(false);
 		setTitle("Listado de pacientes");
 		setBounds(100, 100, 600, 660);
