@@ -1,19 +1,23 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
 
-public class Clinica {
+public class Clinica implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Paciente> misPacientes;
 	private ArrayList<Usuario> misUsuarios;
 	private ArrayList<CitaMedica> citasMedicas;
 	private ArrayList<Consulta> misConsultas;
 	private ArrayList<Enfermedad> misEnfermedades;
 	private ArrayList<Vacuna> misVacunas;
-	public static Clinica clinica = null;
+	private static Clinica clinica;
+	private static Usuario loginUser; 
+	private String dbPath = "db.dat";
 	
 	private Clinica() {
 		this.misPacientes = new ArrayList<Paciente>();
@@ -54,6 +58,18 @@ public class Clinica {
 	public ArrayList<Vacuna> getMisVacunas() {
 		return misVacunas;
 	}
+	
+	public static Clinica getClinica() {
+		return clinica;
+	}
+
+	public static Usuario getLoginUser() {
+		return loginUser;
+	}
+	
+	public String getDbPath() {
+		return dbPath;
+	}
 
 	public void setMisPacientes(ArrayList<Paciente> misPacientes) {
 		this.misPacientes = misPacientes;
@@ -79,6 +95,22 @@ public class Clinica {
 		this.misVacunas = misVacunas;
 	}
 	
+	public static void setClinica(Clinica clinica) {
+		Clinica.clinica = clinica;
+	}
+	
+	public void setDbPath(String dbPath) {
+		dbPath = dbPath;
+	}
+
+	public static void setLoginUser(Usuario loginUser) {
+		Clinica.loginUser = loginUser;
+	}
+	
+	/*
+	 * Retorna un String de caracteres alfanuméricos aleatorios
+	 * dada una longitud para este. 
+	*/
 	public String generadorCodigo(int longitud) {
 		String caracteres = "0123456789";
 		Random rand = new Random();
@@ -180,6 +212,10 @@ public class Clinica {
 		return vacunasDisponibles;
 	}
 	
+	/*
+	 * Dado el id de un médico y una fecha, verifica si este está disponible.
+	 * En caso afirmativo, devuelve "true"; devuelve "false" en caso contrario. 
+	*/
 	public boolean medicoDisponible(Date fecha, String idMedico) {
 		boolean disponible = true;
 		int i = 0;
@@ -194,26 +230,46 @@ public class Clinica {
 		return disponible;
 	}
 	
-	
 	public Paciente buscarPaciente(String cod) {
-		
 		Paciente aux = null;
 		boolean encontrado = false;
 		int i = 0;
 		
-		while(!encontrado && i<misPacientes.size()) {
+		while(!encontrado && i < misPacientes.size()) {
 			if(misPacientes.get(i).getCedula().equalsIgnoreCase(cod)) {
 				aux = misPacientes.get(i);
 				encontrado = true;
 			}
 			i++;
 		}
+		
 		return aux;
-	
 	}
 	
-
+	/*
+	 * Valida las credenciales de inicio de sesión para un usuario 
+	 * (administrador o médico) dado su login y password. 
+	*/
+	public boolean validacionCredenciales(String login, String password) {
+		boolean validacion = false;
+		Usuario user = null;
+		int i = 0;
 		
+		while (!validacion && i < misUsuarios.size()) {
+			user = misUsuarios.get(i);
+			if (user.getLogin().equals(login) && user.getPassword().equals(password)) {
+				loginUser = user;
+				validacion = true;
+			}
+			i++;
+		}
+		
+		return validacion;
+	}
+	
+	public void registroUsuario(Usuario user) {
+		misUsuarios.add(user);
+	}
 		
 }
 

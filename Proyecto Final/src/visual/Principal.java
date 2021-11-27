@@ -5,11 +5,22 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import logico.Clinica;
+import logico.Usuario;
+
 import javax.swing.JLabel;
+import javax.imageio.IIOException;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 
@@ -28,6 +39,41 @@ public class Principal extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				FileInputStream dbInput;
+				FileOutputStream dbOutput;
+				ObjectInputStream dbRead;
+				ObjectOutputStream dbWrite;
+				
+				try {
+					dbInput = new FileInputStream(Clinica.getInstance().getDbPath());
+					dbRead = new ObjectInputStream(dbInput);
+					Clinica temp = (Clinica) dbRead.readObject();
+					Clinica.setClinica(temp);
+					dbInput.close();
+					dbRead.close();
+				} catch (FileNotFoundException e) {
+					try {
+						dbOutput = new FileOutputStream(Clinica.getInstance().getDbPath());
+						dbWrite = new ObjectOutputStream(dbOutput);
+						Usuario aux = new Usuario(Clinica.getInstance().generadorCodigo(8), "admin", "admin", "", "");
+						Clinica.getInstance().registroUsuario(aux);
+						dbWrite.writeObject(Clinica.getInstance());
+						dbOutput.close();
+						dbWrite.close();
+					} catch (FileNotFoundException e1) {
+						
+					}
+					catch (IOException e1) {
+						
+					}
+				}
+				catch (IOException e) {
+					
+				}
+				catch (ClassNotFoundException e) {
+					e.printStackTrace();
+				}
+				
 				try {
 					Principal frame = new Principal();
 					frame.setVisible(true);
