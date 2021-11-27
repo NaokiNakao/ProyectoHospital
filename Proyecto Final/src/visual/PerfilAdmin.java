@@ -67,7 +67,7 @@ public class PerfilAdmin extends JDialog {
 				JButton button = new JButton("Listado de  pacientes");
 				button.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						AdminLispac lispac = new AdminLispac();
+						AdminListadoPaciente lispac = new AdminListadoPaciente();
 						lispac.setVisible(true);
 					}
 				});
@@ -78,7 +78,7 @@ public class PerfilAdmin extends JDialog {
 				JButton button = new JButton("Listado de enfermedades");
 				button.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						AdminLisenfer enf = new AdminLisenfer();
+						AdminListadoEnfermedad enf = new AdminListadoEnfermedad();
 						enf.setVisible(true);
 					}
 				});
@@ -89,7 +89,7 @@ public class PerfilAdmin extends JDialog {
 				JButton button = new JButton("Listado de vacunas");
 				button.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						AdminLisvac  vac = new AdminLisvac();
+						AdminListadoVacuna  vac = new AdminListadoVacuna();
 						vac.setVisible(true);
 					}
 				});
@@ -100,7 +100,7 @@ public class PerfilAdmin extends JDialog {
 				JButton btnListadoDeUsuarios = new JButton("Listado de usuarios");
 				btnListadoDeUsuarios.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						AdminLisusu usu = new AdminLisusu();
+						AdminListadoUsuario usu = new AdminListadoUsuario();
 						usu.setVisible(true);
 					}
 				});
