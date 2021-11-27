@@ -23,8 +23,8 @@ public class PerfilAdmin extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
-	private JTextField txtadminnomb;
-	private JTextField txtadminpuestolab;
+	private JTextField txtNombre;
+	private JTextField txtPuestoLaboral;
 
 	/**
 	 * Launch the application.
@@ -85,18 +85,18 @@ public class PerfilAdmin extends JDialog {
 			}
 		}
 		{
-			txtadminnomb = new JTextField();
-			txtadminnomb.setEditable(false);
-			txtadminnomb.setBounds(23, 257, 190, 26);
-			contentPanel.add(txtadminnomb);
-			txtadminnomb.setColumns(10);
+			txtNombre = new JTextField();
+			txtNombre.setEditable(false);
+			txtNombre.setBounds(23, 257, 190, 26);
+			contentPanel.add(txtNombre);
+			txtNombre.setColumns(10);
 		}
 		{
-			txtadminpuestolab = new JTextField();
-			txtadminpuestolab.setEditable(false);
-			txtadminpuestolab.setColumns(10);
-			txtadminpuestolab.setBounds(23, 308, 190, 26);
-			contentPanel.add(txtadminpuestolab);
+			txtPuestoLaboral = new JTextField();
+			txtPuestoLaboral.setEditable(false);
+			txtPuestoLaboral.setColumns(10);
+			txtPuestoLaboral.setBounds(23, 308, 190, 26);
+			contentPanel.add(txtPuestoLaboral);
 		}
 		{
 			JPanel buttonPane = new JPanel();
