@@ -4,8 +4,8 @@ public class Medico extends Usuario {
 
 	private String especialidad;
 
-	public Medico(String id, String login, String password, String nombre, String telefono, String especialidad) {
-		super(id, login, password, nombre, telefono);
+	public Medico(String id, String login, String password, String nombre, String apellido, String telefono, String especialidad) {
+		super(id, login, password, nombre, apellido, telefono);
 		this.especialidad = especialidad;
 	}
 

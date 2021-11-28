@@ -57,7 +57,7 @@ public class Principal extends JFrame {
 					try {
 						dbOutput = new FileOutputStream(Clinica.getInstance().getDbPath());
 						dbWrite = new ObjectOutputStream(dbOutput);
-						Usuario aux = new Usuario(Clinica.getInstance().generadorCodigo(8), "admin", "admin", "", "");
+						Usuario aux = new Usuario(Clinica.getInstance().generadorCodigo(8), "admin", "admin", "", "", "");
 						Clinica.getInstance().registroUsuario(aux);
 						dbWrite.writeObject(Clinica.getInstance());
 						dbOutput.close();
