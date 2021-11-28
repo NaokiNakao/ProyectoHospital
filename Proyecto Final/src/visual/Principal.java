@@ -23,6 +23,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Principal extends JFrame {
 
@@ -88,6 +90,12 @@ public class Principal extends JFrame {
 	 * Create the frame.
 	 */
 	public Principal() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				guardarInformacion();
+			}
+		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/pictures/istockphoto-1130389312-612x612.jpg")));
 		setResizable(false);
 		setTitle("Hospital Juan Jos\u00E9 Almanzar");
@@ -121,6 +129,12 @@ public class Principal extends JFrame {
 		contentPane.add(btnNewButton);
 		
 		JButton btnCancelar = new JButton("Salir");
+		btnCancelar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				guardarInformacion();
+				dispose();
+			}
+		});
 		btnCancelar.setBounds(560,540, 175, 45);
 		contentPane.add(btnCancelar);
 		
@@ -130,4 +144,31 @@ public class Principal extends JFrame {
 		contentPane.add(lblHospitalJuanJose);
 		setLocationRelativeTo(null);
 	}
+	
+	public void guardarInformacion() {
+		FileOutputStream file;
+		ObjectOutputStream writer;
+		
+		try {
+			file = new FileOutputStream(Clinica.getInstance().getDbPath());
+			writer = new ObjectOutputStream(file);
+			writer.writeObject(Clinica.getInstance());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
