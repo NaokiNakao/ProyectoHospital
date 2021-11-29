@@ -45,6 +45,7 @@ public class PanelUsuario extends JDialog {
 	 * Create the dialog.
 	 */
 	public PanelUsuario(Usuario user) {
+		setResizable(false);
 		setModal(true);
 		setBounds(100, 100, 743, 470);
 		setLocationRelativeTo(null);
