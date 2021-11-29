@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import logico.Administrador;
 import logico.Clinica;
 import logico.Usuario;
 
@@ -57,7 +58,7 @@ public class Principal extends JFrame {
 					try {
 						dbOutput = new FileOutputStream(Clinica.getInstance().getDbPath());
 						dbWrite = new ObjectOutputStream(dbOutput);
-						Usuario aux = new Usuario(Clinica.getInstance().generadorCodigo(8), "admin", "admin", "", "", "");
+						Administrador aux = new Administrador(Clinica.getInstance().generadorCodigo(8), "admin", "admin", "", "", "", "");
 						Clinica.getInstance().registroUsuario(aux);
 						dbWrite.writeObject(Clinica.getInstance());
 						dbOutput.close();

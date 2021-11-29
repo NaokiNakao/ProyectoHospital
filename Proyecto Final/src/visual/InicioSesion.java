@@ -8,9 +8,13 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
+
+import logico.Clinica;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
@@ -79,26 +83,36 @@ public class InicioSesion extends JDialog {
 		pfPassword = new JPasswordField();
 		pfPassword.setBounds(93, 61, 112, 20);
 		Datosnecesarios.add(pfPassword);
+		
+		JButton btnEntrar = new JButton("Entrar");
+		btnEntrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (Clinica.getInstance().validacionCredenciales(txtCodigoUsuario.getText(), pfPassword.getText())) {
+					PanelUsuario frame = new PanelUsuario(Clinica.getLoginUser());
+					frame.setVisible(true);
+					dispose();
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Error en las credenciales.", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		btnEntrar.setBounds(10, 111, 89, 23);
+		Datosnecesarios.add(btnEntrar);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("Aceptar");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancelar");
-				cancelButton.addActionListener(new ActionListener() {
+				JButton btnCancelar = new JButton("Cancelar");
+				btnCancelar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
 					}
 				});
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				btnCancelar.setActionCommand("Cancel");
+				buttonPane.add(btnCancelar);
 			}
 		}
 	}
