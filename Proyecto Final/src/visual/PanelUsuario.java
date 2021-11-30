@@ -36,19 +36,6 @@ public class PanelUsuario extends JDialog {
 	private JButton btnUsuarios;
 
 	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		try {
-			PanelUsuario dialog = new PanelUsuario(null);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}*/
-
-	/**
 	 * Create the dialog.
 	 */
 	public PanelUsuario(Usuario user) {
@@ -107,6 +94,7 @@ public class PanelUsuario extends JDialog {
 		contentPanel.add(lblHolder);
 		
 		txtNombre = new JTextField();
+		txtNombre.setBorder(null);
 		txtNombre.setEditable(false);
 		txtNombre.setBounds(10, 249, 190, 23);
 		contentPanel.add(txtNombre);
@@ -119,6 +107,7 @@ public class PanelUsuario extends JDialog {
 		}
 		
 		txtTipo = new JTextField();
+		txtTipo.setBorder(null);
 		txtTipo.setEditable(false);
 		txtTipo.setBounds(10, 283, 190, 23);
 		contentPanel.add(txtTipo);
