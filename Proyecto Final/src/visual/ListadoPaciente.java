@@ -19,8 +19,10 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import java.util.Date;
 import java.util.Calendar;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class AdminListadoPaciente extends JDialog {
+public class ListadoPaciente extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
@@ -40,7 +42,7 @@ public class AdminListadoPaciente extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			AdminListadoPaciente dialog = new AdminListadoPaciente();
+			ListadoPaciente dialog = new ListadoPaciente();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -51,7 +53,7 @@ public class AdminListadoPaciente extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public AdminListadoPaciente() {
+	public ListadoPaciente() {
 		setResizable(false);
 		setTitle("Listado de pacientes");
 		setBounds(100, 100, 600, 660);
@@ -140,7 +142,7 @@ public class AdminListadoPaciente extends JDialog {
 		JComboBox cmbpacgen = new JComboBox();
 		cmbpacgen.setEnabled(false);
 		cmbpacgen.setModel(new DefaultComboBoxModel(new String[] {"<< Seleccione >>", "Hombre", "Mujer"}));
-		cmbpacgen.setBounds(309, 74, 113, 20);
+		cmbpacgen.setBounds(309, 74, 132, 20);
 		panel.add(cmbpacgen);
 		
 		JLabel lblNewLabel = new JLabel("Fecha de Nacimiento:");
@@ -170,29 +172,35 @@ public class AdminListadoPaciente extends JDialog {
 		txtpactel = new JTextField();
 		txtpactel.setEditable(false);
 		txtpactel.setColumns(10);
-		txtpactel.setBounds(309, 137, 113, 20);
+		txtpactel.setBounds(309, 137, 132, 20);
 		panel.add(txtpactel);
 		
 		JButton btnNewButton = new JButton("Buscar");
 		btnNewButton.setBounds(179, 20, 89, 23);
 		panel.add(btnNewButton);
+		
+		JButton btnHistorialClinico = new JButton("Historial clinico");
+		btnHistorialClinico.setBounds(309, 20, 132, 23);
+		panel.add(btnHistorialClinico);
+		
+		JPanel buttonpane = new JPanel();
+		buttonpane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		buttonpane.setBounds(0, 574, 594, 57);
+		contentPanel.add(buttonpane);
+		buttonpane.setLayout(null);
+		
+		JButton btnNewButton_1 = new JButton("Eliminar");
+		btnNewButton_1.setBounds(374, 11, 89, 23);
+		buttonpane.add(btnNewButton_1);
+		
+		JButton btnSalir = new JButton("Salir");
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnSalir.setBounds(477, 11, 89, 23);
+		buttonpane.add(btnSalir);
 		setLocationRelativeTo(null);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("Crear");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Eliminar");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
-		}
 	}
 }

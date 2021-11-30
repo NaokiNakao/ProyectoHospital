@@ -13,8 +13,10 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class AdminListadoUsuario extends JDialog {
+public class ListadoUsuario extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtusuidregis;
@@ -30,7 +32,7 @@ public class AdminListadoUsuario extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			AdminListadoUsuario dialog = new AdminListadoUsuario();
+			ListadoUsuario dialog = new ListadoUsuario();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -41,7 +43,7 @@ public class AdminListadoUsuario extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public AdminListadoUsuario() {
+	public ListadoUsuario() {
 		setResizable(false);
 		setTitle("Listado de usuarios");
 		setBounds(100, 100, 583, 534);
@@ -172,20 +174,30 @@ public class AdminListadoUsuario extends JDialog {
 		));
 		scrollPane.setViewportView(table);
 		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
+			JPanel buttonpane = new JPanel();
+			buttonpane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			buttonpane.setBounds(0, 454, 577, 51);
+			contentPanel.add(buttonpane);
+			buttonpane.setLayout(null);
 			{
-				JButton okButton = new JButton("Crear");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				JButton btnNewButton = new JButton("Crear");
+				btnNewButton.setBounds(211, 11, 89, 23);
+				buttonpane.add(btnNewButton);
 			}
 			{
-				JButton cancelButton = new JButton("Eliminar");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				JButton btnEliminar = new JButton("Eliminar");
+				btnEliminar.setBounds(325, 11, 89, 23);
+				buttonpane.add(btnEliminar);
+			}
+			{
+				JButton btnSaliar = new JButton("Salir");
+				btnSaliar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+					}
+				});
+				btnSaliar.setBounds(441, 11, 89, 23);
+				buttonpane.add(btnSaliar);
 			}
 		}
 	}

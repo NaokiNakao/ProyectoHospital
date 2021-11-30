@@ -14,8 +14,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class AdminListadoEnfermedad extends JDialog {
+public class ListadoEnfermedad extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
@@ -30,7 +32,7 @@ public class AdminListadoEnfermedad extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			AdminListadoEnfermedad dialog = new AdminListadoEnfermedad();
+			ListadoEnfermedad dialog = new ListadoEnfermedad();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -41,7 +43,7 @@ public class AdminListadoEnfermedad extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public AdminListadoEnfermedad() {
+	public ListadoEnfermedad() {
 		setResizable(false);
 		setTitle("Listado de enfermedades");
 		setBounds(100, 100, 521, 533);
@@ -145,22 +147,28 @@ public class AdminListadoEnfermedad extends JDialog {
 		txtenfercod.setColumns(10);
 		txtenfercod.setBounds(290, 74, 93, 20);
 		panel.add(txtenfercod);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("Crear");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+		
+		JPanel buttonpane = new JPanel();
+		buttonpane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		buttonpane.setBounds(0, 446, 515, 58);
+		contentPanel.add(buttonpane);
+		buttonpane.setLayout(null);
+		
+		JButton btnNewButton = new JButton("Crear");
+		btnNewButton.setBounds(166, 11, 89, 23);
+		buttonpane.add(btnNewButton);
+		
+		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.setBounds(284, 11, 89, 23);
+		buttonpane.add(btnEliminar);
+		
+		JButton btnSalir = new JButton("Salir");
+		btnSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
 			}
-			{
-				JButton cancelButton = new JButton("Eliminar");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
-		}
+		});
+		btnSalir.setBounds(400, 11, 89, 23);
+		buttonpane.add(btnSalir);
 	}
 }
