@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class Vacuna {
 	
-	private String codigo; // una letra y seis (6) dígitos --> "V[código]"
+	private String codigo; // una letra y seis (6) dígitos --> "V-[código]"
 	private String nombreVacuna;
 	private String fabricante;
 	private ArrayList<Enfermedad> proteccion; // enfermedades para la cual ofrece protección
 	private String tipoVacuna; // inactivada, atenuada, vector, ARN
-	private String formaAdministracion; // instramuscular, intradérmica, subcutánea, endovenosa, oral
+	private String formaAdministracion; // intramuscular, intradérmica, subcutánea, endovenosa, oral
 	
 	public Vacuna(String codigo, String nombreVacuna, String fabricante, ArrayList<Enfermedad> proteccion, String tipoVacuna, String formaAdministracion) {
 		this.codigo = codigo;

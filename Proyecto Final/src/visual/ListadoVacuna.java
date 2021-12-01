@@ -11,6 +11,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logico.Clinica;
+import logico.Medico;
 import logico.Vacuna;
 
 import javax.swing.JLabel;
@@ -126,7 +127,22 @@ public class ListadoVacuna extends JDialog {
 						}
 					}
 				});
+				
+				JButton btnNueva = new JButton("Nueva");
+				btnNueva.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						RegistroVacuna registro = new RegistroVacuna(null);
+						registro.setVisible(true);
+					}
+				});
+				if (Clinica.getLoginUser() instanceof Medico) {
+					btnNueva.setVisible(false);
+				}
+				buttonPane.add(btnNueva);
 				btnModificar.setEnabled(false);
+				if (Clinica.getLoginUser() instanceof Medico) {
+					btnModificar.setEnabled(false);
+				}
 				buttonPane.add(btnModificar);
 			}
 			{
@@ -144,7 +160,9 @@ public class ListadoVacuna extends JDialog {
 					}
 				});
 				btnEliminar.setEnabled(false);
-				btnEliminar.setActionCommand("OK");
+				if (Clinica.getLoginUser() instanceof Medico) {
+					btnEliminar.setVisible(false);
+				}
 				buttonPane.add(btnEliminar);
 				getRootPane().setDefaultButton(btnEliminar);
 			}
@@ -176,7 +194,6 @@ public class ListadoVacuna extends JDialog {
 		btnModificar.setEnabled(false);
 		btnEliminar.setEnabled(false);
 	}
-	
 }
 
 
