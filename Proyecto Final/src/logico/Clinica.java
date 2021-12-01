@@ -307,6 +307,10 @@ public class Clinica implements Serializable {
 		
 		return enfermedad;
 	}
+	public void insertarEnfermedad (Enfermedad enfermedad)
+	{
+		misEnfermedades.add(enfermedad);
+	}
 		
 }
 

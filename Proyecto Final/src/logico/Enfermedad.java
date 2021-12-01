@@ -8,6 +8,7 @@ public class Enfermedad {
 	private String descripcionEnfermedad;
 	
 	public Enfermedad(String codigo, String nombreEnfermedad, String tipoEnfermedad, String descripcionEnfermedad) {
+		super();
 		this.codigo = codigo;
 		this.nombreEnfermedad = nombreEnfermedad;
 		this.tipoEnfermedad = tipoEnfermedad;
