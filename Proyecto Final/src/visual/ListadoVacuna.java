@@ -7,27 +7,35 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
+import logico.Clinica;
+import logico.Vacuna;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.border.TitledBorder;
-import javax.swing.JLabel;
-import javax.swing.JComboBox;
-import javax.swing.JSpinner;
+import javax.swing.ListSelectionModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class ListadoVacuna extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
+	private JTextField textField;
 	private JTable table;
-	private JTextField txtvaccodregis;
-	private JTextField txtvacnomb;
-	private JTextField txtvaccod;
-	private JTextField txtvactipo;
-	private JTextField txtformadminis;
-	private JTextField txtvacfabri;
+	private static DefaultTableModel model;
+	private static Object[] rows;
+	private static JButton btnModificar;
+	private static JButton btnEliminar;
+	private Vacuna selected;
 
 	/**
 	 * Launch the application.
@@ -46,169 +54,133 @@ public class ListadoVacuna extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListadoVacuna() {
+		selected = null;
+		setTitle("Vacunas");
 		setResizable(false);
-		setTitle("Listado de vacunas");
-		setBounds(100, 100, 578, 572);
+		setModal(true);
+		setBounds(100, 100, 620, 456);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		setLocationRelativeTo(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel.setBounds(10, 11, 584, 67);
+		contentPanel.add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblNewLabel = new JLabel("C\u00F3digo:");
+		lblNewLabel.setBounds(10, 20, 46, 14);
+		panel.add(lblNewLabel);
+		
+		textField = new JTextField();
+		textField.setBounds(66, 16, 121, 23);
+		panel.add(textField);
+		textField.setColumns(10);
+		
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setBounds(197, 16, 89, 23);
+		panel.add(btnBuscar);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_1.setBounds(10, 89, 584, 278);
+		contentPanel.add(panel_1);
+		panel_1.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 218, 542, 240);
-		contentPanel.add(scrollPane);
+		panel_1.add(scrollPane, BorderLayout.CENTER);
 		
 		table = new JTable();
-		table.setEnabled(false);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-			},
-			new String[] {
-				"Nombre", "Codigo", "Fabricante", "Proteccion", "Tipo", "Forma de Adminis."
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int aux = table.getSelectedRow();
+				if (aux != -1) {
+					btnModificar.setEnabled(true);
+					btnEliminar.setEnabled(true);
+					String codigoVacuna = (String) table.getValueAt(0, aux);
+					selected = Clinica.getInstance().buscarVacunaByCodigo(codigoVacuna);
+				}
 			}
-		));
-		table.getColumnModel().getColumn(0).setPreferredWidth(101);
-		table.getColumnModel().getColumn(1).setPreferredWidth(99);
-		table.getColumnModel().getColumn(2).setPreferredWidth(99);
-		table.getColumnModel().getColumn(3).setPreferredWidth(100);
-		table.getColumnModel().getColumn(4).setPreferredWidth(97);
-		table.getColumnModel().getColumn(5).setPreferredWidth(159);
+		});
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		String header[] = {"Código", "Nombre", "Administración", "Tipo", "Fabricante"};
+		model = new DefaultTableModel();
+		model.setColumnIdentifiers(header);
+		table.setModel(model);
 		scrollPane.setViewportView(table);
 		{
-			JPanel panel = new JPanel();
-			panel.setLayout(null);
-			panel.setBorder(new TitledBorder(null, "Buscador:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panel.setBounds(10, 11, 542, 196);
-			contentPanel.add(panel);
+			JPanel buttonPane = new JPanel();
+			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JLabel lblCodigo = new JLabel("Codigo:");
-				lblCodigo.setBounds(10, 24, 58, 14);
-				panel.add(lblCodigo);
-			}
-			{
-				txtvaccodregis = new JTextField();
-				txtvaccodregis.setColumns(10);
-				txtvaccodregis.setBounds(66, 21, 93, 20);
-				panel.add(txtvaccodregis);
-			}
-			{
-				JLabel label = new JLabel("Nombre:");
-				label.setBounds(41, 49, 66, 14);
-				panel.add(label);
-			}
-			{
-				txtvacnomb = new JTextField();
-				txtvacnomb.setEditable(false);
-				txtvacnomb.setColumns(10);
-				txtvacnomb.setBounds(41, 74, 93, 20);
-				panel.add(txtvacnomb);
-			}
-			{
-				JLabel lblCodigo_1 = new JLabel("Codigo:");
-				lblCodigo_1.setBounds(175, 49, 66, 14);
-				panel.add(lblCodigo_1);
-			}
-			{
-				txtvaccod = new JTextField();
-				txtvaccod.setEditable(false);
-				txtvaccod.setColumns(10);
-				txtvaccod.setBounds(175, 74, 93, 20);
-				panel.add(txtvaccod);
-			}
-			{
-				JLabel lblFabricante = new JLabel("Fabricante:");
-				lblFabricante.setBounds(309, 49, 113, 14);
-				panel.add(lblFabricante);
-			}
-			{
-				JLabel lblTipo = new JLabel("Tipo:");
-				lblTipo.setBounds(41, 112, 118, 14);
-				panel.add(lblTipo);
-			}
-			{
-				txtvactipo = new JTextField();
-				txtvactipo.setEditable(false);
-				txtvactipo.setColumns(10);
-				txtvactipo.setBounds(41, 137, 93, 20);
-				panel.add(txtvactipo);
-			}
-			{
-				JLabel lblFormaDeAdministracion = new JLabel("Forma de Administracion:");
-				lblFormaDeAdministracion.setBounds(175, 112, 164, 14);
-				panel.add(lblFormaDeAdministracion);
-			}
-			{
-				txtformadminis = new JTextField();
-				txtformadminis.setEditable(false);
-				txtformadminis.setColumns(10);
-				txtformadminis.setBounds(175, 137, 113, 20);
-				panel.add(txtformadminis);
-			}
-			{
-				JButton button = new JButton("Buscar");
-				button.setBounds(179, 20, 89, 23);
-				panel.add(button);
-			}
-			{
-				txtvacfabri = new JTextField();
-				txtvacfabri.setEditable(false);
-				txtvacfabri.setColumns(10);
-				txtvacfabri.setBounds(309, 74, 93, 20);
-				panel.add(txtvacfabri);
-			}
-		}
-		{
-			JPanel buttonpane = new JPanel();
-			buttonpane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			buttonpane.setBounds(0, 483, 572, 60);
-			contentPanel.add(buttonpane);
-			buttonpane.setLayout(null);
-			{
-				JButton btnNewButton = new JButton("Crear");
-				btnNewButton.setBounds(217, 11, 89, 23);
-				buttonpane.add(btnNewButton);
-			}
-			{
-				JButton btnEliminar = new JButton("Eliminar");
-				btnEliminar.setBounds(319, 11, 89, 23);
-				buttonpane.add(btnEliminar);
-			}
-			{
-				JButton btnSalir = new JButton("Salir");
-				btnSalir.addActionListener(new ActionListener() {
+				btnModificar = new JButton("Modificar");
+				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						if (selected != null) {
+							RegistroVacuna frame = new RegistroVacuna(selected);
+							frame.setVisible(true);
+						}
+					}
+				});
+				btnModificar.setEnabled(false);
+				buttonPane.add(btnModificar);
+			}
+			{
+				btnEliminar = new JButton("Eliminar");
+				btnEliminar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro desea eliminar la vacuna?" + selected.getCodigo(), "Confirmación", JOptionPane.WARNING_MESSAGE);
+						if (opcion == JOptionPane.YES_OPTION) {
+							Clinica.getInstance().eliminarVacuna(selected.getCodigo());
+							cargarVacunas();
+							btnModificar.setEnabled(false);
+							btnEliminar.setEnabled(false);
+							selected = null;
+						}
+					}
+				});
+				btnEliminar.setEnabled(false);
+				btnEliminar.setActionCommand("OK");
+				buttonPane.add(btnEliminar);
+				getRootPane().setDefaultButton(btnEliminar);
+			}
+			{
+				JButton btnCerrar = new JButton("Cerrar");
+				btnCerrar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
 						dispose();
 					}
 				});
-				btnSalir.setBounds(420, 11, 89, 23);
-				buttonpane.add(btnSalir);
+				btnCerrar.setActionCommand("Cancel");
+				buttonPane.add(btnCerrar);
 			}
 		}
 	}
+	
+	public static void cargarVacunas() {
+		model.setRowCount(0);
+		rows = new Object[model.getColumnCount()];
+		
+		for (Vacuna vacuna : Clinica.getInstance().getMisVacunas()) {
+			rows[0] = vacuna.getCodigo();
+			rows[1] = vacuna.getNombreVacuna();
+			rows[2] = vacuna.getFormaAdministracion();
+			rows[3] = vacuna.getTipoVacuna();
+			rows[4] = vacuna.getFabricante();
+		}
+		
+		btnModificar.setEnabled(false);
+		btnEliminar.setEnabled(false);
+	}
+	
 }
+
+
+
+
+
+

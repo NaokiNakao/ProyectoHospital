@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Vacuna {
 	
-	private String codigo;
+	private String codigo; // una letra y seis (6) dígitos --> "V[código]"
 	private String nombreVacuna;
 	private String fabricante;
 	private ArrayList<Enfermedad> proteccion; // enfermedades para la cual ofrece protección
