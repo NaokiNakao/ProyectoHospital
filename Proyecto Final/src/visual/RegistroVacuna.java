@@ -9,8 +9,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import logico.Clinica;
+import logico.Enfermedad;
 import logico.Vacuna;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
+import com.sun.javafx.scene.control.SelectedCellsMap;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
@@ -19,6 +24,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class RegistroVacuna extends JDialog {
 
@@ -28,9 +35,16 @@ public class RegistroVacuna extends JDialog {
 	private JTextField txtFabricante;
 	private JComboBox cbxTipo;
 	private JTable tableEnfermedades;
-	private JTable tableProtección;
+	private static DefaultTableModel modelEnfermedades;
+	private static Object[] rowsEnfermedades;
+	private Enfermedad selectedEnfermedad;
+	private JTable tableProteccion;
+	private static DefaultTableModel modelProteccion;
+	private static Object[] rowsProteccion;
+	private Enfermedad selectedProteccion;
 	private JButton btnPasarDerecha;
 	private JButton btnPasarIzquierda;
+	private static Vacuna vacuna;
 
 	/**
 	 * Launch the application.
@@ -49,6 +63,9 @@ public class RegistroVacuna extends JDialog {
 	 * Create the dialog.
 	 */
 	public RegistroVacuna(Vacuna vacuna) {
+		selectedEnfermedad = null;
+		selectedProteccion = null;
+		this.vacuna = vacuna;
 		setResizable(false);
 		setModal(true);
 		setBounds(100, 100, 558, 531);
@@ -133,6 +150,17 @@ public class RegistroVacuna extends JDialog {
 		panelEnfermedades.add(scrollPane, BorderLayout.CENTER);
 		
 		tableEnfermedades = new JTable();
+		tableEnfermedades.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int index = tableEnfermedades.getSelectedRow();
+				if (index != -1) {
+					String aux = (String) tableEnfermedades.getValueAt(index, 0);
+					String codigoEnfermedad = aux.substring(0, 8);
+					selectedEnfermedad = Clinica.getInstance().buscarEnfermedadByCodigo(codigoEnfermedad);
+				}
+			}
+		});
 		scrollPane.setViewportView(tableEnfermedades);
 		
 		JPanel panelProteccion = new JPanel();
@@ -143,8 +171,19 @@ public class RegistroVacuna extends JDialog {
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panelProteccion.add(scrollPane_1, BorderLayout.CENTER);
 		
-		tableProtección = new JTable();
-		scrollPane_1.setViewportView(tableProtección);
+		tableProteccion = new JTable();
+		tableProteccion.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int index = tableProteccion.getSelectedRow();
+				if (index != -1) {
+					String aux = (String) tableProteccion.getValueAt(index, 0);
+					String codigoProteccion = aux.substring(0, 8);
+					selectedProteccion = Clinica.getInstance().buscarEnfermedadByCodigo(codigoProteccion);
+				}
+			}
+		});
+		scrollPane_1.setViewportView(tableProteccion);
 		
 		JLabel lblNewLabel_3 = new JLabel("Enfermedades:");
 		lblNewLabel_3.setBounds(63, 31, 86, 14);
@@ -194,5 +233,43 @@ public class RegistroVacuna extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+		
+		cargarEnfermedades();
+		cargarProteccion();
 	}
+	
+	public static void cargarEnfermedades() {
+		modelEnfermedades.setRowCount(0);
+		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
+		
+		for (Enfermedad enfermedad : Clinica.getInstance().getMisEnfermedades()) {
+			rowsEnfermedades[0] = enfermedad.getCodigo() + " : " + enfermedad.getNombreEnfermedad();
+			modelEnfermedades.addRow(rowsEnfermedades);
+		}
+	}
+	
+	public static void cargarProteccion() {
+		modelProteccion.setRowCount(0);
+		rowsProteccion = new Object[modelProteccion.getColumnCount()];
+		
+		for (Enfermedad enfermedad : vacuna.getProteccion()) {
+			rowsProteccion[0] = enfermedad.getCodigo() + " : " + enfermedad.getNombreEnfermedad();
+			modelProteccion.addRow(rowsProteccion);
+		}
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

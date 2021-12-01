@@ -289,6 +289,24 @@ public class Clinica implements Serializable {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	////////////////////Utils (Enfermedad) ////////////////////
+
+	public Enfermedad buscarEnfermedadByCodigo(String codigoEnfermedad) {
+		Enfermedad enfermedad = null;
+		boolean encontrada = false;
+		int i = 0;
+		
+		while (!encontrada && i < misEnfermedades.size()) {
+			if (misEnfermedades.get(i).getCodigo().equalsIgnoreCase(codigoEnfermedad)) {
+				enfermedad = misEnfermedades.get(i);
+				encontrada = true;
+			}
+			i++;
+		}
+		
+		return enfermedad;
+	}
 		
 }
 

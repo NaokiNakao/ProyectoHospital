@@ -177,6 +177,8 @@ public class ListadoVacuna extends JDialog {
 				buttonPane.add(btnCerrar);
 			}
 		}
+		
+		cargarVacunas();
 	}
 	
 	public static void cargarVacunas() {
@@ -189,6 +191,7 @@ public class ListadoVacuna extends JDialog {
 			rows[2] = vacuna.getFormaAdministracion();
 			rows[3] = vacuna.getTipoVacuna();
 			rows[4] = vacuna.getFabricante();
+			model.addRow(rows);
 		}
 		
 		btnModificar.setEnabled(false);
