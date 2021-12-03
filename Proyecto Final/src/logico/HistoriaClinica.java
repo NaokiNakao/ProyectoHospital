@@ -10,8 +10,6 @@ public class HistoriaClinica {
 	private ArrayList<Consulta> misConsultas;
 	private ArrayList<Vacuna> misVacunas;
 	private ArrayList<Enfermedad> padecimientos;
-	private DefaultTableModel modelEnfermedades;
-	private Object[] rowsEnfermedades;
 	
 	public HistoriaClinica(String codigo) {
 		this.codigo = codigo;

@@ -75,7 +75,7 @@ public class HistorialPaciente extends JDialog {
 	 * Create the dialog.
 	 */
 	public HistorialPaciente() {
-		setBounds(100, 100, 816, 867);
+		setBounds(100, 100, 1168, 788);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
@@ -102,7 +102,7 @@ public class HistorialPaciente extends JDialog {
 			Medico medico = new Medico("5260", "", "", "Ramon", "", "", "");
 			Consulta consulta = new Consulta("2051", hoy, "Fiebre", "Bueeeno", medico);
 			paciente1.getHistorial().agregarConsulta(consulta);
-			//paciente1.getHistorial().getMisConsultas().add(consulta);
+			paciente1.getHistorial().getMisConsultas().add(consulta);
 			
 			
 			JPanel panel = new JPanel();
@@ -153,6 +153,7 @@ public class HistorialPaciente extends JDialog {
 			panel_1.setLayout(null);
 			
 			rdbtnEnfermedades = new JRadioButton("Enfermedades");
+			rdbtnEnfermedades.setSelected(true);
 			rdbtnEnfermedades.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					rdbtnDatosDeConsultas.setSelected(false);
@@ -196,23 +197,9 @@ public class HistorialPaciente extends JDialog {
 			});
 			rdbtnDatosDeConsultas.setBounds(548, 15, 159, 23);
 			panel_1.add(rdbtnDatosDeConsultas);
-			
-			panelEnfermedades = new JPanel();
-			panelEnfermedades.setBounds(10, 271, 770, 141);
-			panel.add(panelEnfermedades);
-			panelEnfermedades.setLayout(new BorderLayout(0, 0));
-			
-			JScrollPane scrollPane = new JScrollPane();
-			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-			panelEnfermedades.add(scrollPane, BorderLayout.CENTER);
-			
-			tableEnfermedades = new JTable();
-			tableEnfermedades.setRowSelectionAllowed(false);
 			String[] heardersEnfermedades = {"Codigo","Nombre","Tipo"};
 			modelEnfermedades = new DefaultTableModel();
-			tableEnfermedades.setModel(modelEnfermedades);
 			modelEnfermedades.setColumnIdentifiers(heardersEnfermedades);
-			scrollPane.setViewportView(tableEnfermedades);
 			
 			JPanel panel_3 = new JPanel();
 			panel_3.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -247,35 +234,50 @@ public class HistorialPaciente extends JDialog {
 			
 			panelVacunas = new JPanel();
 			panelVacunas.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelVacunas.setBounds(10, 423, 770, 141);
+			panelVacunas.setBounds(10, 271, 770, 141);
 			panel.add(panelVacunas);
 			panelVacunas.setLayout(new BorderLayout(0, 0));
 			
-			JScrollPane scrollPane_1 = new JScrollPane();
-			panelVacunas.add(scrollPane_1, BorderLayout.CENTER);
+			JScrollPane scrollPaneVacunas = new JScrollPane();
+			panelVacunas.add(scrollPaneVacunas, BorderLayout.CENTER);
 			
 			tableVacunas = new JTable();
 			String[] heardersVacunas = {"Codigo","Nombre","Fabricante","Tipo de Vacuna"};
 			modelVacunas = new DefaultTableModel();
 			tableVacunas.setModel(modelVacunas);
 			modelVacunas.setColumnIdentifiers(heardersVacunas);
-			scrollPane_1.setViewportView(tableVacunas);
+			scrollPaneVacunas.setViewportView(tableVacunas);
 			
 			panelDatosConsulta = new JPanel();
 			panelDatosConsulta.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelDatosConsulta.setBounds(10, 573, 770, 117);
+			panelDatosConsulta.setBounds(10, 433, 770, 141);
 			panel.add(panelDatosConsulta);
 			panelDatosConsulta.setLayout(new BorderLayout(0, 0));
 			
-			JScrollPane scrollPane_2 = new JScrollPane();
-			panelDatosConsulta.add(scrollPane_2, BorderLayout.CENTER);
+			JScrollPane scrollPaneConsultas = new JScrollPane();
+			scrollPaneConsultas.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+			panelDatosConsulta.add(scrollPaneConsultas, BorderLayout.CENTER);
 			
 			tableDatosConsulta = new JTable();
 			String [] heardersConsultas = {"Codigo","Fecha","Doctor"};
 			modelConsultas = new DefaultTableModel();
 			tableDatosConsulta.setModel(modelConsultas);
 			modelConsultas.setColumnIdentifiers(heardersConsultas);
-			scrollPane_2.setViewportView(tableDatosConsulta); 
+			scrollPaneConsultas.setViewportView(tableDatosConsulta);
+			
+			panelEnfermedades = new JPanel();
+			panelEnfermedades.setBounds(10, 271, 770, 141);
+			panel.add(panelEnfermedades);
+			panelEnfermedades.setLayout(new BorderLayout(0, 0));
+			
+			JScrollPane scrollPaneEnfermedades = new JScrollPane();
+			scrollPaneEnfermedades.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+			panelEnfermedades.add(scrollPaneEnfermedades, BorderLayout.CENTER);
+			
+			tableEnfermedades = new JTable();
+			tableEnfermedades.setRowSelectionAllowed(false);
+			tableEnfermedades.setModel(modelEnfermedades);
+			scrollPaneEnfermedades.setViewportView(tableEnfermedades);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -339,16 +341,20 @@ public class HistorialPaciente extends JDialog {
 		
 		modelConsultas.setRowCount(0);
 		rowsConsultas = new Object[modelConsultas.getColumnCount()];
+		rowsConsultas[1] = "Hola";
+		modelConsultas.addRow(rowsConsultas);
+		
+		/*modelConsultas.setRowCount(0);
+		rowsConsultas = new Object[modelConsultas.getColumnCount()];
 		
 		if(paciente!= null) {
 			for (int i = 0; i < rowsConsultas.length; i++) {
-				rowsConsultas[0] = paciente.getHistorial().getMisConsultas().get(i).getCodigo();
+				rowsConsultas[0]=paciente.getHistorial().getMisVacunas().get(i).getCodigo();
+				//rowsConsultas[0] = paciente.getHistorial().getMisConsultas().get(i).getCodigo();
 				rowsConsultas[1] = paciente.getHistorial().getMisConsultas().get(i).getFechaConsulta();
 				rowsConsultas[2] = paciente.getHistorial().getMisConsultas().get(i).getMiMedico().getNombre();
 				modelConsultas.addRow(rowsConsultas);
 			}
-		}
+		}*/
 	}
-	
-	
 }
