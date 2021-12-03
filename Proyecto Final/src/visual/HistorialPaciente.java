@@ -75,36 +75,16 @@ public class HistorialPaciente extends JDialog {
 	 * Create the dialog.
 	 */
 	public HistorialPaciente() {
-		setBounds(100, 100, 1168, 788);
+		setTitle("Historial Medico");
+		setModal(true);
+		setResizable(false);
+		setBounds(100, 100, 809, 539);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
-		{
-			
-			Date hoy = new Date();
-			HistoriaClinica h = new HistoriaClinica("120");
-			Paciente paciente1 = new Paciente("1021", "Misael", "Hombre", hoy, "f", "5", h);
-			Clinica.getInstance().getMisPacientes().add(paciente1);
-			
-			
-			
-			Enfermedad covid = new Enfermedad("1021", "covid", "Respiratoria", "Malisima compai");
-			paciente1.getHistorial().agregarPadecimiento(covid);
-			
-			ArrayList<Enfermedad> r = new ArrayList<>();
-			Vacuna sinovac = new Vacuna("620", "Sinovac", "Yo", r, "P", "P");
-			Vacuna rv = new Vacuna("8952", "tula", "Tambien yo", r, "Ayh", "p");
-			paciente1.getHistorial().agregarVacuna(sinovac);
-			paciente1.getHistorial().agregarVacuna(rv);
-			
-			Medico medico = new Medico("5260", "", "", "Ramon", "", "", "");
-			Consulta consulta = new Consulta("2051", hoy, "Fiebre", "Bueeeno", medico);
-			paciente1.getHistorial().agregarConsulta(consulta);
-			paciente1.getHistorial().getMisConsultas().add(consulta);
-			
-			
+		{		
 			JPanel panel = new JPanel();
 			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
@@ -122,15 +102,26 @@ public class HistorialPaciente extends JDialog {
 						paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText().toString());
 						txtNombre.setText(paciente.getNombre());
 						txtTelefono.setText(paciente.getTelefono());
+					if(rdbtnEnfermedades.isSelected()) {	
+						loadEnfermedades(paciente);
+					}else if(rdbtnVacunas.isSelected()) {
+							loadVacunas(paciente);
+						}else if(rdbtnDatosDeConsultas.isSelected()) {
+							loadConsultas(paciente);
+						}
 						
+					}else {
+						JOptionPane.showMessageDialog(null, "Este paciente no existe o la cedula esta incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+						txtNombre.setText("");
+						txtTelefono.setText("");
+						txtCedula.setText("");
+						paciente = null;
+					}
+					
+					if(paciente==null){
 						loadEnfermedades(paciente);
 						loadVacunas(paciente);
 						loadConsultas(paciente);
-						
-					}else {
-						JOptionPane.showMessageDialog(null, "Este paciente no existe", "Error", JOptionPane.ERROR_MESSAGE);
-						txtNombre.setEditable(true);
-						txtTelefono.setEditable(true);
 					}
 				}
 			});
@@ -153,30 +144,31 @@ public class HistorialPaciente extends JDialog {
 			panel_1.setLayout(null);
 			
 			rdbtnEnfermedades = new JRadioButton("Enfermedades");
-			rdbtnEnfermedades.setSelected(true);
 			rdbtnEnfermedades.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					rdbtnDatosDeConsultas.setSelected(false);
-					rdbtnVacunas.setSelected(false);
 					
-					panelEnfermedades.setVisible(true);
-					panelDatosConsulta.setVisible(false);
-					panelVacunas.setVisible(false);
+						rdbtnDatosDeConsultas.setSelected(false);
+						rdbtnVacunas.setSelected(false);
+						panelEnfermedades.setVisible(true);
+						panelDatosConsulta.setVisible(false);
+						panelVacunas.setVisible(false);
+						loadEnfermedades(paciente);
 				}
 			});
 			rdbtnEnfermedades.setBounds(110, 15, 109, 23);
 			panel_1.add(rdbtnEnfermedades);
 			
 			rdbtnVacunas = new JRadioButton("Vacunas");
+			rdbtnVacunas.setSelected(true);
 			rdbtnVacunas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
 					rdbtnDatosDeConsultas.setSelected(false);
 					rdbtnEnfermedades.setSelected(false);
 					
 					panelEnfermedades.setVisible(false);
 					panelDatosConsulta.setVisible(false);
 					panelVacunas.setVisible(true);
+					loadVacunas(paciente);
 				}
 			});
 			rdbtnVacunas.setBounds(329, 15, 109, 23);
@@ -185,13 +177,13 @@ public class HistorialPaciente extends JDialog {
 			rdbtnDatosDeConsultas = new JRadioButton("Datos de consultas");
 			rdbtnDatosDeConsultas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
 					rdbtnVacunas.setSelected(false);
 					rdbtnEnfermedades.setSelected(false);
 					
 					panelEnfermedades.setVisible(false);
 					panelDatosConsulta.setVisible(true);
 					panelVacunas.setVisible(false);
+					loadConsultas(paciente);
 					
 				}
 			});
@@ -234,7 +226,7 @@ public class HistorialPaciente extends JDialog {
 			
 			panelVacunas = new JPanel();
 			panelVacunas.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelVacunas.setBounds(10, 271, 770, 141);
+			panelVacunas.setBounds(10, 271, 770, 180);
 			panel.add(panelVacunas);
 			panelVacunas.setLayout(new BorderLayout(0, 0));
 			
@@ -250,7 +242,7 @@ public class HistorialPaciente extends JDialog {
 			
 			panelDatosConsulta = new JPanel();
 			panelDatosConsulta.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelDatosConsulta.setBounds(10, 433, 770, 141);
+			panelDatosConsulta.setBounds(10, 271, 770, 180);
 			panel.add(panelDatosConsulta);
 			panelDatosConsulta.setLayout(new BorderLayout(0, 0));
 			
@@ -266,7 +258,7 @@ public class HistorialPaciente extends JDialog {
 			scrollPaneConsultas.setViewportView(tableDatosConsulta);
 			
 			panelEnfermedades = new JPanel();
-			panelEnfermedades.setBounds(10, 271, 770, 141);
+			panelEnfermedades.setBounds(10, 271, 770, 180);
 			panel.add(panelEnfermedades);
 			panelEnfermedades.setLayout(new BorderLayout(0, 0));
 			
@@ -284,12 +276,6 @@ public class HistorialPaciente extends JDialog {
 			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
 			{
 				JButton cancelButton = new JButton("Salir");
 				cancelButton.addActionListener(new ActionListener() {
@@ -338,13 +324,9 @@ public class HistorialPaciente extends JDialog {
 	}
 	
 	private void loadConsultas(Paciente paciente) {
+
 		
 		modelConsultas.setRowCount(0);
-		rowsConsultas = new Object[modelConsultas.getColumnCount()];
-		rowsConsultas[1] = "Hola";
-		modelConsultas.addRow(rowsConsultas);
-		
-		/*modelConsultas.setRowCount(0);
 		rowsConsultas = new Object[modelConsultas.getColumnCount()];
 		
 		if(paciente!= null) {
@@ -355,6 +337,6 @@ public class HistorialPaciente extends JDialog {
 				rowsConsultas[2] = paciente.getHistorial().getMisConsultas().get(i).getMiMedico().getNombre();
 				modelConsultas.addRow(rowsConsultas);
 			}
-		}*/
+		}
 	}
 }
