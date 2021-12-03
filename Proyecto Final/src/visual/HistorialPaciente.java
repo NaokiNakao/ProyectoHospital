@@ -16,12 +16,19 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logico.Clinica;
+import logico.Consulta;
+import logico.Enfermedad;
+import logico.HistoriaClinica;
+import logico.Medico;
 import logico.Paciente;
+import logico.Vacuna;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 
 public class HistorialPaciente extends JDialog {
@@ -75,6 +82,29 @@ public class HistorialPaciente extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
+			
+			Date hoy = new Date();
+			HistoriaClinica h = new HistoriaClinica("120");
+			Paciente paciente1 = new Paciente("1021", "Misael", "Hombre", hoy, "f", "5", h);
+			Clinica.getInstance().getMisPacientes().add(paciente1);
+			
+			
+			
+			Enfermedad covid = new Enfermedad("1021", "covid", "Respiratoria", "Malisima compai");
+			paciente1.getHistorial().agregarPadecimiento(covid);
+			
+			ArrayList<Enfermedad> r = new ArrayList<>();
+			Vacuna sinovac = new Vacuna("620", "Sinovac", "Yo", r, "P", "P");
+			Vacuna rv = new Vacuna("8952", "tula", "Tambien yo", r, "Ayh", "p");
+			paciente1.getHistorial().agregarVacuna(sinovac);
+			paciente1.getHistorial().agregarVacuna(rv);
+			
+			Medico medico = new Medico("5260", "", "", "Ramon", "", "", "");
+			Consulta consulta = new Consulta("2051", hoy, "Fiebre", "Bueeeno", medico);
+			paciente1.getHistorial().agregarConsulta(consulta);
+			//paciente1.getHistorial().getMisConsultas().add(consulta);
+			
+			
 			JPanel panel = new JPanel();
 			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
@@ -245,7 +275,7 @@ public class HistorialPaciente extends JDialog {
 			modelConsultas = new DefaultTableModel();
 			tableDatosConsulta.setModel(modelConsultas);
 			modelConsultas.setColumnIdentifiers(heardersConsultas);
-			scrollPane_2.setViewportView(tableDatosConsulta);
+			scrollPane_2.setViewportView(tableDatosConsulta); 
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -283,6 +313,7 @@ public class HistorialPaciente extends JDialog {
 					rowsEnfermedades[0]= paciente.getHistorial().getPadecimientos().get(i).getCodigo();
 					rowsEnfermedades[1]= paciente.getHistorial().getPadecimientos().get(i).getNombreEnfermedad();
 					rowsEnfermedades[2]= paciente.getHistorial().getPadecimientos().get(i).getTipoEnfermedad();
+					modelEnfermedades.addRow(rowsEnfermedades);
 				}
 		}
 		
@@ -298,21 +329,23 @@ public class HistorialPaciente extends JDialog {
 				rowsVacunas[1]=  paciente.getHistorial().getMisVacunas().get(i).getNombreVacuna();
 				rowsVacunas[2]= paciente.getHistorial().getMisVacunas().get(i).getFabricante();
 				rowsVacunas[3]= paciente.getHistorial().getMisVacunas().get(i).getTipoVacuna();
+				modelVacunas.addRow(rowsVacunas);
 			}
 		
 		}
 	}
 	
 	private void loadConsultas(Paciente paciente) {
+		
 		modelConsultas.setRowCount(0);
 		rowsConsultas = new Object[modelConsultas.getColumnCount()];
 		
 		if(paciente!= null) {
 			for (int i = 0; i < rowsConsultas.length; i++) {
-				rowsConsultas[0] = paciente.getMisConsultas().get(i).getCodigo();
-				rowsConsultas[1] = paciente.getMisConsultas().get(i).getFechaConsulta();
-				rowsConsultas[2] = paciente.getMisConsultas().get(i).getMiMedico().getNombre();
-				
+				rowsConsultas[0] = paciente.getHistorial().getMisConsultas().get(i).getCodigo();
+				rowsConsultas[1] = paciente.getHistorial().getMisConsultas().get(i).getFechaConsulta();
+				rowsConsultas[2] = paciente.getHistorial().getMisConsultas().get(i).getMiMedico().getNombre();
+				modelConsultas.addRow(rowsConsultas);
 			}
 		}
 	}

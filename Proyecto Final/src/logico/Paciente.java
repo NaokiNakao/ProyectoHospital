@@ -12,7 +12,6 @@ public class Paciente {
 	private String direccion;
 	private String telefono;
 	private HistoriaClinica historial;
-	private ArrayList<Consulta> misConsultas;
 	
 	public Paciente(String cedula, String nombre, String genero, Date fechaNacimiento, String direccion, String telefono, HistoriaClinica historial) {
 		this.cedula = cedula;
@@ -22,7 +21,6 @@ public class Paciente {
 		this.direccion = direccion;
 		this.telefono = telefono;
 		this.historial = historial;
-		this.misConsultas = new ArrayList<Consulta>();
 	}
 
 	public String getCedula() {
@@ -53,10 +51,6 @@ public class Paciente {
 		return historial;
 	}
 
-	public ArrayList<Consulta> getMisConsultas() {
-		return misConsultas;
-	}
-
 	public void setCedula(String cedula) {
 		this.cedula = cedula;
 	}
@@ -83,14 +77,6 @@ public class Paciente {
 
 	public void setHistorial(HistoriaClinica historial) {
 		this.historial = historial;
-	}
-
-	public void setMisConsultas(ArrayList<Consulta> misConsultas) {
-		this.misConsultas = misConsultas;
-	}
-	
-	public void agregarConsulta(Consulta consulta) {
-		misConsultas.add(consulta);
 	}
 	
 }

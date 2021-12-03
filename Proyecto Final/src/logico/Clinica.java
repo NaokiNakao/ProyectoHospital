@@ -150,7 +150,7 @@ public class Clinica implements Serializable {
 		int total = 0;
 		
 		for (Paciente paciente : misPacientes) {
-			for (Consulta consulta : paciente.getMisConsultas()) {
+			for (Consulta consulta : paciente.getHistorial().getMisConsultas()) {
 				if (consulta.getEnfermedad().getCodigo().equalsIgnoreCase(codigoEnfermedad) && consulta.getFechaConsulta().equals(fecha)) {
 					total++;
 				}
