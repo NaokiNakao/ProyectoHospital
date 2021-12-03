@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
 public class ListadoVacuna extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
+	private JTextField txtCodigoVacuna;
 	private JTable table;
 	private static DefaultTableModel model;
 	private static Object[] rows;
@@ -75,12 +75,24 @@ public class ListadoVacuna extends JDialog {
 		lblNewLabel.setBounds(10, 20, 46, 14);
 		panel.add(lblNewLabel);
 		
-		textField = new JTextField();
-		textField.setBounds(66, 16, 121, 23);
-		panel.add(textField);
-		textField.setColumns(10);
+		txtCodigoVacuna = new JTextField();
+		txtCodigoVacuna.setBounds(66, 16, 121, 23);
+		panel.add(txtCodigoVacuna);
+		txtCodigoVacuna.setColumns(10);
 		
 		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Vacuna vacuna = Clinica.getInstance().buscarVacunaByCodigo(txtCodigoVacuna.getText());
+				if (vacuna != null) {
+					RegistroVacuna frame = new RegistroVacuna(vacuna);
+					frame.setVisible(true);
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "La vacuna no se encuentra registrada.", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 		btnBuscar.setBounds(197, 16, 89, 23);
 		panel.add(btnBuscar);
 		

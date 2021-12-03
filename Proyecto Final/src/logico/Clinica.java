@@ -284,6 +284,45 @@ public class Clinica implements Serializable {
 		
 		return vacuna;
 	}
+	
+	public boolean codigoVacunaValido(String codigoVacuna) {
+		boolean validacion = true;
+		int i = 0;
+		
+		if (codigoVacuna.length() != 8) {
+			validacion = false;
+		}
+		
+		while (validacion && i < misVacunas.size()) {
+			if (misVacunas.get(i).getCodigo().equalsIgnoreCase(codigoVacuna)) {
+				validacion = false;
+			}
+			i++;
+		}
+		
+		return validacion;
+	}
+	
+	public boolean agregarVacuna(Vacuna nuevaVacuna) {
+		boolean operacionCorrecta = false;
+		
+		if (datosVacunaValidos(nuevaVacuna)) {
+			misVacunas.add(nuevaVacuna);
+			operacionCorrecta = true;
+		}
+		
+		return operacionCorrecta;
+	}
+	
+	private boolean datosVacunaValidos(Vacuna vacuna) {
+		boolean validacion = false;
+		
+		if ( codigoVacunaValido(vacuna.getCodigo()) && (vacuna.getNombreVacuna() != null) && (vacuna.getFabricante() != null) && (!vacuna.getTipoVacuna().equalsIgnoreCase("<Seleccionar>")) && (!vacuna.getFormaAdministracion().equalsIgnoreCase("<Seleccionar>")) && (vacuna.getProteccion().size() > 0) ) {
+			validacion = true;
+		}
+		
+		return validacion;
+	}
 
 	public void eliminarVacuna(String codigo) {
 		// TODO Auto-generated method stub

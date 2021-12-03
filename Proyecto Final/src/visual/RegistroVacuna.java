@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import com.sun.javafx.scene.control.SelectedCellsMap;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -26,6 +27,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
 import javax.swing.ListSelectionModel;
 
 public class RegistroVacuna extends JDialog {
@@ -46,11 +49,12 @@ public class RegistroVacuna extends JDialog {
 	private JButton btnPasarDerecha;
 	private JButton btnPasarIzquierda;
 	private static Vacuna vacuna;
+	private JComboBox cbxAdministracion;
 
 	/**
 	 * Launch the application.
 	 */
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		try {
 			RegistroVacuna dialog = new RegistroVacuna(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -58,7 +62,7 @@ public class RegistroVacuna extends JDialog {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}*/
+	}
 
 	/**
 	 * Create the dialog.
@@ -91,7 +95,11 @@ public class RegistroVacuna extends JDialog {
 		txtCodigo.setBounds(66, 8, 121, 23);
 		if (vacuna == null) {
 			txtCodigo.setEditable(false);
-			txtCodigo.setText("V-" + Clinica.getInstance().generadorCodigo(6));
+			String codigo;
+			do {
+				codigo = "V-" + Clinica.getInstance().generadorCodigo(6);
+				txtCodigo.setText(codigo);
+			} while (!Clinica.getInstance().codigoVacunaValido(codigo));
 		}
 		contentPanel.add(txtCodigo);
 		{
@@ -127,7 +135,7 @@ public class RegistroVacuna extends JDialog {
 		cbxTipo.setBounds(66, 88, 155, 23);
 		contentPanel.add(cbxTipo);
 		
-		JComboBox cbxAdministracion = new JComboBox();
+		cbxAdministracion = new JComboBox();
 		cbxAdministracion.setModel(new DefaultComboBoxModel(new String[] {"<Seleccionar>", "Intramuscular", "Intrad\u00E9rmica", "Subcut\u00E1nea", "Endovenosa", "Oral"}));
 		cbxAdministracion.setBounds(360, 87, 155, 23);
 		contentPanel.add(cbxAdministracion);
@@ -218,7 +226,20 @@ public class RegistroVacuna extends JDialog {
 				}
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						
+						if (vacuna == null) {
+							ArrayList<Enfermedad> proteccion = new ArrayList<Enfermedad>();
+							Vacuna nuevaVacuna = new Vacuna(txtCodigo.getText(), txtNombre.getText(), txtFabricante.getText(), proteccion, cbxTipo.getSelectedItem().toString(), cbxAdministracion.getSelectedItem().toString());
+							if (Clinica.getInstance().agregarVacuna(nuevaVacuna)) {
+								JOptionPane.showMessageDialog(null, "La vacuna se ha agregado.", "Registro satisfactorio", JOptionPane.INFORMATION_MESSAGE);
+								limpiarCampos();
+							}
+							else {
+								JOptionPane.showMessageDialog(null, "Datos no válidos.", "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						}
+						else {
+							
+						}
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -263,6 +284,14 @@ public class RegistroVacuna extends JDialog {
 		} catch (NullPointerException e) {
 			// El objeto "vacuna" es nulo 
 		}
+	}
+	
+	public void limpiarCampos() {
+		txtCodigo.setText(Clinica.getInstance().generadorCodigo(6));
+		txtNombre.setText("");
+		txtFabricante.setText("");
+		cbxTipo.setSelectedIndex(0);
+		cbxAdministracion.setSelectedIndex(0);
 	}
 	
 }
