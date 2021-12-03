@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class ListadoPaciente extends JDialog {
+public class Listadopaciente extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
@@ -42,7 +42,7 @@ public class ListadoPaciente extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			ListadoPaciente dialog = new ListadoPaciente();
+			Listadopaciente dialog = new Listadopaciente();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -53,7 +53,7 @@ public class ListadoPaciente extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListadoPaciente() {
+	public Listadopaciente() {
 		setResizable(false);
 		setTitle("Listado de pacientes");
 		setBounds(100, 100, 600, 660);

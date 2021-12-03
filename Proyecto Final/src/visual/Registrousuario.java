@@ -20,7 +20,7 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 import java.awt.event.ActionEvent;
 
-public class RegistroUsuario extends JDialog {
+public class Registrousuario extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtusunomb;
@@ -35,7 +35,7 @@ public class RegistroUsuario extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			RegistroUsuario dialog = new RegistroUsuario();
+			Registrousuario dialog = new Registrousuario();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -46,7 +46,7 @@ public class RegistroUsuario extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public RegistroUsuario() {
+	public Registrousuario() {
 		setResizable(false);
 		setModal(true);
 		setTitle("Registro de usuario");

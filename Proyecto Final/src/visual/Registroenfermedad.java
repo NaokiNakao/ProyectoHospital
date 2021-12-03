@@ -21,7 +21,7 @@ import logico.Enfermedad;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class RegistroEnfermedad extends JDialog {
+public class Registroenfermedad extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtenfercod;
@@ -34,7 +34,7 @@ public class RegistroEnfermedad extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			RegistroEnfermedad dialog = new RegistroEnfermedad();
+			Registroenfermedad dialog = new Registroenfermedad();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -45,7 +45,7 @@ public class RegistroEnfermedad extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public RegistroEnfermedad() {
+	public Registroenfermedad() {
 		setModal(true);
 		setResizable(false);
 		setTitle("Registro de enfermedad");

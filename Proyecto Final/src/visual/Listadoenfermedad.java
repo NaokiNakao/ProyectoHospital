@@ -17,7 +17,7 @@ import javax.swing.JTextPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class ListadoEnfermedad extends JDialog {
+public class Listadoenfermedad extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
@@ -32,7 +32,7 @@ public class ListadoEnfermedad extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			ListadoEnfermedad dialog = new ListadoEnfermedad();
+			Listadoenfermedad dialog = new Listadoenfermedad();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -43,7 +43,7 @@ public class ListadoEnfermedad extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListadoEnfermedad() {
+	public Listadoenfermedad() {
 		setResizable(false);
 		setTitle("Listado de enfermedades");
 		setBounds(100, 100, 521, 533);

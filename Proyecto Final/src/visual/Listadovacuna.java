@@ -27,7 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class ListadoVacuna extends JDialog {
+public class Listadovacuna extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtCodigoVacuna;
@@ -43,7 +43,7 @@ public class ListadoVacuna extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			ListadoVacuna dialog = new ListadoVacuna();
+			Listadovacuna dialog = new Listadovacuna();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -54,7 +54,7 @@ public class ListadoVacuna extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListadoVacuna() {
+	public Listadovacuna() {
 		selected = null;
 		setTitle("Vacunas");
 		setResizable(false);

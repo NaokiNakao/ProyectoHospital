@@ -16,7 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class ListadoUsuario extends JDialog {
+public class Listadousuario extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtusuidregis;
@@ -32,7 +32,7 @@ public class ListadoUsuario extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			ListadoUsuario dialog = new ListadoUsuario();
+			Listadousuario dialog = new Listadousuario();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -43,7 +43,7 @@ public class ListadoUsuario extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ListadoUsuario() {
+	public Listadousuario() {
 		setResizable(false);
 		setTitle("Listado de usuarios");
 		setBounds(100, 100, 583, 534);
