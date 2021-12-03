@@ -26,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.ListSelectionModel;
 
 public class RegistroVacuna extends JDialog {
 
@@ -49,7 +50,7 @@ public class RegistroVacuna extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		try {
 			RegistroVacuna dialog = new RegistroVacuna(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -57,15 +58,15 @@ public class RegistroVacuna extends JDialog {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	/**
 	 * Create the dialog.
 	 */
-	public RegistroVacuna(Vacuna vacuna) {
+	public RegistroVacuna(Vacuna vac) {
 		selectedEnfermedad = null;
 		selectedProteccion = null;
-		this.vacuna = vacuna;
+		vacuna = vac;
 		setResizable(false);
 		setModal(true);
 		setBounds(100, 100, 558, 531);
@@ -142,7 +143,7 @@ public class RegistroVacuna extends JDialog {
 		panel.setLayout(null);
 		
 		JPanel panelEnfermedades = new JPanel();
-		panelEnfermedades.setBounds(20, 56, 173, 220);
+		panelEnfermedades.setBounds(20, 45, 173, 231);
 		panel.add(panelEnfermedades);
 		panelEnfermedades.setLayout(new BorderLayout(0, 0));
 		
@@ -150,6 +151,7 @@ public class RegistroVacuna extends JDialog {
 		panelEnfermedades.add(scrollPane, BorderLayout.CENTER);
 		
 		tableEnfermedades = new JTable();
+		tableEnfermedades.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableEnfermedades.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -161,10 +163,14 @@ public class RegistroVacuna extends JDialog {
 				}
 			}
 		});
+		String headerEnfermedad[] = {"Enfermedad"};
+		modelEnfermedades = new DefaultTableModel();
+		modelEnfermedades.setColumnIdentifiers(headerEnfermedad);
+		tableEnfermedades.setModel(modelEnfermedades);
 		scrollPane.setViewportView(tableEnfermedades);
 		
 		JPanel panelProteccion = new JPanel();
-		panelProteccion.setBounds(311, 56, 173, 220);
+		panelProteccion.setBounds(311, 45, 173, 231);
 		panel.add(panelProteccion);
 		panelProteccion.setLayout(new BorderLayout(0, 0));
 		
@@ -172,6 +178,7 @@ public class RegistroVacuna extends JDialog {
 		panelProteccion.add(scrollPane_1, BorderLayout.CENTER);
 		
 		tableProteccion = new JTable();
+		tableProteccion.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tableProteccion.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -183,15 +190,11 @@ public class RegistroVacuna extends JDialog {
 				}
 			}
 		});
+		String headerProteccion[] = {"Protección"};
+		modelProteccion = new DefaultTableModel();
+		modelProteccion.setColumnIdentifiers(headerProteccion);
+		tableProteccion.setModel(modelProteccion);
 		scrollPane_1.setViewportView(tableProteccion);
-		
-		JLabel lblNewLabel_3 = new JLabel("Enfermedades:");
-		lblNewLabel_3.setBounds(63, 31, 86, 14);
-		panel.add(lblNewLabel_3);
-		
-		JLabel lblNewLabel_4 = new JLabel("Protecci\u00F3n:");
-		lblNewLabel_4.setBounds(363, 31, 68, 14);
-		panel.add(lblNewLabel_4);
 		
 		btnPasarDerecha = new JButton(">>");
 		btnPasarDerecha.setBounds(216, 114, 77, 23);
@@ -252,9 +255,13 @@ public class RegistroVacuna extends JDialog {
 		modelProteccion.setRowCount(0);
 		rowsProteccion = new Object[modelProteccion.getColumnCount()];
 		
-		for (Enfermedad enfermedad : vacuna.getProteccion()) {
-			rowsProteccion[0] = enfermedad.getCodigo() + " : " + enfermedad.getNombreEnfermedad();
-			modelProteccion.addRow(rowsProteccion);
+		try {
+			for (Enfermedad enfermedad : vacuna.getProteccion()) {
+				rowsProteccion[0] = enfermedad.getCodigo() + " : " + enfermedad.getNombreEnfermedad();
+				modelProteccion.addRow(rowsProteccion);
+			}
+		} catch (NullPointerException e) {
+			// El objeto "vacuna" es nulo 
 		}
 	}
 	

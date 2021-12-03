@@ -70,10 +70,21 @@ public class PanelUsuario extends JDialog {
 			panelMenu.add(btnEnfermedades);
 			
 			btnVacunas = new JButton("Vacunas");
+			btnVacunas.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ListadoVacuna listado = new ListadoVacuna();
+					listado.setVisible(true);
+				}
+			});
 			btnVacunas.setBounds(10, 83, 134, 25);
 			panelMenu.add(btnVacunas);
 			
 			btnUsuarios = new JButton("Usuarios");
+			btnUsuarios.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					
+				}
+			});
 			btnUsuarios.setBounds(10, 119, 134, 25);
 			if (user instanceof Medico) {
 				btnUsuarios.setVisible(false);
