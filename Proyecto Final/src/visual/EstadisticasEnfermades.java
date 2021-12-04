@@ -51,6 +51,7 @@ public class EstadisticasEnfermades extends JDialog {
 	private JTextField txtCasosTotales;
 	private JTextField txtCasosHombres;
 	private JTextField txtCasosMujeres;
+	private JTextField txtCasosPorFecha;
 	
 
 	/**
@@ -189,8 +190,27 @@ public class EstadisticasEnfermades extends JDialog {
 			
 			JPanel panel_3 = new JPanel();
 			panel_3.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panel_3.setBounds(286, 252, 267, 135);
+			panel_3.setBounds(286, 294, 267, 135);
 			panel.add(panel_3);
+			panel_3.setLayout(null);
+			
+			JLabel lblNewLabel_4 = new JLabel("Fecha:");
+			lblNewLabel_4.setBounds(10, 11, 46, 14);
+			panel_3.add(lblNewLabel_4);
+			
+			txtCasosPorFecha = new JTextField();
+			txtCasosPorFecha.setEditable(false);
+			txtCasosPorFecha.setBounds(10, 90, 129, 20);
+			panel_3.add(txtCasosPorFecha);
+			txtCasosPorFecha.setColumns(10);
+			
+			JButton btnNewButton = new JButton("Buscar");
+			btnNewButton.setBounds(168, 36, 89, 23);
+			panel_3.add(btnNewButton);
+			
+			JLabel lblNewLabel_5 = new JLabel("casos");
+			lblNewLabel_5.setBounds(149, 93, 46, 14);
+			panel_3.add(lblNewLabel_5);
 			
 			JPanel panel_4 = new JPanel();
 			panel_4.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Lista de Vacunas", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -210,8 +230,13 @@ public class EstadisticasEnfermades extends JDialog {
 			
 			JLabel lblNewLabel_1 = new JLabel("Casos");
 			lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			lblNewLabel_1.setBounds(392, 62, 82, 14);
+			lblNewLabel_1.setBounds(399, 62, 82, 14);
 			panel.add(lblNewLabel_1);
+			
+			JLabel lblCasosPorFecha = new JLabel("Casos por fecha");
+			lblCasosPorFecha.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblCasosPorFecha.setBounds(373, 269, 128, 14);
+			panel.add(lblCasosPorFecha);
 		}
 		{
 			JPanel buttonPane = new JPanel();

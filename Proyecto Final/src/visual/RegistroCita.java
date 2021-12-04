@@ -8,12 +8,26 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
+
+import logico.CitaMedica;
+import logico.Clinica;
+import logico.Medico;
+import logico.Paciente;
+import logico.Usuario;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Date;
 import java.awt.event.ActionEvent;
+import javax.swing.ListSelectionModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class RegistroCita extends JDialog {
 
@@ -28,6 +42,13 @@ public class RegistroCita extends JDialog {
 	private JTable tableDoctoresDisponibles;
 	private JButton btnBuscarFecha;
 
+	private Paciente paciente;
+	private Medico selectedMedico;
+	private ArrayList<Medico> medicos;
+	
+	private DefaultTableModel modelMedicos;
+	private Object[] rowsMedicos;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -54,6 +75,8 @@ public class RegistroCita extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
+		
+		medicos = new ArrayList<>();
 		{
 			JPanel panel = new JPanel();
 			contentPanel.add(panel, BorderLayout.CENTER);
@@ -71,6 +94,30 @@ public class RegistroCita extends JDialog {
 			txtCedula.setColumns(10);
 			
 			btnBuscarCedula = new JButton("Buscar\r\n");
+			btnBuscarCedula.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				
+				if(txtCedula.getText().toString().equalsIgnoreCase("")) {	
+					JOptionPane.showMessageDialog(null, "Favor completar todas los campos", "Error", JOptionPane.ERROR_MESSAGE);
+	
+				}else {
+					if(Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null){
+						
+						paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText());
+						txtNombre.setText(paciente.getNombre());
+						txtDireccion.setText(paciente.getDireccion());
+						txtTelefono.setText(paciente.getTelefono());
+						
+					}else {
+						JOptionPane.showMessageDialog(null, "Este paciente no existe o la cedula esta incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+						txtCedula.setText("");
+						txtNombre.setText("");
+						txtDireccion.setText("");
+						txtTelefono.setText("");
+					}
+				}
+				}
+			});
 			btnBuscarCedula.setBounds(270, 31, 89, 23);
 			panelDatosCliente.add(btnBuscarCedula);
 			
@@ -134,6 +181,13 @@ public class RegistroCita extends JDialog {
 			panelDatosConsulta.add(txtFecha);
 			
 			btnBuscarFecha = new JButton("Buscar\r\n");
+			btnBuscarFecha.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					//Date fecha = Date.Valueof(txtFecha.getText());
+					//loadMedicos(fecha);
+				}
+			});
 			btnBuscarFecha.setBounds(544, 30, 89, 23);
 			panelDatosConsulta.add(btnBuscarFecha);
 			
@@ -147,6 +201,22 @@ public class RegistroCita extends JDialog {
 			panelDoctoresDisponibles.add(scrollPane, BorderLayout.CENTER);
 			
 			tableDoctoresDisponibles = new JTable();
+			tableDoctoresDisponibles.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int aux = tableDoctoresDisponibles.getSelectedRow();
+					if(aux!=-1) {
+						
+						String cod = (String) modelMedicos.getValueAt(aux, 0);
+						selectedMedico=Clinica.getInstance().buscarMedicoByCodigo(cod);
+					}
+				}
+			});
+			String[] heardersMedicos = {"Codigo","Nombre","Especialidad"};
+			modelMedicos = new DefaultTableModel();
+			tableDoctoresDisponibles.setModel(modelMedicos);
+			modelMedicos.setColumnIdentifiers(heardersMedicos);
+			tableDoctoresDisponibles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			scrollPane.setViewportView(tableDoctoresDisponibles);
 		}
 		{
@@ -156,6 +226,15 @@ public class RegistroCita extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("Aceptar");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+					//	CitaMedica cita = new CitaMedica(txtCodigoCita.getText().toString(), fechaCita, txtNombre.getText(), txtTelefono.getText().toString(), selectedMedico);
+					//	Clinica.getInstance().insertarCita(cita);
+						JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
+						txtCodigoCita.setText(Clinica.getInstance().generadorCodigo(4));
+					}
+				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
@@ -171,5 +250,40 @@ public class RegistroCita extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+		
+		txtCodigoCita.setText(Clinica.getInstance().generadorCodigo(4));
 	}
+	
+	private ArrayList<Medico> CargarMedicoDisponibles(Date fecha) {
+		
+		ArrayList<Medico> medicosDisp = new ArrayList<>();
+		
+		for (Usuario user : Clinica.getInstance().getMisUsuarios()) {
+			
+			if(user instanceof Medico) {
+				if(Clinica.getInstance().medicoDisponible(fecha, user.getId())) {
+					medicosDisp.add((Medico) user);
+				}
+			}
+		}
+		
+		return medicosDisp;
+	}
+	
+	private void loadMedicos(Date fecha) {
+		
+		ArrayList<Medico> medicosDisp = new ArrayList<>();
+		medicosDisp = CargarMedicoDisponibles(fecha);
+		
+		modelMedicos.setRowCount(0);
+		rowsMedicos = new Object[modelMedicos.getColumnCount()];
+		
+		for (int i = 0; i < medicosDisp.size(); i++) {
+			rowsMedicos[0]= medicosDisp.get(i).getId();
+			rowsMedicos[1]= medicosDisp.get(i).getNombre()+""+medicosDisp.get(i).getApellido();
+			rowsMedicos[2] = medicosDisp.get(i).getEspecialidad();
+		}
+		
+	}
+	
 }
