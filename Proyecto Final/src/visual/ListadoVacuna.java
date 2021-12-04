@@ -27,7 +27,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Listadovacuna extends JDialog {
+public class ListadoVacuna extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtCodigoVacuna;
@@ -43,7 +43,7 @@ public class Listadovacuna extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			Listadovacuna dialog = new Listadovacuna();
+			ListadoVacuna dialog = new ListadoVacuna();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -54,7 +54,7 @@ public class Listadovacuna extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Listadovacuna() {
+	public ListadoVacuna() {
 		selected = null;
 		setTitle("Vacunas");
 		setResizable(false);
@@ -163,7 +163,8 @@ public class Listadovacuna extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro desea eliminar la vacuna?" + selected.getCodigo(), "Confirmación", JOptionPane.WARNING_MESSAGE);
 						if (opcion == JOptionPane.YES_OPTION) {
-							Clinica.getInstance().eliminarVacuna(selected.getCodigo());
+							int index = Clinica.getInstance().indexByCodigoVacuna(selected.getCodigo());
+							Clinica.getInstance().eliminarVacuna(index);
 							cargarVacunas();
 							btnModificar.setEnabled(false);
 							btnEliminar.setEnabled(false);
@@ -209,6 +210,7 @@ public class Listadovacuna extends JDialog {
 		btnModificar.setEnabled(false);
 		btnEliminar.setEnabled(false);
 	}
+	
 }
 
 

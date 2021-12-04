@@ -285,6 +285,22 @@ public class Clinica implements Serializable {
 		return vacuna;
 	}
 	
+	public int indexByCodigoVacuna(String codigoVacuna) {
+		int index = -1;
+		boolean encontrado = false;
+		int i = 0;
+		
+		while (!encontrado && i < misVacunas.size()) {
+			if (misVacunas.get(i).getCodigo().equalsIgnoreCase(codigoVacuna)) {
+				index = i;
+				encontrado = true;
+			}
+			i++;
+		}
+		
+		return index;
+	}
+	
 	public boolean codigoVacunaValido(String codigoVacuna) {
 		boolean validacion = true;
 		int i = 0;
@@ -317,16 +333,21 @@ public class Clinica implements Serializable {
 	private boolean datosVacunaValidos(Vacuna vacuna) {
 		boolean validacion = false;
 		
-		if ( codigoVacunaValido(vacuna.getCodigo()) && (vacuna.getNombreVacuna() != null) && (vacuna.getFabricante() != null) && (!vacuna.getTipoVacuna().equalsIgnoreCase("<Seleccionar>")) && (!vacuna.getFormaAdministracion().equalsIgnoreCase("<Seleccionar>")) && (vacuna.getProteccion().size() > 0) ) {
+		if ( codigoVacunaValido(vacuna.getCodigo()) && (vacuna.getNombreVacuna() != null) && (vacuna.getFabricante() != null) && (!vacuna.getTipoVacuna().equalsIgnoreCase("<Seleccionar>")) && (!vacuna.getFormaAdministracion().equalsIgnoreCase("<Seleccionar>")) /*&& (vacuna.getProteccion().size() > 0)*/ ) {
 			validacion = true;
 		}
 		
 		return validacion;
 	}
+	
+	public void modificarVacuna(Vacuna modificacion, int index) {
+		if (index != -1) {
+			misVacunas.set(index, modificacion);
+		}
+	}
 
-	public void eliminarVacuna(String codigo) {
-		// TODO Auto-generated method stub
-		
+	public void eliminarVacuna(int index) {
+		misVacunas.remove(index);
 	}
 	
 	////////////////////Utils (Enfermedad) ////////////////////

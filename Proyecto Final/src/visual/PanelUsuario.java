@@ -72,7 +72,7 @@ public class PanelUsuario extends JDialog {
 			btnVacunas = new JButton("Vacunas");
 			btnVacunas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Listadovacuna listado = new Listadovacuna();
+					ListadoVacuna listado = new ListadoVacuna();
 					listado.setVisible(true);
 				}
 			});

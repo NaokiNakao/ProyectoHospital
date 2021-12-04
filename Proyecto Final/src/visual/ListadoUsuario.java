@@ -16,15 +16,15 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Listadousuario extends JDialog {
+public class ListadoUsuario extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField txtusuidregis;
-	private JTextField txtusunomb;
-	private JTextField txtloginusu;
-	private JTextField txtusucontras;
-	private JTextField txtusutel;
-	private JTextField txtusuid;
+	private JTextField txtIdBuscado;
+	private JTextField txtNombre;
+	private JTextField txtLogin;
+	private JTextField txtContrasenna;
+	private JTextField txtTelefono;
+	private JTextField txtId;
 	private JTable table;
 
 	/**
@@ -32,7 +32,7 @@ public class Listadousuario extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			Listadousuario dialog = new Listadousuario();
+			ListadoUsuario dialog = new ListadoUsuario();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -43,7 +43,7 @@ public class Listadousuario extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Listadousuario() {
+	public ListadoUsuario() {
 		setResizable(false);
 		setTitle("Listado de usuarios");
 		setBounds(100, 100, 583, 534);
@@ -64,10 +64,10 @@ public class Listadousuario extends JDialog {
 				panel.add(lblId_1);
 			}
 			{
-				txtusuidregis = new JTextField();
-				txtusuidregis.setColumns(10);
-				txtusuidregis.setBounds(41, 21, 93, 20);
-				panel.add(txtusuidregis);
+				txtIdBuscado = new JTextField();
+				txtIdBuscado.setColumns(10);
+				txtIdBuscado.setBounds(41, 21, 93, 20);
+				panel.add(txtIdBuscado);
 			}
 			{
 				JLabel label = new JLabel("Nombre:");
@@ -75,11 +75,11 @@ public class Listadousuario extends JDialog {
 				panel.add(label);
 			}
 			{
-				txtusunomb = new JTextField();
-				txtusunomb.setEditable(false);
-				txtusunomb.setColumns(10);
-				txtusunomb.setBounds(41, 74, 93, 20);
-				panel.add(txtusunomb);
+				txtNombre = new JTextField();
+				txtNombre.setEditable(false);
+				txtNombre.setColumns(10);
+				txtNombre.setBounds(41, 74, 93, 20);
+				panel.add(txtNombre);
 			}
 			{
 				JLabel lblId = new JLabel("Login:");
@@ -87,11 +87,11 @@ public class Listadousuario extends JDialog {
 				panel.add(lblId);
 			}
 			{
-				txtloginusu = new JTextField();
-				txtloginusu.setEditable(false);
-				txtloginusu.setColumns(10);
-				txtloginusu.setBounds(175, 74, 93, 20);
-				panel.add(txtloginusu);
+				txtLogin = new JTextField();
+				txtLogin.setEditable(false);
+				txtLogin.setColumns(10);
+				txtLogin.setBounds(175, 74, 93, 20);
+				panel.add(txtLogin);
 			}
 			{
 				JLabel lblContrasea = new JLabel("ID:");
@@ -104,11 +104,11 @@ public class Listadousuario extends JDialog {
 				panel.add(lblContrasea_1);
 			}
 			{
-				txtusucontras = new JTextField();
-				txtusucontras.setEditable(false);
-				txtusucontras.setColumns(10);
-				txtusucontras.setBounds(41, 137, 93, 20);
-				panel.add(txtusucontras);
+				txtContrasenna = new JTextField();
+				txtContrasenna.setEditable(false);
+				txtContrasenna.setColumns(10);
+				txtContrasenna.setBounds(41, 137, 93, 20);
+				panel.add(txtContrasenna);
 			}
 			{
 				JLabel lblTelefono = new JLabel("Telefono:");
@@ -116,23 +116,23 @@ public class Listadousuario extends JDialog {
 				panel.add(lblTelefono);
 			}
 			{
-				txtusutel = new JTextField();
-				txtusutel.setEditable(false);
-				txtusutel.setColumns(10);
-				txtusutel.setBounds(175, 137, 93, 20);
-				panel.add(txtusutel);
+				txtTelefono = new JTextField();
+				txtTelefono.setEditable(false);
+				txtTelefono.setColumns(10);
+				txtTelefono.setBounds(175, 137, 93, 20);
+				panel.add(txtTelefono);
 			}
 			{
-				JButton button = new JButton("Buscar");
-				button.setBounds(175, 20, 89, 23);
-				panel.add(button);
+				JButton btnBuscar = new JButton("Buscar");
+				btnBuscar.setBounds(175, 20, 89, 23);
+				panel.add(btnBuscar);
 			}
 			{
-				txtusuid = new JTextField();
-				txtusuid.setEditable(false);
-				txtusuid.setColumns(10);
-				txtusuid.setBounds(309, 74, 93, 20);
-				panel.add(txtusuid);
+				txtId = new JTextField();
+				txtId.setEditable(false);
+				txtId.setColumns(10);
+				txtId.setBounds(309, 74, 93, 20);
+				panel.add(txtId);
 			}
 		}
 		

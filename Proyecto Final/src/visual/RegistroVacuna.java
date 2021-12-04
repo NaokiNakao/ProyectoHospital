@@ -30,6 +30,7 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.ListSelectionModel;
+import javax.swing.JToolBar;
 
 public class RegistroVacuna extends JDialog {
 
@@ -238,8 +239,18 @@ public class RegistroVacuna extends JDialog {
 							}
 						}
 						else {
-							
+							String codigoAux = vacuna.getCodigo();
+							int indexAux = Clinica.getInstance().indexByCodigoVacuna(codigoAux);
+							vacuna.setCodigo(txtCodigo.getText());
+							vacuna.setNombreVacuna(txtNombre.getText());
+							vacuna.setFabricante(txtFabricante.getText());
+							vacuna.setTipoVacuna(cbxTipo.getSelectedItem().toString());
+							vacuna.setFormaAdministracion(cbxAdministracion.getSelectedItem().toString());
+							Clinica.getInstance().modificarVacuna(vacuna, indexAux);
+							JOptionPane.showMessageDialog(null, "Datos modificados.", "Información", JOptionPane.INFORMATION_MESSAGE);
+							dispose();
 						}
+						ListadoVacuna.cargarVacunas();
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -258,6 +269,7 @@ public class RegistroVacuna extends JDialog {
 			}
 		}
 		
+		cargarDatosCampos();
 		cargarEnfermedades();
 		cargarProteccion();
 	}
@@ -286,14 +298,27 @@ public class RegistroVacuna extends JDialog {
 		}
 	}
 	
-	public void limpiarCampos() {
-		txtCodigo.setText(Clinica.getInstance().generadorCodigo(6));
+	private void cargarDatosCampos() {
+		if (vacuna != null) {
+			txtCodigo.setText(vacuna.getCodigo());
+			txtNombre.setText(vacuna.getNombreVacuna());
+			txtFabricante.setText(vacuna.getFabricante());
+			cbxTipo.setSelectedItem(vacuna.getTipoVacuna());
+			cbxAdministracion.setSelectedItem(vacuna.getFormaAdministracion());
+		}
+	}
+	
+	private void limpiarCampos() {
+		String codigo;
+		do {
+			codigo = "V-" + Clinica.getInstance().generadorCodigo(6);
+			txtCodigo.setText(codigo);
+		} while (!Clinica.getInstance().codigoVacunaValido(codigo));
 		txtNombre.setText("");
 		txtFabricante.setText("");
 		cbxTipo.setSelectedIndex(0);
 		cbxAdministracion.setSelectedIndex(0);
 	}
-	
 }
 
 

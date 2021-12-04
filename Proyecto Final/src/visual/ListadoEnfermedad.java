@@ -17,22 +17,22 @@ import javax.swing.JTextPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Listadoenfermedad extends JDialog {
+public class ListadoEnfermedad extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
-	private JTextField txtenfercodregis;
-	private JTextField txtenfernomb;
-	private JTextField txtenfertipo;
-	private JTextField txtenferdescrip;
-	private JTextField txtenfercod;
+	private JTextField txtCodigoRegistrado;
+	private JTextField txtNombre;
+	private JTextField txtTipo;
+	private JTextField txtDescripcion;
+	private JTextField txtCodigo;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			Listadoenfermedad dialog = new Listadoenfermedad();
+			ListadoEnfermedad dialog = new ListadoEnfermedad();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -43,7 +43,7 @@ public class Listadoenfermedad extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Listadoenfermedad() {
+	public ListadoEnfermedad() {
 		setResizable(false);
 		setTitle("Listado de enfermedades");
 		setBounds(100, 100, 521, 533);
@@ -103,50 +103,50 @@ public class Listadoenfermedad extends JDialog {
 		lblNewLabel.setBounds(10, 24, 58, 14);
 		panel.add(lblNewLabel);
 		
-		txtenfercodregis = new JTextField();
-		txtenfercodregis.setBounds(66, 21, 93, 20);
-		panel.add(txtenfercodregis);
-		txtenfercodregis.setColumns(10);
+		txtCodigoRegistrado = new JTextField();
+		txtCodigoRegistrado.setBounds(66, 21, 93, 20);
+		panel.add(txtCodigoRegistrado);
+		txtCodigoRegistrado.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Nombre:");
 		lblNewLabel_1.setBounds(41, 49, 66, 14);
 		panel.add(lblNewLabel_1);
 		
-		txtenfernomb = new JTextField();
-		txtenfernomb.setEditable(false);
-		txtenfernomb.setColumns(10);
-		txtenfernomb.setBounds(41, 74, 93, 20);
-		panel.add(txtenfernomb);
+		txtNombre = new JTextField();
+		txtNombre.setEditable(false);
+		txtNombre.setColumns(10);
+		txtNombre.setBounds(41, 74, 93, 20);
+		panel.add(txtNombre);
 		
 		JLabel lblTipo = new JLabel("Tipo:");
 		lblTipo.setBounds(175, 49, 66, 14);
 		panel.add(lblTipo);
 		
-		txtenfertipo = new JTextField();
-		txtenfertipo.setEditable(false);
-		txtenfertipo.setBounds(175, 74, 93, 20);
-		panel.add(txtenfertipo);
-		txtenfertipo.setColumns(10);
+		txtTipo = new JTextField();
+		txtTipo.setEditable(false);
+		txtTipo.setBounds(175, 74, 93, 20);
+		panel.add(txtTipo);
+		txtTipo.setColumns(10);
 		
 		JLabel lblDescripcion = new JLabel("Descripcion:");
 		lblDescripcion.setBounds(41, 112, 93, 14);
 		panel.add(lblDescripcion);
 		
-		txtenferdescrip = new JTextField();
-		txtenferdescrip.setEditable(false);
-		txtenferdescrip.setColumns(10);
-		txtenferdescrip.setBounds(41, 133, 227, 20);
-		panel.add(txtenferdescrip);
+		txtDescripcion = new JTextField();
+		txtDescripcion.setEditable(false);
+		txtDescripcion.setColumns(10);
+		txtDescripcion.setBounds(41, 133, 227, 20);
+		panel.add(txtDescripcion);
 		
 		JLabel lblCodigo = new JLabel("Codigo:");
 		lblCodigo.setBounds(290, 49, 66, 14);
 		panel.add(lblCodigo);
 		
-		txtenfercod = new JTextField();
-		txtenfercod.setEditable(false);
-		txtenfercod.setColumns(10);
-		txtenfercod.setBounds(290, 74, 93, 20);
-		panel.add(txtenfercod);
+		txtCodigo = new JTextField();
+		txtCodigo.setEditable(false);
+		txtCodigo.setColumns(10);
+		txtCodigo.setBounds(290, 74, 93, 20);
+		panel.add(txtCodigo);
 		
 		JPanel buttonpane = new JPanel();
 		buttonpane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));

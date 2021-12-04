@@ -22,27 +22,27 @@ import java.util.Calendar;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Listadopaciente extends JDialog {
+public class ListadoPaciente extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable table;
 	private JPanel panel;
 	private JLabel lblCedula;
-	private JTextField txtpaccedregis;
+	private JTextField txtCedulaRegistrada;
 	private JLabel label_1;
-	private JTextField txtpacnomb;
+	private JTextField txtNombre;
 	private JLabel lblCedula_1;
-	private JTextField txtpacced;
+	private JTextField txtCedula;
 	private JLabel lblGenero;
-	private JTextField txtpacdirecc;
-	private JTextField txtpactel;
+	private JTextField txtDireccion;
+	private JTextField txtTelefono;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			Listadopaciente dialog = new Listadopaciente();
+			ListadoPaciente dialog = new ListadoPaciente();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -53,7 +53,7 @@ public class Listadopaciente extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public Listadopaciente() {
+	public ListadoPaciente() {
 		setResizable(false);
 		setTitle("Listado de pacientes");
 		setBounds(100, 100, 600, 660);
@@ -110,74 +110,74 @@ public class Listadopaciente extends JDialog {
 		lblCedula.setBounds(10, 24, 58, 14);
 		panel.add(lblCedula);
 		
-		txtpaccedregis = new JTextField();
-		txtpaccedregis.setColumns(10);
-		txtpaccedregis.setBounds(66, 21, 93, 20);
-		panel.add(txtpaccedregis);
+		txtCedulaRegistrada = new JTextField();
+		txtCedulaRegistrada.setColumns(10);
+		txtCedulaRegistrada.setBounds(66, 21, 93, 20);
+		panel.add(txtCedulaRegistrada);
 		
 		label_1 = new JLabel("Nombre:");
 		label_1.setBounds(41, 49, 66, 14);
 		panel.add(label_1);
 		
-		txtpacnomb = new JTextField();
-		txtpacnomb.setEditable(false);
-		txtpacnomb.setColumns(10);
-		txtpacnomb.setBounds(41, 74, 93, 20);
-		panel.add(txtpacnomb);
+		txtNombre = new JTextField();
+		txtNombre.setEditable(false);
+		txtNombre.setColumns(10);
+		txtNombre.setBounds(41, 74, 93, 20);
+		panel.add(txtNombre);
 		
 		lblCedula_1 = new JLabel("Cedula:");
 		lblCedula_1.setBounds(175, 49, 66, 14);
 		panel.add(lblCedula_1);
 		
-		txtpacced = new JTextField();
-		txtpacced.setEditable(false);
-		txtpacced.setColumns(10);
-		txtpacced.setBounds(175, 74, 93, 20);
-		panel.add(txtpacced);
+		txtCedula = new JTextField();
+		txtCedula.setEditable(false);
+		txtCedula.setColumns(10);
+		txtCedula.setBounds(175, 74, 93, 20);
+		panel.add(txtCedula);
 		
 		lblGenero = new JLabel("Genero:");
 		lblGenero.setBounds(309, 49, 93, 14);
 		panel.add(lblGenero);
 		
-		JComboBox cmbpacgen = new JComboBox();
-		cmbpacgen.setEnabled(false);
-		cmbpacgen.setModel(new DefaultComboBoxModel(new String[] {"<< Seleccione >>", "Hombre", "Mujer"}));
-		cmbpacgen.setBounds(309, 74, 132, 20);
-		panel.add(cmbpacgen);
+		JComboBox cbxGenero = new JComboBox();
+		cbxGenero.setEnabled(false);
+		cbxGenero.setModel(new DefaultComboBoxModel(new String[] {"<< Seleccione >>", "Hombre", "Mujer"}));
+		cbxGenero.setBounds(309, 74, 132, 20);
+		panel.add(cbxGenero);
 		
 		JLabel lblNewLabel = new JLabel("Fecha de Nacimiento:");
 		lblNewLabel.setBounds(41, 112, 118, 14);
 		panel.add(lblNewLabel);
 		
-		JSpinner spnpacfechna = new JSpinner();
-		spnpacfechna.setEnabled(false);
-		spnpacfechna.setModel(new SpinnerDateModel(new Date(1637899200000L), null, null, Calendar.DAY_OF_YEAR));
-		spnpacfechna.setBounds(39, 137, 120, 20);
-		panel.add(spnpacfechna);
+		JSpinner spnFechaNacimiento = new JSpinner();
+		spnFechaNacimiento.setEnabled(false);
+		spnFechaNacimiento.setModel(new SpinnerDateModel(new Date(1637899200000L), null, null, Calendar.DAY_OF_YEAR));
+		spnFechaNacimiento.setBounds(39, 137, 120, 20);
+		panel.add(spnFechaNacimiento);
 		
 		JLabel lblDireccion = new JLabel("Direccion:");
 		lblDireccion.setBounds(175, 112, 118, 14);
 		panel.add(lblDireccion);
 		
-		txtpacdirecc = new JTextField();
-		txtpacdirecc.setEditable(false);
-		txtpacdirecc.setColumns(10);
-		txtpacdirecc.setBounds(175, 137, 93, 20);
-		panel.add(txtpacdirecc);
+		txtDireccion = new JTextField();
+		txtDireccion.setEditable(false);
+		txtDireccion.setColumns(10);
+		txtDireccion.setBounds(175, 137, 93, 20);
+		panel.add(txtDireccion);
 		
 		JLabel lblTelefono = new JLabel("Telefono:");
 		lblTelefono.setBounds(309, 112, 118, 14);
 		panel.add(lblTelefono);
 		
-		txtpactel = new JTextField();
-		txtpactel.setEditable(false);
-		txtpactel.setColumns(10);
-		txtpactel.setBounds(309, 137, 132, 20);
-		panel.add(txtpactel);
+		txtTelefono = new JTextField();
+		txtTelefono.setEditable(false);
+		txtTelefono.setColumns(10);
+		txtTelefono.setBounds(309, 137, 132, 20);
+		panel.add(txtTelefono);
 		
-		JButton btnNewButton = new JButton("Buscar");
-		btnNewButton.setBounds(179, 20, 89, 23);
-		panel.add(btnNewButton);
+		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.setBounds(179, 20, 89, 23);
+		panel.add(btnBuscar);
 		
 		JButton btnHistorialClinico = new JButton("Historial clinico");
 		btnHistorialClinico.setBounds(309, 20, 132, 23);
