@@ -29,6 +29,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Component;
+import javax.swing.Box;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import java.awt.Font;
 
 public class EstadisticasEnfermades extends JDialog {
 
@@ -42,6 +47,10 @@ public class EstadisticasEnfermades extends JDialog {
 	
 	private DefaultTableModel modelVacunas;
 	private Object [] rowsVacunas;
+	private JTextField textField;
+	private JTextField txtCasosTotales;
+	private JTextField txtCasosHombres;
+	private JTextField txtCasosMujeres;
 	
 
 	/**
@@ -79,12 +88,13 @@ public class EstadisticasEnfermades extends JDialog {
 			Clinica.getInstance().insertarEnfermedad(covid2);
 			
 			ArrayList<Enfermedad> r = new ArrayList<>();
+			ArrayList<Enfermedad>t = new ArrayList<>();
 			
 			r.add(covid);
-			
+			t.add(covid2);
 			
 			Vacuna sinovac = new Vacuna("620", "Sinovac", "Yo", r, "P", "P");
-			Vacuna rv = new Vacuna("8952", "tula", "Tambien yo", r, "Ayh", "p");
+			Vacuna rv = new Vacuna("8952", "tula", "Tambien yo", t, "Ayh", "p");
 			
 			Clinica.getInstance().agregarVacuna(rv);
 			Clinica.getInstance().agregarVacuna(sinovac);
@@ -114,8 +124,18 @@ public class EstadisticasEnfermades extends JDialog {
 						String cod = (String) modelEnfermedades.getValueAt(aux, 0);
 						selectedEnfermedad=Clinica.getInstance().buscarEnfermedadByCodigo(cod);
 						loadVacunas(selectedEnfermedad);
+						
+					float[] h = Clinica.getInstance().porcentajeEnfermedadPorGenero(selectedEnfermedad.getCodigo());
+						
+						txtCasosHombres.setText(String.valueOf(h[0])+"%");
+						txtCasosMujeres.setText(String.valueOf(h[1])+"%");
+						txtCasosTotales.setText(String.valueOf(Clinica.getInstance().casosEnfermedadTotal(selectedEnfermedad.getCodigo())));
 						//System.out.println(Clinica.getInstance().buscarEnfermedadByCodigo(cod).getNombreEnfermedad());
+					}else {
+						txtCasosHombres.setText("");
+						txtCasosMujeres.setText("");
 					}
+					
 				}
 			});
 			String[] heardersEnfermedades= {"Codigo","Nombre","Tipo"};
@@ -126,9 +146,46 @@ public class EstadisticasEnfermades extends JDialog {
 			scrollPane.setViewportView(tableEnfermedades);
 			
 			JPanel panel_2 = new JPanel();
-			panel_2.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panel_2.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 			panel_2.setBounds(286, 87, 267, 135);
 			panel.add(panel_2);
+			panel_2.setLayout(null);
+			
+			textField = new JTextField();
+			textField.setEditable(false);
+			textField.setBounds(132, 0, 2, 135);
+			panel_2.add(textField);
+			textField.setColumns(10);
+			
+			JLabel lblNewLabel = new JLabel("Casos Totales:");
+			lblNewLabel.setBounds(144, 11, 86, 14);
+			panel_2.add(lblNewLabel);
+			
+			txtCasosTotales = new JTextField();
+			txtCasosTotales.setEditable(false);
+			txtCasosTotales.setBounds(144, 57, 86, 20);
+			panel_2.add(txtCasosTotales);
+			txtCasosTotales.setColumns(10);
+			
+			JLabel lblNewLabel_2 = new JLabel("Hombres:");
+			lblNewLabel_2.setBounds(10, 11, 71, 14);
+			panel_2.add(lblNewLabel_2);
+			
+			txtCasosHombres = new JTextField();
+			txtCasosHombres.setEditable(false);
+			txtCasosHombres.setColumns(10);
+			txtCasosHombres.setBounds(10, 36, 86, 20);
+			panel_2.add(txtCasosHombres);
+			
+			JLabel lblNewLabel_3 = new JLabel("Mujeres:");
+			lblNewLabel_3.setBounds(10, 74, 71, 14);
+			panel_2.add(lblNewLabel_3);
+			
+			txtCasosMujeres = new JTextField();
+			txtCasosMujeres.setEditable(false);
+			txtCasosMujeres.setColumns(10);
+			txtCasosMujeres.setBounds(10, 99, 86, 20);
+			panel_2.add(txtCasosMujeres);
 			
 			JPanel panel_3 = new JPanel();
 			panel_3.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -150,6 +207,11 @@ public class EstadisticasEnfermades extends JDialog {
 			tableVacunas.setModel(modelVacunas);
 			modelVacunas.setColumnIdentifiers(heardersVacunas);
 			scrollPane_1.setViewportView(tableVacunas);
+			
+			JLabel lblNewLabel_1 = new JLabel("Casos");
+			lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblNewLabel_1.setBounds(392, 62, 82, 14);
+			panel.add(lblNewLabel_1);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -173,8 +235,7 @@ public class EstadisticasEnfermades extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 			
-			loadEnfermedades();
-			
+			loadEnfermedades();	
 		}
 	}
 	
@@ -195,13 +256,12 @@ public class EstadisticasEnfermades extends JDialog {
 	
 	
 	private void loadVacunas(Enfermedad enfermedad) {
-		
+	
 		modelVacunas.setRowCount(0);
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
 		
 		ArrayList<Vacuna> misVacunas = new ArrayList<>();
 		if(enfermedad!= null) {
-
 			misVacunas =  Clinica.getInstance().vacunasParaEnfermedad(enfermedad.getCodigo());
 		
 			for (int i = 0; i < misVacunas.size(); i++) {
@@ -213,5 +273,4 @@ public class EstadisticasEnfermades extends JDialog {
 		
 		}
 	}
-	
 }

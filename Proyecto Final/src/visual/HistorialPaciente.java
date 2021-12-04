@@ -75,10 +75,11 @@ public class HistorialPaciente extends JDialog {
 	 * Create the dialog.
 	 */
 	public HistorialPaciente() {
-		setTitle("Historial Medico");
 		setModal(true);
+		setTitle("Historial Medico");
 		setResizable(false);
 		setBounds(100, 100, 809, 539);
+		setLocationRelativeTo(null); 	
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
@@ -97,31 +98,35 @@ public class HistorialPaciente extends JDialog {
 			JButton btnNewButton = new JButton("Buscar\r\n");
 			btnNewButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
-					if(Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null) {
-						paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText().toString());
-						txtNombre.setText(paciente.getNombre());
-						txtTelefono.setText(paciente.getTelefono());
-					if(rdbtnEnfermedades.isSelected()) {	
-						loadEnfermedades(paciente);
-					}else if(rdbtnVacunas.isSelected()) {
-							loadVacunas(paciente);
-						}else if(rdbtnDatosDeConsultas.isSelected()) {
-							loadConsultas(paciente);
+				
+				if(txtCedula.getText().equalsIgnoreCase("")) {
+					JOptionPane.showMessageDialog(null, "Favor completar todos los espacios", "Error", JOptionPane.ERROR_MESSAGE);
+				}else {
+						if(Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null) {
+							paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText().toString());
+							txtNombre.setText(paciente.getNombre());
+							txtTelefono.setText(paciente.getTelefono());
+						if(rdbtnEnfermedades.isSelected()) {	
+							loadEnfermedades(paciente);
+						}else if(rdbtnVacunas.isSelected()) {
+								loadVacunas(paciente);
+							}else if(rdbtnDatosDeConsultas.isSelected()) {
+								loadConsultas(paciente);
+							}
+						
+						}else {
+							JOptionPane.showMessageDialog(null, "Este paciente no existe o la cedula esta incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+							txtNombre.setText("");
+							txtTelefono.setText("");
+							txtCedula.setText("");
+							paciente = null;
 						}
 						
-					}else {
-						JOptionPane.showMessageDialog(null, "Este paciente no existe o la cedula esta incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
-						txtNombre.setText("");
-						txtTelefono.setText("");
-						txtCedula.setText("");
-						paciente = null;
-					}
-					
-					if(paciente==null){
-						loadEnfermedades(paciente);
-						loadVacunas(paciente);
-						loadConsultas(paciente);
+						if(paciente==null){
+							loadEnfermedades(paciente);
+							loadVacunas(paciente);
+							loadConsultas(paciente);
+						}
 					}
 				}
 			});
