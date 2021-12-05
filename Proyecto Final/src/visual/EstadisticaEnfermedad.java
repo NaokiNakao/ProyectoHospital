@@ -35,7 +35,7 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.Font;
 
-public class EstadisticasEnfermades extends JDialog {
+public class EstadisticaEnfermedad extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTable tableEnfermedades;
@@ -59,7 +59,7 @@ public class EstadisticasEnfermades extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			EstadisticasEnfermades dialog = new EstadisticasEnfermades();
+			EstadisticaEnfermedad dialog = new EstadisticaEnfermedad();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -70,10 +70,11 @@ public class EstadisticasEnfermades extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public EstadisticasEnfermades() {
+	public EstadisticaEnfermedad() {
 		setModal(true);
 		setResizable(false);
 		setBounds(100, 100, 855, 550);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

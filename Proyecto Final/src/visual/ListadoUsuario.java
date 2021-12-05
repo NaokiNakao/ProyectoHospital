@@ -44,6 +44,7 @@ public class ListadoUsuario extends JDialog {
 	 * Create the dialog.
 	 */
 	public ListadoUsuario() {
+		setModal(true);
 		setResizable(false);
 		setTitle("Listado de usuarios");
 		setBounds(100, 100, 583, 534);

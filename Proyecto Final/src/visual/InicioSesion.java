@@ -89,8 +89,8 @@ public class InicioSesion extends JDialog {
 			public void actionPerformed(ActionEvent arg0) {
 				if (Clinica.getInstance().validacionCredenciales(txtCodigoUsuario.getText(), pfPassword.getText())) {
 					PanelUsuario frame = new PanelUsuario(Clinica.getLoginUser());
-					frame.setVisible(true);
 					dispose();
+					frame.setVisible(true);
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "Error en las credenciales.", "Error", JOptionPane.ERROR_MESSAGE);

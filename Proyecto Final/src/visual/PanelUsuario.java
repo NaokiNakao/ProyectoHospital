@@ -62,10 +62,22 @@ public class PanelUsuario extends JDialog {
 			panelMenu.setLayout(null);
 			
 			btnPacientes = new JButton("Pacientes");
+			btnPacientes.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					ListadoPaciente listado = new ListadoPaciente();
+					listado.setVisible(true);
+				}
+			});
 			btnPacientes.setBounds(10, 11, 134, 25);
 			panelMenu.add(btnPacientes);
 			
 			btnEnfermedades = new JButton("Enfermedades");
+			btnEnfermedades.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					EstadisticaEnfermedad frame = new EstadisticaEnfermedad();
+					frame.setVisible(true);
+				}
+			});
 			btnEnfermedades.setBounds(10, 47, 134, 25);
 			panelMenu.add(btnEnfermedades);
 			
@@ -82,7 +94,8 @@ public class PanelUsuario extends JDialog {
 			btnUsuarios = new JButton("Usuarios");
 			btnUsuarios.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					
+					ListadoUsuario listado = new ListadoUsuario();
+					listado.setVisible(true);
 				}
 			});
 			btnUsuarios.setBounds(10, 119, 134, 25);

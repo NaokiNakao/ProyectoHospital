@@ -55,6 +55,7 @@ public class ListadoPaciente extends JDialog {
 	 */
 	public ListadoPaciente() {
 		setResizable(false);
+		setModal(true);
 		setTitle("Listado de pacientes");
 		setBounds(100, 100, 600, 660);
 		getContentPane().setLayout(new BorderLayout());
