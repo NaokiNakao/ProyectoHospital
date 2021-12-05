@@ -184,8 +184,12 @@ public class RegistroCita extends JDialog {
 			btnBuscarFecha.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
+					if(txtFecha.getText().toString().equalsIgnoreCase("")) {
+						JOptionPane.showMessageDialog(null, "Favor completar todas los campos", "Error", JOptionPane.ERROR_MESSAGE);
+					}else {
 					//Date fecha = Date.Valueof(txtFecha.getText());
 					//loadMedicos(fecha);
+					}
 				}
 			});
 			btnBuscarFecha.setBounds(544, 30, 89, 23);
