@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class Clinica implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3627439187370750264L;
 	private ArrayList<Paciente> misPacientes;
 	private ArrayList<Usuario> misUsuarios;
 	private ArrayList<CitaMedica> citasMedicas;

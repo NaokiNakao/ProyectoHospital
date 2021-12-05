@@ -87,6 +87,7 @@ public class ListadoVacuna extends JDialog {
 				if (vacuna != null) {
 					RegistroVacuna frame = new RegistroVacuna(vacuna);
 					frame.setVisible(true);
+					txtCodigoVacuna.setText("");
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "La vacuna no se encuentra registrada.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -161,7 +162,7 @@ public class ListadoVacuna extends JDialog {
 				btnEliminar = new JButton("Eliminar");
 				btnEliminar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro desea eliminar la vacuna?" + selected.getCodigo(), "Confirmación", JOptionPane.WARNING_MESSAGE);
+						int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro desea eliminar la vacuna?", "Confirmación", JOptionPane.WARNING_MESSAGE);
 						if (opcion == JOptionPane.YES_OPTION) {
 							int index = Clinica.getInstance().indexByCodigoVacuna(selected.getCodigo());
 							Clinica.getInstance().eliminarVacuna(index);

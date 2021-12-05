@@ -206,10 +206,20 @@ public class RegistroVacuna extends JDialog {
 		scrollPane_1.setViewportView(tableProteccion);
 		
 		btnPasarDerecha = new JButton(">>");
+		btnPasarDerecha.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 		btnPasarDerecha.setBounds(216, 114, 77, 23);
 		panel.add(btnPasarDerecha);
 		
 		btnPasarIzquierda = new JButton("<<");
+		btnPasarIzquierda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnPasarIzquierda.setBounds(216, 161, 77, 23);
 		panel.add(btnPasarIzquierda);
 		{
@@ -258,7 +268,7 @@ public class RegistroVacuna extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 			{
-				JButton cancelButton = new JButton("Cancelar");
+				JButton cancelButton = new JButton("Cerrar");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
@@ -274,7 +284,7 @@ public class RegistroVacuna extends JDialog {
 		cargarProteccion();
 	}
 	
-	public static void cargarEnfermedades() {
+	private void cargarEnfermedades() {
 		modelEnfermedades.setRowCount(0);
 		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
 		
@@ -284,7 +294,7 @@ public class RegistroVacuna extends JDialog {
 		}
 	}
 	
-	public static void cargarProteccion() {
+	private void cargarProteccion() {
 		modelProteccion.setRowCount(0);
 		rowsProteccion = new Object[modelProteccion.getColumnCount()];
 		
@@ -319,6 +329,7 @@ public class RegistroVacuna extends JDialog {
 		cbxTipo.setSelectedIndex(0);
 		cbxAdministracion.setSelectedIndex(0);
 	}
+	
 }
 
 

@@ -1,9 +1,11 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Vacuna {
+public class Vacuna implements Serializable{
 	
+	private static final long serialVersionUID = 7941951698889619066L;
 	private String codigo; // una letra y seis (6) dígitos --> "V-[código]"
 	private String nombreVacuna;
 	private String fabricante;
