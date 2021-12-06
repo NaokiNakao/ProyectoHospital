@@ -233,8 +233,8 @@ public class RegistroCita extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
-					//	CitaMedica cita = new CitaMedica(txtCodigoCita.getText().toString(), fechaCita, txtNombre.getText(), txtTelefono.getText().toString(), selectedMedico);
-					//	Clinica.getInstance().insertarCita(cita);
+						//CitaMedica cita = new CitaMedica(txtCodigoCita.getText().toString(), fecha, txtNombre.getText(), txtTelefono.getText().toString(), selectedMedico);
+						//Clinica.getInstance().insertarCita(cita);
 						JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
 						txtCodigoCita.setText(Clinica.getInstance().generadorCodigo(4));
 					}

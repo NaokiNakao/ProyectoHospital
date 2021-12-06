@@ -9,12 +9,15 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import logico.Administrador;
+import logico.CitaMedica;
+import logico.Clinica;
 import logico.Medico;
 import logico.Usuario;
 import java.awt.GridLayout;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -22,6 +25,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.Color;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.ListSelectionModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class PanelUsuario extends JDialog {
 
@@ -34,6 +43,11 @@ public class PanelUsuario extends JDialog {
 	private JButton btnEnfermedades;
 	private JButton btnVacunas;
 	private JButton btnUsuarios;
+	private JTable tableAgenda;
+	private static DefaultTableModel modelAgenda;
+	private static Object[] rowsAgenda;
+	private CitaMedica siguienteCita;
+	private JButton btnConsulta;
 
 	/**
 	 * Create the dialog.
@@ -45,9 +59,11 @@ public class PanelUsuario extends JDialog {
 		setLocationRelativeTo(null);
 		if (user instanceof Administrador) {
 			setTitle("Administrador");
+			btnConsulta.setVisible(false);
 		}
 		else if (user instanceof Medico) {
 			setTitle("Medico");
+			loadAgenda((Medico) user);
 		}
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -103,6 +119,20 @@ public class PanelUsuario extends JDialog {
 				btnUsuarios.setVisible(false);
 			}
 			panelMenu.add(btnUsuarios);
+			
+			btnConsulta = new JButton("Siguiente Consulta");
+			btnConsulta.setBounds(10, 155, 134, 25);
+			panelMenu.add(btnConsulta);
+			btnConsulta.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					String cod = (String) tableAgenda.getValueAt(0, 0);
+					siguienteCita = Clinica.getInstance().buscarCitaMedicaByCod(cod);
+					
+					ConsultasVisual rc =new ConsultasVisual(siguienteCita,(Medico) user);
+					rc.setVisible(true);
+				}
+			});
 		}
 		
 		lblHolder = new JLabel("");
@@ -145,11 +175,29 @@ public class PanelUsuario extends JDialog {
 		
 		panelAgenda = new JPanel();
 		panelAgenda.setBorder(new TitledBorder(null, "Agenda", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelAgenda.setBounds(220, 11, 324, 371);
+		panelAgenda.setBounds(220, 11, 324, 352);
 		if (user instanceof Administrador) {
 			panelAgenda.setVisible(false);
 		}
 		contentPanel.add(panelAgenda);
+		panelAgenda.setLayout(new BorderLayout(0, 0));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		panelAgenda.add(scrollPane, BorderLayout.CENTER);
+		
+		tableAgenda = new JTable();
+		tableAgenda.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		String[] heardersAgenda = {"Codigo","Paciente","Fecha"};
+		modelAgenda = new DefaultTableModel();
+		tableAgenda.setModel(modelAgenda);
+		modelAgenda.setColumnIdentifiers(heardersAgenda);
+		tableAgenda.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPane.setViewportView(tableAgenda);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -166,5 +214,19 @@ public class PanelUsuario extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+	}
+	
+	private void loadAgenda(Medico medico) {
+		
+		modelAgenda.setRowCount(0);
+		rowsAgenda = new Object[modelAgenda.getColumnCount()];
+				
+				for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
+					rowsAgenda[0]=  medico.getMisCitas().get(i).getCodigo();
+					rowsAgenda[1]=  medico.getMisCitas().get(i).getNombrePersona();
+					rowsAgenda[2]=  medico.getMisCitas().get(i).getFechaCita();
+					modelAgenda.addRow(rowsAgenda);
+				}
+		
 	}
 }

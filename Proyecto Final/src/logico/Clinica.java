@@ -393,6 +393,32 @@ public class Clinica implements Serializable {
 		citasMedicas.add(cita);
 	}
 	
+	public CitaMedica buscarCitaMedicaByCod(String cod) {
+		CitaMedica cita = null;
+		boolean encontrada = false;
+		int i = 0;
+		
+		while (!encontrada && i < misUsuarios.size()) {
+			if (citasMedicas.get(i).getCodigo().equalsIgnoreCase(cod)) {
+				cita = citasMedicas.get(i);
+				encontrada = true;
+			}
+			i++;
+		}
+		
+		return cita;
+		
+	}
+	
+	public void insertarConsulta(Consulta c, Medico medico,CitaMedica cita) {
+		
+		misConsultas.add(c);
+		medico.getMisConsultas().add(c);
+		medico.getMisCitas().remove(cita);
+		
+	}
+	 
+	
 }
 
 

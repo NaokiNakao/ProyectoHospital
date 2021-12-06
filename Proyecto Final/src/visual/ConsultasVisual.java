@@ -20,30 +20,57 @@ import javax.swing.JTextField;
 import java.awt.Button;
 import java.awt.Panel;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
+import com.sun.media.jfxmedia.Media;
+
+import logico.CitaMedica;
+import logico.Clinica;
 import logico.Consulta;
+import logico.Enfermedad;
+import logico.Medico;
+import logico.Vacuna;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.UIManager;
 import java.awt.Color;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ConsultasVisual extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtPaciente;
 	private JButton btnHistorial;
-	private JButton btnEnfermedades;
+	private JButton btnReceta;
 	private JTextPane textPaneSintomas;
 	private JTextPane textPaneDiagnostico;
-	private JComboBox cbxEnfermedades;
-
+	private JTable tableEnfermedades;
+	private static DefaultTableModel modelEnfermedades;
+	private static Object[] rowsEnfermedades;
+	private JPanel panelReceta;
+	private JTable tableVacunas;
+	private static DefaultTableModel modelVacunas;
+	private static Object[] rowsVacunas;
+	private Enfermedad selectedEnfermedad;
+	private Vacuna selectedVacuna;
+	private JTextPane textPaneReceta;
+	private JButton btnFinalizar;
+	private JLabel lblCodigoConsulta;
+	
+ 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			ConsultasVisual dialog = new ConsultasVisual();
+			ConsultasVisual dialog = new ConsultasVisual(null,null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -54,11 +81,11 @@ public class ConsultasVisual extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ConsultasVisual() {
+	public ConsultasVisual(CitaMedica cita,Medico medico) {
 		setModal(true);
 		setTitle("Consulta");
 		setResizable(false);
-		setBounds(100, 100, 815, 598);
+		setBounds(100, 100, 920, 598);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -70,9 +97,29 @@ public class ConsultasVisual extends JDialog {
 			panel.setLayout(null);
 			
 			final Panel panelSintomas = new Panel();
-			panelSintomas.setBounds(28, 10, 386, 456);
+			panelSintomas.setBounds(20, 38, 459, 456);
 			panel.add(panelSintomas);
 			panelSintomas.setLayout(null);
+			
+			
+
+			Enfermedad covid = new Enfermedad("1021", "covid", "Respiratoria", "Malisima compai");
+			Clinica.getInstance().insertarEnfermedad(covid);
+			
+			Enfermedad covid2 = new Enfermedad("1028", "covid2", "Respiratoria", "Malisima compai");
+			Clinica.getInstance().insertarEnfermedad(covid2);
+			
+			ArrayList<Enfermedad> r = new ArrayList<>();
+			ArrayList<Enfermedad>t = new ArrayList<>();
+			
+			r.add(covid);
+			t.add(covid2);
+			
+			Vacuna sinovac = new Vacuna("620", "Sinovac", "Yo", r, "P", "P");
+			Vacuna rv = new Vacuna("8952", "tula", "Tambien yo", t, "Ayh", "p");
+			
+			Clinica.getInstance().agregarVacuna(rv);
+			Clinica.getInstance().agregarVacuna(sinovac);
 			
 			JButton btnSiguiente = new JButton("Siguiente");
 			btnSiguiente.addActionListener(new ActionListener() {
@@ -83,79 +130,109 @@ public class ConsultasVisual extends JDialog {
 						JOptionPane.showMessageDialog(null, "Favor colocar al menos un sintoma", "Error", JOptionPane.ERROR_MESSAGE);
 					}else {
 						panelSintomas.setVisible(false);
+						loadEnfermedades();
 					}
 				}
 			});
-			btnSiguiente.setBounds(129, 415, 112, 23);
+			btnSiguiente.setBounds(173, 415, 112, 23);
 			panelSintomas.add(btnSiguiente);
 			
 			JLabel lblSintomas = new JLabel("Sintomas");
-			lblSintomas.setBounds(148, 11, 90, 25);
+			lblSintomas.setBounds(184, 11, 90, 25);
 			panelSintomas.add(lblSintomas);
 			lblSintomas.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			{
 				textPaneSintomas = new JTextPane();
-				textPaneSintomas.setBounds(33, 47, 304, 343);
+				textPaneSintomas.setBounds(33, 47, 392, 343);
 				panelSintomas.add(textPaneSintomas);
+				//loadEnfermedades();
 			}
 			
 			JPanel panelPaciente = new JPanel();
 			panelPaciente.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Paciente", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-			panelPaciente.setBounds(533, 43, 224, 371);
+			panelPaciente.setBounds(616, 71, 224, 371);
 			panel.add(panelPaciente);
 			panelPaciente.setLayout(null);
 			
 			txtPaciente = new JTextField();
+			txtPaciente.setText(cita.getNombrePersona());
 			txtPaciente.setEditable(false);
 			txtPaciente.setBounds(10, 342, 204, 20);
 			panelPaciente.add(txtPaciente);
 			txtPaciente.setColumns(10);
 			
-			Panel panel_1 = new Panel();
-			panel_1.setBounds(28, 10, 386, 456);
-			panel.add(panel_1);
-			panel_1.setLayout(null);
+			Panel panelDiagnostico = new Panel();
+			panelDiagnostico.setBounds(20, 38, 459, 456);
+			panel.add(panelDiagnostico);
+			panelDiagnostico.setLayout(null);
 			
 			JLabel lblDiagnostico = new JLabel("Diagnostico");
 			lblDiagnostico.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			lblDiagnostico.setBounds(148, 11, 90, 25);
-			panel_1.add(lblDiagnostico);
+			lblDiagnostico.setBounds(184, 11, 90, 25);
+			panelDiagnostico.add(lblDiagnostico);
 			
 			textPaneDiagnostico = new JTextPane();
-			textPaneDiagnostico.setBounds(33, 216, 304, 174);
-			panel_1.add(textPaneDiagnostico);
+			textPaneDiagnostico.setBounds(33, 216, 392, 174);
+			panelDiagnostico.add(textPaneDiagnostico);
 			
 			JButton btnVolver = new JButton("Sintomas");
-			btnVolver.setBounds(33, 415, 128, 23);
-			panel_1.add(btnVolver);
+			btnVolver.setBounds(67, 415, 128, 23);
+			panelDiagnostico.add(btnVolver);
 			
-			btnEnfermedades = new JButton("Finalizar");
-			btnEnfermedades.addActionListener(new ActionListener() {
+			btnReceta = new JButton("Receta");
+			btnReceta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
 					if(textPaneDiagnostico.getText().toString().equalsIgnoreCase("")) {
 						JOptionPane.showMessageDialog(null, "Favor colocar una despripcion del diagnostico", "Error", JOptionPane.ERROR_MESSAGE);
 					}else {
-					//	Consulta c = new Consulta(codigo, fechaConsulta, textPaneSintomas.getText().toString(), textPaneDiagnostico.getText().toString(), miMedico);
+						panelSintomas.setVisible(false);
+						panelDiagnostico.setVisible(false);
+						panelReceta.setVisible(true);
 					}
 				}
 			});
-			btnEnfermedades.setBounds(209, 415, 128, 23);
-			panel_1.add(btnEnfermedades);
+			btnReceta.setBounds(262, 415, 128, 23);
+			panelDiagnostico.add(btnReceta);
 			
 			JPanel panelEnfer = new JPanel();
 			panelEnfer.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			panelEnfer.setBounds(33, 47, 304, 158);
-			panel_1.add(panelEnfer);
+			panelEnfer.setBounds(33, 47, 392, 158);
+			panelDiagnostico.add(panelEnfer);
 			panelEnfer.setLayout(null);
 			
-			cbxEnfermedades = new JComboBox();
-			cbxEnfermedades.setBounds(67, 78, 169, 20);
-			panelEnfer.add(cbxEnfermedades);
-			
 			JLabel lblNewLabel = new JLabel("Seleccione la enfermedad a diagnosticar:");
-			lblNewLabel.setBounds(47, 33, 247, 14);
+			lblNewLabel.setBounds(72, 11, 247, 14);
 			panelEnfer.add(lblNewLabel);
+			
+			JPanel panelTablaEnfermedades = new JPanel();
+			panelTablaEnfermedades.setBounds(21, 43, 342, 104);
+			panelEnfer.add(panelTablaEnfermedades);
+			panelTablaEnfermedades.setLayout(new BorderLayout(0, 0));
+			
+			JScrollPane scrollPane = new JScrollPane();
+			scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+			panelTablaEnfermedades.add(scrollPane, BorderLayout.CENTER);
+			
+			tableEnfermedades = new JTable();
+			tableEnfermedades.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int aux = tableEnfermedades.getSelectedRow();
+					if(aux!=-1) {
+						String cod = (String) modelEnfermedades.getValueAt(aux, 0);
+						selectedEnfermedad=Clinica.getInstance().buscarEnfermedadByCodigo(cod);
+						loadVacunas(selectedEnfermedad);
+					}
+					
+				}
+			});
+			String[] heardersEnfermedades= {"Codigo","Nombre","Tipo"};
+			modelEnfermedades = new DefaultTableModel();
+			tableEnfermedades.setModel(modelEnfermedades);
+			modelEnfermedades.setColumnIdentifiers(heardersEnfermedades);
+			tableEnfermedades.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			scrollPane.setViewportView(tableEnfermedades);
 			
 			btnHistorial = new JButton("Historial");
 			btnHistorial.addActionListener(new ActionListener() {
@@ -164,11 +241,103 @@ public class ConsultasVisual extends JDialog {
 					p.setVisible(true);
 				}
 			});
-			btnHistorial.setBounds(601, 425, 112, 23);
+			btnHistorial.setBounds(672, 453, 112, 23);
 			panel.add(btnHistorial);
+			
+			panelReceta = new JPanel();
+			panelReceta.setBounds(20, 38, 459, 456);
+			panel.add(panelReceta);
+			panelReceta.setLayout(null);
+			
+			JLabel lblReceta = new JLabel("Receta");
+			lblReceta.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lblReceta.setBounds(184, 11, 90, 25);
+			panelReceta.add(lblReceta);
+			
+			textPaneReceta = new JTextPane();
+			textPaneReceta.setBounds(33, 216, 392, 174);
+			panelReceta.add(textPaneReceta);
+			String[] heardersVacunas = {"Codigo","Nombre","Fabricante"};
+			modelVacunas = new DefaultTableModel();
+			modelVacunas.setColumnIdentifiers(heardersVacunas);
+			
+			btnFinalizar = new JButton("Finalizar");
+			btnFinalizar.setBounds(262, 415, 128, 23);
+			panelReceta.add(btnFinalizar);
+			
+			JButton btnDiagnostico = new JButton("Diagnostico");
+			btnDiagnostico.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					panelDiagnostico.setVisible(true);
+				}
+			});
+			btnDiagnostico.setBounds(67, 415, 128, 23);
+			panelReceta.add(btnDiagnostico);
+			
+			JPanel panelVacu = new JPanel();
+			panelVacu.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panelVacu.setBounds(33, 47, 392, 158);
+			panelReceta.add(panelVacu);
+			panelVacu.setLayout(null);
+			
+			JPanel panelVacunas = new JPanel();
+			panelVacunas.setBounds(21, 43, 342, 104);
+			panelVacu.add(panelVacunas);
+			panelVacunas.setLayout(new BorderLayout(0, 0));
+			
+			JScrollPane scrollPane_1 = new JScrollPane();
+			scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+			panelVacunas.add(scrollPane_1, BorderLayout.CENTER);
+			
+			tableVacunas = new JTable();
+			tableVacunas.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					int aux = tableVacunas.getSelectedRow();
+					if(aux!=-1) {
+						String cod = (String) modelVacunas.getValueAt(aux, 0);
+						selectedVacuna=Clinica.getInstance().buscarVacunaByCodigo(cod);
+					}
+				}
+			});
+			tableVacunas.setModel(modelVacunas);
+			scrollPane_1.setViewportView(tableVacunas);
+			
+			JLabel lblNewLabel_1 = new JLabel("Seleccione la vacuna a recetar:");
+			lblNewLabel_1.setBounds(72, 11, 247, 14);
+			panelVacu.add(lblNewLabel_1);
+			
+			lblCodigoConsulta = new JLabel("New label");
+			lblCodigoConsulta.setBounds(10, 11, 121, 14);
+			lblCodigoConsulta.setText("Consulta-"+cita.getCodigo());
+			panel.add(lblCodigoConsulta);
+			btnFinalizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					if (textPaneReceta.getText().toString().equalsIgnoreCase("")) {
+						JOptionPane.showMessageDialog(null, "Favor colocar una receta", "Error", JOptionPane.ERROR_MESSAGE);
+					}else { 
+						Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(), textPaneDiagnostico.getText().toString(),
+								medico, textPaneReceta.getText().toString());
+						
+						if(selectedEnfermedad!=null) {
+							n.setEnfermedad(selectedEnfermedad);
+						}
+						
+						if(selectedVacuna != null) {
+							n.setMisVacunas(selectedVacuna);
+						}
+						
+						Clinica.getInstance().insertarConsulta(n, medico, cita);
+						JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
+						
+					}
+					
+				}
+			});
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-				panelSintomas.setVisible(true);
+					panelSintomas.setVisible(true);
 				}
 			});
 		}
@@ -187,6 +356,38 @@ public class ConsultasVisual extends JDialog {
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
+		}
+	}
+	private void loadEnfermedades() {
+		
+		modelEnfermedades.setRowCount(0);
+		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
+				
+				for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
+					rowsEnfermedades[0]=  Clinica.getInstance().getMisEnfermedades().get(i).getCodigo();
+					rowsEnfermedades[1]=  Clinica.getInstance().getMisEnfermedades().get(i).getNombreEnfermedad();
+					rowsEnfermedades[2]=  Clinica.getInstance().getMisEnfermedades().get(i).getTipoEnfermedad();
+					modelEnfermedades.addRow(rowsEnfermedades);
+				}
+		
+	}
+	
+	private void loadVacunas(Enfermedad enfermedad) {
+		
+		modelVacunas.setRowCount(0);
+		rowsVacunas = new Object[modelVacunas.getColumnCount()];
+		
+		ArrayList<Vacuna> misVacunas = new ArrayList<Vacuna>();
+		if(enfermedad!= null) {
+			misVacunas =  Clinica.getInstance().vacunasParaEnfermedad(enfermedad.getCodigo());
+		
+			for (int i = 0; i < misVacunas.size(); i++) {
+				rowsVacunas[0]= misVacunas.get(i).getCodigo();
+				rowsVacunas[1]=  misVacunas.get(i).getNombreVacuna();
+				rowsVacunas[2]= misVacunas.get(i).getFabricante();
+				modelVacunas.addRow(rowsVacunas);
+			}
+		
 		}
 	}
 }
