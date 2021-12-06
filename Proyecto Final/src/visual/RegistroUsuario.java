@@ -130,7 +130,7 @@ public class RegistroUsuario extends JDialog {
 				txtLogin.setColumns(10);
 			}
 			{
-				JLabel lblNewLabel_2 = new JLabel("Login:");
+				JLabel lblNewLabel_2 = new JLabel("Usuario:");
 				lblNewLabel_2.setBounds(110, 45, 46, 14);
 				panel_1.add(lblNewLabel_2);
 			}
