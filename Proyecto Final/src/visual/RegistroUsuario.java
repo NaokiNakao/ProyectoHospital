@@ -82,7 +82,7 @@ public class RegistroUsuario extends JDialog {
 		}
 		{
 			txtNombre = new JTextField();
-			txtNombre.setBounds(127, 77, 137, 20);
+			txtNombre.setBounds(125, 77, 137, 20);
 			panel_general.add(txtNombre);
 			txtNombre.setColumns(10);
 		}
@@ -119,19 +119,19 @@ public class RegistroUsuario extends JDialog {
 			}
 			
 			pfContrasenna = new JPasswordField();
-			pfContrasenna.setBounds(216, 84, 86, 20);
+			pfContrasenna.setBounds(216, 84, 119, 20);
 			panel_1.add(pfContrasenna);
 			pfContrasenna.setText(generadorContraseña(8));
 			pfContrasenna.setEditable(false);
 			{
 				txtLogin = new JTextField();
-				txtLogin.setBounds(216, 42, 86, 20);
+				txtLogin.setBounds(216, 42, 119, 20);
 				panel_1.add(txtLogin);
 				txtLogin.setColumns(10);
 			}
 			{
 				JLabel lblNewLabel_2 = new JLabel("Usuario:");
-				lblNewLabel_2.setBounds(110, 45, 46, 14);
+				lblNewLabel_2.setBounds(110, 45, 62, 14);
 				panel_1.add(lblNewLabel_2);
 			}
 		}
