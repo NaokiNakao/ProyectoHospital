@@ -67,7 +67,7 @@ public class InicioSesion extends JDialog {
 		contentPanel.add(Datosnecesarios);
 		Datosnecesarios.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("C\u00F3digo:");
+		JLabel lblNewLabel = new JLabel("Usuario:");
 		lblNewLabel.setBounds(10, 39, 58, 14);
 		Datosnecesarios.add(lblNewLabel);
 		

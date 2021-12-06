@@ -206,6 +206,7 @@ public class RegistroVacuna extends JDialog {
 		scrollPane_1.setViewportView(tableProteccion);
 		
 		btnPasarDerecha = new JButton(">>");
+		btnPasarDerecha.setEnabled(false);
 		btnPasarDerecha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -215,6 +216,7 @@ public class RegistroVacuna extends JDialog {
 		panel.add(btnPasarDerecha);
 		
 		btnPasarIzquierda = new JButton("<<");
+		btnPasarIzquierda.setEnabled(false);
 		btnPasarIzquierda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				

@@ -42,11 +42,11 @@ public class EstadisticaEnfermedad extends JDialog {
 	private JTable tableVacunas;
 	private Enfermedad selectedEnfermedad;
 	
-	private DefaultTableModel modelEnfermedades;
-	private Object[] rowsEnfermedades;
+	private static DefaultTableModel modelEnfermedades;
+	private static Object[] rowsEnfermedades;
 	
-	private DefaultTableModel modelVacunas;
-	private Object [] rowsVacunas;
+	private static DefaultTableModel modelVacunas;
+	private static Object [] rowsVacunas;
 	private JTextField textField;
 	private JTextField txtCasosTotales;
 	private JTextField txtCasosHombres;
@@ -286,7 +286,7 @@ public class EstadisticaEnfermedad extends JDialog {
 		modelVacunas.setRowCount(0);
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
 		
-		ArrayList<Vacuna> misVacunas = new ArrayList<>();
+		ArrayList<Vacuna> misVacunas = new ArrayList<Vacuna>();
 		if(enfermedad!= null) {
 			misVacunas =  Clinica.getInstance().vacunasParaEnfermedad(enfermedad.getCodigo());
 		
