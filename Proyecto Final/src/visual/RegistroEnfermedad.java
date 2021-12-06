@@ -20,14 +20,15 @@ import logico.Enfermedad;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextPane;
 
 public class RegistroEnfermedad extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtCodigo;
 	private JTextField txtNombre;
-	private JTextField txtDescripcion;
 	private JComboBox cbxTipo;
+	private JTextPane textPaneDescripcion;
 
 	/**
 	 * Launch the application.
@@ -49,56 +50,55 @@ public class RegistroEnfermedad extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setTitle("Registro de enfermedad");
-		setBounds(100, 100, 506, 438);
+		setBounds(100, 100, 516, 417);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBounds(21, 15, 467, 320);
+		contentPanel.add(panel);
+		panel.setLayout(null);
+		
+		textPaneDescripcion = new JTextPane();
+		textPaneDescripcion.setBounds(30, 175, 419, 129);
+		panel.add(textPaneDescripcion);
+		
 		JLabel lblNewLabel = new JLabel("ID:");
-		lblNewLabel.setBounds(20, 27, 79, 14);
-		contentPanel.add(lblNewLabel);
+		lblNewLabel.setBounds(10, 17, 79, 14);
+		panel.add(lblNewLabel);
 		
 		txtCodigo = new JTextField();
+		txtCodigo.setBounds(85, 14, 149, 20);
+		panel.add(txtCodigo);
 		txtCodigo.setEditable(false);
 		txtCodigo.setText("E-" + Clinica.getInstance().generadorCodigo(5));
-		txtCodigo.setBounds(95, 24, 149, 20);
-		contentPanel.add(txtCodigo);
 		txtCodigo.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Nombre:");
-		lblNewLabel_1.setBounds(20, 66, 79, 14);
-		contentPanel.add(lblNewLabel_1);
+		lblNewLabel_1.setBounds(10, 56, 79, 14);
+		panel.add(lblNewLabel_1);
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(95, 63, 149, 20);
-		contentPanel.add(txtNombre);
+		txtNombre.setBounds(85, 53, 149, 20);
+		panel.add(txtNombre);
 		txtNombre.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("Tipo:");
-		lblNewLabel_2.setBounds(20, 113, 46, 14);
-		contentPanel.add(lblNewLabel_2);
+		lblNewLabel_2.setBounds(10, 103, 46, 14);
+		panel.add(lblNewLabel_2);
 		
 		cbxTipo = new JComboBox();
+		cbxTipo.setBounds(85, 100, 149, 20);
+		panel.add(cbxTipo);
 		cbxTipo.setModel(new DefaultComboBoxModel(new String[] {"<< Seleccione >>", "Respiratoria", "Gastrointestinal", "Neurologica", "Muscular", "Sexual", "Cardiovascular"}));
-		cbxTipo.setBounds(95, 110, 149, 20);
-		contentPanel.add(cbxTipo);
 		
 		JLabel lblNewLabel_3 = new JLabel("Descripci\u00F3n:");
-		lblNewLabel_3.setBounds(20, 160, 79, 14);
-		contentPanel.add(lblNewLabel_3);
-		
-		txtDescripcion = new JTextField();
-		txtDescripcion.setBounds(20, 186, 352, 108);
-		contentPanel.add(txtDescripcion);
-		txtDescripcion.setColumns(10);
-		
-		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(10, 11, 467, 320);
-		contentPanel.add(panel);
-		panel.setLayout(null);
+		lblNewLabel_3.setBounds(10, 150, 79, 14);
+		panel.add(lblNewLabel_3);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -108,21 +108,21 @@ public class RegistroEnfermedad extends JDialog {
 				JButton btnRegistrar = new JButton("Registrar");
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						String codigo = txtCodigo.getText();
-						String nombre = txtNombre.getText();
-						String tipo = cbxTipo.getSelectedItem().toString();
-						String descripcion = txtDescripcion.getText();
-						Enfermedad enfer = new Enfermedad(codigo,nombre,tipo, descripcion);
 					  if(espaciovacio())
 					  {
-						  JOptionPane.showMessageDialog(null, "Tienes que completar todos los espacios", "Error", JOptionPane.ERROR_MESSAGE);
+						  	JOptionPane.showMessageDialog(null, "Tienes que completar todos los espacios", "Error", JOptionPane.ERROR_MESSAGE);
 					  }
 					  
 					  else {
-						  Clinica.getInstance().insertarEnfermedad(enfer);
-						   limpiar();
-						   JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
-						   txtCodigo.setText("E-" + Clinica.getInstance().generadorCodigo(5));
+							String codigo = txtCodigo.getText();
+							String nombre = txtNombre.getText();
+							String tipo = cbxTipo.getSelectedItem().toString();
+							String descripcion = textPaneDescripcion.getText();
+							Enfermedad enfer = new Enfermedad(codigo,nombre,tipo, descripcion);
+							Clinica.getInstance().insertarEnfermedad(enfer);
+							JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
+							limpiar();
+							txtCodigo.setText("E-" + Clinica.getInstance().generadorCodigo(5));
 					  }
 			    }
 
@@ -144,15 +144,15 @@ public class RegistroEnfermedad extends JDialog {
 		}
 	}
 	public void limpiar() {
-		txtNombre.setText(" ");
-		txtDescripcion.setText(" ");
+		txtNombre.setText("");
+		textPaneDescripcion.setText("");
 		cbxTipo.setSelectedIndex(0);
 	}
 	
 	public boolean espaciovacio()
 	{
 		boolean aux = false;
-		if(txtNombre.getText().equalsIgnoreCase(" ") || txtDescripcion.getText().equalsIgnoreCase(" ") ||cbxTipo.getSelectedItem().toString().equalsIgnoreCase("<< Seleccione >>"))
+		if(txtNombre.getText().equalsIgnoreCase("") || textPaneDescripcion.getText().equalsIgnoreCase("") ||cbxTipo.getSelectedItem().toString().equalsIgnoreCase("<< Seleccione >>"))
 		{
 			aux = true;
 		}
