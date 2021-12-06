@@ -50,78 +50,91 @@ public class RegistroUsuario extends JDialog {
 		setResizable(false);
 		setModal(true);
 		setTitle("Registro de usuario");
-		setBounds(100, 100, 586, 220);
+		setBounds(100, 100, 600, 462);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-		{
-			JLabel lblNewLabel = new JLabel("Nombre:");
-			lblNewLabel.setBounds(10, 22, 69, 14);
-			contentPanel.add(lblNewLabel);
-		}
-		{
-			txtNombre = new JTextField();
-			txtNombre.setBounds(64, 19, 86, 20);
-			contentPanel.add(txtNombre);
-			txtNombre.setColumns(10);
-		}
+		
+		JPanel panel_general = new JPanel();
+		panel_general.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_general.setBounds(10, 11, 560, 341);
+		contentPanel.add(panel_general);
+		panel_general.setLayout(null);
 		{
 			JLabel lblNewLabel_1 = new JLabel("ID:");
-			lblNewLabel_1.setBounds(382, 22, 46, 14);
-			contentPanel.add(lblNewLabel_1);
+			lblNewLabel_1.setBounds(48, 26, 46, 14);
+			panel_general.add(lblNewLabel_1);
 		}
 		{
 			txtId = new JTextField();
+			txtId.setBounds(125, 23, 139, 20);
+			panel_general.add(txtId);
 			txtId.setEditable(false);
 			txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4));
-			txtId.setBounds(445, 19, 86, 20);
-			contentPanel.add(txtId);
 			txtId.setColumns(10);
 		}
 		{
-			JLabel lblNewLabel_2 = new JLabel("Login:");
-			lblNewLabel_2.setBounds(10, 66, 46, 14);
-			contentPanel.add(lblNewLabel_2);
+			JLabel lblNewLabel = new JLabel("Nombre:");
+			lblNewLabel.setBounds(48, 80, 69, 14);
+			panel_general.add(lblNewLabel);
 		}
 		{
-			txtLogin = new JTextField();
-			txtLogin.setBounds(64, 63, 86, 20);
-			contentPanel.add(txtLogin);
-			txtLogin.setColumns(10);
-		}
-		{
-			JLabel lblContrasea = new JLabel("Contrase\u00F1a:");
-			lblContrasea.setBounds(181, 66, 96, 14);
-			contentPanel.add(lblContrasea);
+			txtNombre = new JTextField();
+			txtNombre.setBounds(127, 77, 137, 20);
+			panel_general.add(txtNombre);
+			txtNombre.setColumns(10);
 		}
 		{
 			JLabel lblApellido = new JLabel("Apellido:");
-			lblApellido.setBounds(181, 22, 67, 14);
-			contentPanel.add(lblApellido);
+			lblApellido.setBounds(290, 80, 67, 14);
+			panel_general.add(lblApellido);
 		}
 		{
 			txtApellido = new JTextField();
+			txtApellido.setBounds(367, 77, 137, 20);
+			panel_general.add(txtApellido);
 			txtApellido.setColumns(10);
-			txtApellido.setBounds(268, 19, 86, 20);
-			contentPanel.add(txtApellido);
 		}
 		
-		pfContrasenna = new JPasswordField();
-		pfContrasenna.setText(generadorContraseña(8));
-		pfContrasenna.setEditable(false);
-		pfContrasenna.setBounds(268, 63, 86, 20);
-		contentPanel.add(pfContrasenna);
-		
 		JLabel lblTelefono = new JLabel("Telefono:");
-		lblTelefono.setBounds(382, 66, 69, 14);
-		contentPanel.add(lblTelefono);
+		lblTelefono.setBounds(46, 127, 69, 14);
+		panel_general.add(lblTelefono);
 		
 		txtTelefono = new JTextField();
+		txtTelefono.setBounds(125, 124, 139, 20);
+		panel_general.add(txtTelefono);
 		txtTelefono.setColumns(10);
-		txtTelefono.setBounds(445, 63, 86, 20);
-		contentPanel.add(txtTelefono);
+		{
+			JPanel panel_1 = new JPanel();
+			panel_1.setBorder(new TitledBorder(null, "Datos de Usuario:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panel_1.setBounds(46, 197, 458, 133);
+			panel_general.add(panel_1);
+			panel_1.setLayout(null);
+			{
+				JLabel lblContrasea = new JLabel("Contrase\u00F1a:");
+				lblContrasea.setBounds(110, 87, 96, 14);
+				panel_1.add(lblContrasea);
+			}
+			
+			pfContrasenna = new JPasswordField();
+			pfContrasenna.setBounds(216, 84, 86, 20);
+			panel_1.add(pfContrasenna);
+			pfContrasenna.setText(generadorContraseña(8));
+			pfContrasenna.setEditable(false);
+			{
+				txtLogin = new JTextField();
+				txtLogin.setBounds(216, 42, 86, 20);
+				panel_1.add(txtLogin);
+				txtLogin.setColumns(10);
+			}
+			{
+				JLabel lblNewLabel_2 = new JLabel("Login:");
+				lblNewLabel_2.setBounds(110, 45, 46, 14);
+				panel_1.add(lblNewLabel_2);
+			}
+		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));

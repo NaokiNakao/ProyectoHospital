@@ -69,7 +69,7 @@ public class ConsultasVisual extends JDialog {
 			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
 			
-			Panel panelSintomas = new Panel();
+			final Panel panelSintomas = new Panel();
 			panelSintomas.setBounds(28, 10, 386, 456);
 			panel.add(panelSintomas);
 			panelSintomas.setLayout(null);

@@ -49,50 +49,56 @@ public class RegistroEnfermedad extends JDialog {
 		setModal(true);
 		setResizable(false);
 		setTitle("Registro de enfermedad");
-		setBounds(100, 100, 493, 274);
+		setBounds(100, 100, 506, 438);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Codigo:");
-		lblNewLabel.setBounds(10, 27, 79, 14);
+		JLabel lblNewLabel = new JLabel("ID:");
+		lblNewLabel.setBounds(20, 27, 79, 14);
 		contentPanel.add(lblNewLabel);
 		
 		txtCodigo = new JTextField();
 		txtCodigo.setEditable(false);
 		txtCodigo.setText("E-" + Clinica.getInstance().generadorCodigo(5));
-		txtCodigo.setBounds(85, 24, 122, 20);
+		txtCodigo.setBounds(95, 24, 149, 20);
 		contentPanel.add(txtCodigo);
 		txtCodigo.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Nombre:");
-		lblNewLabel_1.setBounds(10, 66, 79, 14);
+		lblNewLabel_1.setBounds(20, 66, 79, 14);
 		contentPanel.add(lblNewLabel_1);
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(85, 63, 122, 20);
+		txtNombre.setBounds(95, 63, 149, 20);
 		contentPanel.add(txtNombre);
 		txtNombre.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("Tipo:");
-		lblNewLabel_2.setBounds(241, 66, 46, 14);
+		lblNewLabel_2.setBounds(20, 113, 46, 14);
 		contentPanel.add(lblNewLabel_2);
 		
 		cbxTipo = new JComboBox();
 		cbxTipo.setModel(new DefaultComboBoxModel(new String[] {"<< Seleccione >>", "Respiratoria", "Gastrointestinal", "Neurologica", "Muscular", "Sexual", "Cardiovascular"}));
-		cbxTipo.setBounds(297, 63, 122, 20);
+		cbxTipo.setBounds(95, 110, 149, 20);
 		contentPanel.add(cbxTipo);
 		
 		JLabel lblNewLabel_3 = new JLabel("Descripci\u00F3n:");
-		lblNewLabel_3.setBounds(10, 117, 79, 14);
+		lblNewLabel_3.setBounds(20, 160, 79, 14);
 		contentPanel.add(lblNewLabel_3);
 		
 		txtDescripcion = new JTextField();
-		txtDescripcion.setBounds(85, 114, 287, 20);
+		txtDescripcion.setBounds(20, 186, 352, 108);
 		contentPanel.add(txtDescripcion);
 		txtDescripcion.setColumns(10);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBounds(10, 11, 467, 320);
+		contentPanel.add(panel);
+		panel.setLayout(null);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
