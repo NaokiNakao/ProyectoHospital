@@ -133,6 +133,7 @@ public class RegistroCita extends JDialog {
 								cbxSexoPersona.setSelectedIndex(1);
 							}
 						
+						spnNacimiento.setValue(paciente.getFechaNacimiento());
 						
 						
 					}else {
@@ -230,11 +231,23 @@ public class RegistroCita extends JDialog {
 			btnBuscarFecha = new JButton("Buscar\r\n");
 			btnBuscarFecha.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-			
-					Date dateAux2 = (Date) spnFechaCita.getValue();
-					SimpleDateFormat de = new SimpleDateFormat("MM/DD/YYY HH:mm");
-					fecha = de.format(dateAux2);
-					loadMedicos(dateAux2);
+					
+					Date dateAux = (Date) spnFechaCita.getValue();
+					Date fechaActual = new Date();
+					
+					if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), dateAux)) {
+						JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
+						
+					}else {
+						if(dateAux.compareTo(fechaActual) < 0) {
+							JOptionPane.showMessageDialog(null, "Favor introducir una fecha valida.", "Error", JOptionPane.ERROR_MESSAGE);	
+						}else {
+							Date dateAux2 = (Date) spnFechaCita.getValue();
+							SimpleDateFormat de = new SimpleDateFormat("MM/DD/YYY HH:mm");
+							fecha = de.format(dateAux2);
+							loadMedicos(dateAux2);
+							}
+					}
 									
 				}
 			});
@@ -289,6 +302,7 @@ public class RegistroCita extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						
 						Date fechaCita = (Date) spnFechaCita.getValue();
+						Date fechaActual = new Date();
 						
 						SimpleDateFormat r = new SimpleDateFormat("MM/DD/YYY");
 						String	fecha2 = r.format(fechaCita);
@@ -311,12 +325,27 @@ public class RegistroCita extends JDialog {
 								JOptionPane.showMessageDialog(null, "Favor completar todos los datos requeridos.", "Error", JOptionPane.ERROR_MESSAGE);
 							}else {
 								
-								CitaMedica cita = new CitaMedica(txtCodigoCita.getText().toString(), fechaCita, txtNombre.getText().toString(), txtTelefono.getText().toString(), selectedMedico, txtCedula.getText().toString(), String.valueOf((cbxSexoPersona.getSelectedItem())),
-											fechaNacimiento,txtDireccion.getText().toString(),date1);
-												
-								Clinica.getInstance().insertarCita(cita,selectedMedico);
-								JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
-								txtCodigoCita.setText("Cita-"+Clinica.getInstance().generadorCodigo(4));
+								if(fechaCita.compareTo(fechaActual) < 0) {
+									JOptionPane.showMessageDialog(null, "Favor introducir una fecha valida.", "Error", JOptionPane.ERROR_MESSAGE);
+								}else {
+								
+									if(fechaNacimiento.compareTo(fechaActual) > 0 ) {
+										JOptionPane.showMessageDialog(null, "Favor introducir una fecha de nacimiento valida.", "Error", JOptionPane.ERROR_MESSAGE);
+									}else {
+										
+										if(selectedMedico == null) {
+											JOptionPane.showMessageDialog(null, "Favor seleccionar un medico.", "Error", JOptionPane.ERROR_MESSAGE);
+										}else {
+											CitaMedica cita = new CitaMedica(txtCodigoCita.getText().toString(), fechaCita, txtNombre.getText().toString(), txtTelefono.getText().toString(), selectedMedico, txtCedula.getText().toString(), String.valueOf((cbxSexoPersona.getSelectedItem())),
+														fechaNacimiento,txtDireccion.getText().toString(),date1);
+															
+											Clinica.getInstance().insertarCita(cita,selectedMedico);
+											JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
+											txtCodigoCita.setText("Cita-"+Clinica.getInstance().generadorCodigo(4));
+										}
+										
+									}
+								}
 							}
 						}
 					}
@@ -360,11 +389,12 @@ public class RegistroCita extends JDialog {
 	private boolean espaciosVacios() {
 		
 		boolean vacio = false;
+		Date hoy = new Date();
 		
 		if(txtCedula.getText().toString().equalsIgnoreCase("") || txtNombre.getText().toString().equalsIgnoreCase("") 
 				|| txtTelefono.getText().toString().equalsIgnoreCase("") ||
 				txtDireccion.getText().toString().equalsIgnoreCase("") || txtCodigoCita.getText().toString().equalsIgnoreCase("") /*|| selectedMedico==null */
-				|| cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("<<Seleccione>>")) {
+				|| cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("<<Seleccione>>") || spnNacimiento.getValue().equals(hoy)) {
 			
 			vacio = true;
 			

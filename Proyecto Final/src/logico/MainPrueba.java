@@ -1,5 +1,7 @@
 package logico;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -31,8 +33,8 @@ public class MainPrueba {
 		r.add(covid2);
 		t.add(covid2);
 		
-		Vacuna sinovac = new Vacuna("62054545", "Sinovac", "Yo", covid, "P", "P");
-		Vacuna rv = new Vacuna("89526936", "tula", "Tambien yo", covid, "Ayh", "p");
+		Vacuna sinovac = new Vacuna("62054545", "Sinovac", "Yo", r, "P", "P");
+		Vacuna rv = new Vacuna("89526936", "tula", "Tambien yo", r, "Ayh", "p");
 		
 		Clinica.getInstance().agregarVacuna(rv);
 		Clinica.getInstance().agregarVacuna(sinovac);
@@ -41,14 +43,38 @@ public class MainPrueba {
 		ArrayList<Vacuna> p = new ArrayList();
 		p = Clinica.getInstance().getMisVacunas();
 		
-		for (int i = 0; i <Clinica.getInstance().vacunasParaEnfermedad("1021").size(); i++) {
+		/*for (int i = 0; i <Clinica.getInstance().vacunasParaEnfermedad("1021").size(); i++) {
 			
 			
 			System.out.println(Clinica.getInstance().vacunasParaEnfermedad("1021").get(i).getNombreVacuna());
+		}*/
+		
+		 SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
+	      Date d1 = null;
+		try {
+			d1 = sdformat.parse("2019-04-15");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+	      Date d2 = null;
+		try {
+			d2 = sdformat.parse("2019-08-10");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	      System.out.println("The date 1 is: " + sdformat.format(d1));
+	      System.out.println("The date 2 is: " + sdformat.format(d2));
+	      if(d1.compareTo(d2) > 0) {
+	         System.out.println("Date 1 occurs after Date 2");
+	      } else if(d1.compareTo(d2) < 0) {
+	         System.out.println("Date 1 occurs before Date 2");
+	      } else if(d1.compareTo(d2) == 0) {
+	         System.out.println("Both dates are equal");
+	      }
+	   }
 
-		
-		
 		//CitaMedica r = new CitaMedica("895", f, "", "", med1, "", "", f, "");
 		//Clinica.getInstance().insertarCita(r, med1);
 		
@@ -62,6 +88,8 @@ public class MainPrueba {
 			
 			System.out.println(Clinica.getInstance().CargarMedicoDisponibles(f).get(i).getId());
 		}*/
-	}
+	
 
 }
+
+

@@ -16,6 +16,7 @@ import logico.Usuario;
 import java.awt.GridLayout;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.BoxLayout;
@@ -48,6 +49,7 @@ public class PanelUsuario extends JDialog {
 	private static Object[] rowsAgenda;
 	private CitaMedica siguienteCita;
 	private JButton btnConsulta;
+	private JButton btnCitas;
 
 	/**
 	 * Create the dialog.
@@ -103,7 +105,7 @@ public class PanelUsuario extends JDialog {
 					listado.setVisible(true);
 				}
 			});
-			btnVacunas.setBounds(10, 83, 134, 25);
+			btnVacunas.setBounds(10, 155, 134, 25);
 			panelMenu.add(btnVacunas);
 			
 			btnUsuarios = new JButton("Usuarios");
@@ -113,26 +115,41 @@ public class PanelUsuario extends JDialog {
 					listado.setVisible(true);
 				}
 			});
-			btnUsuarios.setBounds(10, 119, 134, 25);
+			btnUsuarios.setBounds(10, 83, 134, 25);
 			if (user instanceof Medico) {
 				btnUsuarios.setVisible(false);
 			}
 			panelMenu.add(btnUsuarios);
 			
-			btnConsulta = new JButton("Siguiente Consulta");
-			btnConsulta.setBounds(10, 155, 134, 25);
+			btnConsulta = new JButton("Consulta");
+			btnConsulta.setBounds(10, 119, 134, 25);
 			if (user instanceof Administrador) {
 				btnConsulta.setVisible(false);
 			}
 			panelMenu.add(btnConsulta);
+			
+			btnCitas = new JButton("Nueva cita");
+			btnCitas.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					RegistroCita r = new RegistroCita();
+					r.setVisible(true);
+				}
+			});
+			btnCitas.setBounds(10, 191, 134, 25);
+			panelMenu.add(btnCitas);
 			btnConsulta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					String cod = (String) tableAgenda.getValueAt(0, 0);
-					siguienteCita = Clinica.getInstance().buscarCitaMedicaByCod(cod);
+					Medico med = (Medico) user;	
 					
-					ConsultasVisual rc =new ConsultasVisual(siguienteCita,(Medico) user);
-					rc.setVisible(true);
+					if(med.getMisCitas().size() == 0) {			
+						JOptionPane.showMessageDialog(null, "Hasta ahora no tiene ninguna cita pendiente", "Error", JOptionPane.ERROR_MESSAGE);
+					}else {
+						siguienteCita = med.getMisCitas().get(0);
+						ConsultasVisual rc =new ConsultasVisual(siguienteCita,(Medico) user);
+						rc.setVisible(true);
+					}
 				}
 			});
 		}

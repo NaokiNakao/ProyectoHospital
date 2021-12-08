@@ -12,7 +12,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import logico.Administrador;
 import logico.Clinica;
+import logico.Medico;
 import logico.Usuario;
 
 import javax.swing.JPasswordField;
@@ -229,18 +231,39 @@ public class RegistroUsuario extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 					 if(espaciovacio())
 					 {
-						 JOptionPane.showMessageDialog(null, "Tienes que completar todos los espacios", "Error", JOptionPane.ERROR_MESSAGE);
+						 JOptionPane.showMessageDialog(null, "Favor completar todos los espacios", "Error", JOptionPane.ERROR_MESSAGE);
 					 }else{
 						 
-						 if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
-							 Usuario usu = new Usuario( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),txtNombre.getText(),txtApellido.getText(),txtTelefono.getText());
-							 Clinica.getInstance().registroUsuario(usu);
-							 limpiar();
-							 JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
-							 txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4)); 
-					 	}else{
-					 		JOptionPane.showMessageDialog(null, "Favor repetir las contraseñas correctamente", "Error", JOptionPane.ERROR_MESSAGE);
-					 	}
+						 if(user(txtLogin.getText().toString())) {
+							 JOptionPane.showMessageDialog(null, "Favor escoger otro usuario.", "Error", JOptionPane.ERROR_MESSAGE);
+						 }else {
+						 
+							 if(rdbtnMedico.isSelected()) {
+								 if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
+									 Medico usu = new Medico( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
+											 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText(),txtEspecialidad.getText().toString());
+									 Clinica.getInstance().registroUsuario(usu);
+									 limpiar();
+									 JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
+									 txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4)); 
+							 	}else{
+							 		JOptionPane.showMessageDialog(null, "Favor repetir las contraseñas correctamente", "Error", JOptionPane.ERROR_MESSAGE);
+							 		}
+								 }else if (rdbtnAdmin.isSelected()) {
+	
+							 		if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
+										 Administrador usu = new Administrador( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
+												 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText(),txtCargoLaboral.getText().toString());
+										 Clinica.getInstance().registroUsuario(usu);
+										 limpiar();
+										 JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
+										 txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4)); 
+								 	}else{
+								 		JOptionPane.showMessageDialog(null, "Favor repetir las contraseñas correctamente", "Error", JOptionPane.ERROR_MESSAGE);
+							 		
+							 	}
+					 		}
+						 }
 					 
 					 }
 					}
@@ -290,4 +313,16 @@ public class RegistroUsuario extends JDialog {
 		txtEspecialidad.setText("");
 	}
 	
+	public boolean user(String usuario) {
+		
+		boolean bandera = false;
+		
+		for (Usuario user : Clinica.getInstance().getMisUsuarios()) {
+			if(user.getLogin().equalsIgnoreCase(usuario)) {
+				bandera = true;
+			}
+		}
+		
+		return bandera;
+	}
 }
