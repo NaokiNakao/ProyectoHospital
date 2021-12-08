@@ -267,6 +267,24 @@ public class Clinica implements Serializable {
 		misUsuarios.add(user);
 	}
 	
+	////////////////////Utils (Usuario) ////////////////////
+	
+	public Usuario buscarUsuarioById(String idUsuario) {
+		Usuario user = null;
+		boolean encontrado = false;
+		int i = 0;
+		
+		while (!encontrado && i < misUsuarios.size()) {
+			if (misUsuarios.get(i).getId().equalsIgnoreCase(idUsuario)) {
+				user = misUsuarios.get(i);
+				encontrado = true;
+			}
+			i++;
+		}
+		
+		return user;
+	}
+	
 	//////////////////// Utils (Vacuna) ////////////////////
 	
 	public Vacuna buscarVacunaByCodigo(String codigoVacuna) {
