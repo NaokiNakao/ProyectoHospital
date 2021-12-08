@@ -74,6 +74,12 @@ public class ListadoUsuario extends JDialog {
 			buttonpane.setLayout(null);
 			{
 				btnModificar = new JButton("Modificar");
+				btnModificar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						RegistroUsuario registro = new RegistroUsuario(selectedUser);
+						registro.setVisible(true);
+					}
+				});
 				btnModificar.setEnabled(false);
 				btnModificar.setBounds(276, 11, 89, 23);
 				buttonpane.add(btnModificar);
@@ -98,7 +104,7 @@ public class ListadoUsuario extends JDialog {
 			JButton btnNuevo = new JButton("Nuevo");
 			btnNuevo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					RegistroUsuario registro = new RegistroUsuario();
+					RegistroUsuario registro = new RegistroUsuario(null);
 					registro.setVisible(true);
 				}
 			});
@@ -164,6 +170,8 @@ public class ListadoUsuario extends JDialog {
 		model.setColumnIdentifiers(headers);
 		table.setModel(model);
 		scrollPane.setViewportView(table);
+		
+		cargarUsuarios(0);
 	}
 	
 	public static void cargarUsuarios(int select) {

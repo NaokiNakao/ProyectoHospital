@@ -9,11 +9,11 @@ public class Vacuna implements Serializable{
 	private String codigo; // una letra y seis (6) dígitos --> "V-[código]"
 	private String nombreVacuna;
 	private String fabricante;
-	private Enfermedad proteccion; // enfermedades para la cual ofrece protección
+	private ArrayList<Enfermedad> proteccion; // enfermedades para la cual ofrece protección
 	private String tipoVacuna; // inactivada, atenuada, vector, ARN
 	private String formaAdministracion; // intramuscular, intradérmica, subcutánea, endovenosa, oral
 	
-	public Vacuna(String codigo, String nombreVacuna, String fabricante, Enfermedad proteccion, String tipoVacuna, String formaAdministracion) {
+	public Vacuna(String codigo, String nombreVacuna, String fabricante, ArrayList<Enfermedad> proteccion, String tipoVacuna, String formaAdministracion) {
 		this.codigo = codigo;
 		this.nombreVacuna = nombreVacuna;
 		this.fabricante = fabricante;
@@ -34,7 +34,7 @@ public class Vacuna implements Serializable{
 		return fabricante;
 	}
 
-	public Enfermedad getProteccion() {
+	public ArrayList<Enfermedad> getProteccion() {
 		return proteccion;
 	}
 
@@ -58,7 +58,7 @@ public class Vacuna implements Serializable{
 		this.fabricante = fabricante;
 	}
 
-	public void setProteccion(Enfermedad proteccion) {
+	public void setProteccion(ArrayList<Enfermedad> proteccion) {
 		this.proteccion = proteccion;
 	}
 

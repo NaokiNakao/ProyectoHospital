@@ -38,12 +38,13 @@ public class RegistroUsuario extends JDialog {
 	private JTextField txtCargoLaboral;
 	private JRadioButton rdbtnMedico;
 	private JRadioButton rdbtnAdmin;
-	private JPasswordField pfRepetirContraseña;
+	private JPasswordField pfRepetirContrasenna;
+	private Usuario userAux;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		try {
 			RegistroUsuario dialog = new RegistroUsuario();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -51,16 +52,23 @@ public class RegistroUsuario extends JDialog {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	/**
 	 * Create the dialog.
 	 */
-	public RegistroUsuario() {
+	public RegistroUsuario(Usuario user) {
+		this.userAux = user;
 		setResizable(false);
 		setModal(true);
-		setTitle("Registro de usuario");
+		if (userAux == null) {
+			setTitle("Registro de usuario");
+		}
+		else {
+			setTitle("Modificación de usuario");
+		}
 		setBounds(100, 100, 615, 601);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
@@ -82,7 +90,7 @@ public class RegistroUsuario extends JDialog {
 			txtId.setBounds(125, 23, 139, 20);
 			panel_general.add(txtId);
 			txtId.setEditable(false);
-			txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4));
+			txtId.setText(Clinica.getInstance().generadorCodigo(8));
 			txtId.setColumns(10);
 		}
 		{
@@ -147,9 +155,9 @@ public class RegistroUsuario extends JDialog {
 			lblNewLabel_5.setBounds(254, 87, 119, 14);
 			panelDatosUsuario.add(lblNewLabel_5);
 			
-			pfRepetirContraseña = new JPasswordField();
-			pfRepetirContraseña.setBounds(386, 84, 119, 20);
-			panelDatosUsuario.add(pfRepetirContraseña);
+			pfRepetirContrasenna = new JPasswordField();
+			pfRepetirContrasenna.setBounds(386, 84, 119, 20);
+			panelDatosUsuario.add(pfRepetirContrasenna);
 		}
 		
 		JPanel panelRdbtns = new JPanel();
@@ -224,7 +232,7 @@ public class RegistroUsuario extends JDialog {
 						 JOptionPane.showMessageDialog(null, "Tienes que completar todos los espacios", "Error", JOptionPane.ERROR_MESSAGE);
 					 }else{
 						 
-						 if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContraseña.getText())) {
+						 if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
 							 Usuario usu = new Usuario( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),txtNombre.getText(),txtApellido.getText(),txtTelefono.getText());
 							 Clinica.getInstance().registroUsuario(usu);
 							 limpiar();
@@ -258,7 +266,7 @@ public class RegistroUsuario extends JDialog {
 	{
 		boolean aux = false;
 		if(txtNombre.getText().equalsIgnoreCase("")|| txtApellido.getText().equalsIgnoreCase("") || txtLogin.getText().equalsIgnoreCase("") || txtTelefono.getText().equalsIgnoreCase("")||
-				pfContrasenna.getText().equalsIgnoreCase("") || pfRepetirContraseña.getText().equalsIgnoreCase("")){
+				pfContrasenna.getText().equalsIgnoreCase("") || pfRepetirContrasenna.getText().equalsIgnoreCase("")){
 			aux = true;
 		}else if(rdbtnAdmin.isSelected() && txtCargoLaboral.getText().equalsIgnoreCase("")) {
 			aux=true;
@@ -277,24 +285,9 @@ public class RegistroUsuario extends JDialog {
 		txtLogin.setText("");
 		txtTelefono.setText("");
 		pfContrasenna.setText("");
-		pfRepetirContraseña.setText("");
+		pfRepetirContrasenna.setText("");
 		txtCargoLaboral.setText("");
 		txtEspecialidad.setText("");
 	}
-	public String generadorContraseña(int longitud) {
-		String caracteres = "ABCDEFGHIJKLMOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz123456790";
-		Random rand = new Random();
-		char[] aux = new char[longitud];
-		String password = "";
-		
-		for (int i = 0; i < longitud; i++) {
-			aux[i] = caracteres.charAt(rand.nextInt(caracteres.length()));
-		}
-							
-		for (int i = 0; i < aux.length; i++) {
-			password += aux[i];
-		}
-		
-		return password;
-	}
+	
 }

@@ -103,6 +103,8 @@ public class Clinica implements Serializable {
 		Clinica.loginUser = loginUser;
 	}
 	
+	//////////////////// Métodos para estadísticas de enfermedades ////////////////////
+	
 	/*
 	 * Retorna un String de caracteres alfanuméricos aleatorios
 	 * dada una longitud para este. 
@@ -198,8 +200,10 @@ public class Clinica implements Serializable {
 		ArrayList<Vacuna> vacunasDisponibles = new ArrayList<Vacuna>();
 		
 		for (Vacuna vacuna : misVacunas) {
-			if(vacuna.getProteccion().getCodigo().equalsIgnoreCase(codigoEnfermedad)) {
-				vacunasDisponibles.add(vacuna);
+			for (Enfermedad proteccion : vacuna.getProteccion()) {
+				if (proteccion.getCodigo().equalsIgnoreCase(codigoEnfermedad)) {
+					vacunasDisponibles.add(vacuna);
+				}
 			}
 		}
 		

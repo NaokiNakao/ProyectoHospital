@@ -103,8 +103,8 @@ public class EstadisticaEnfermedad extends JDialog {
 			r.add(covid2);
 			t.add(covid2);
 			
-			Vacuna sinovac = new Vacuna("620", "Sinovac", "Yo", covid, "P", "P");
-			Vacuna rv = new Vacuna("8952", "tula", "Tambien yo", covid, "Ayh", "p");
+			Vacuna sinovac = new Vacuna("620", "Sinovac", "Yo", r, "P", "P");
+			Vacuna rv = new Vacuna("8952", "tula", "Tambien yo", t, "Ayh", "p");
 			
 			Clinica.getInstance().agregarVacuna(rv);
 			Clinica.getInstance().agregarVacuna(sinovac);

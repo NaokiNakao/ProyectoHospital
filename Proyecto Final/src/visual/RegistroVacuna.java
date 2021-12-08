@@ -240,8 +240,7 @@ public class RegistroVacuna extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						if (vacuna == null) {
-							Enfermedad proteccion = null;
-							Vacuna nuevaVacuna = new Vacuna(txtCodigo.getText(), txtNombre.getText(), txtFabricante.getText(), proteccion, cbxTipo.getSelectedItem().toString(), cbxAdministracion.getSelectedItem().toString());
+							Vacuna nuevaVacuna = new Vacuna(txtCodigo.getText(), txtNombre.getText(), txtFabricante.getText(), null, cbxTipo.getSelectedItem().toString(), cbxAdministracion.getSelectedItem().toString());
 							if (Clinica.getInstance().agregarVacuna(nuevaVacuna)) {
 								JOptionPane.showMessageDialog(null, "La vacuna se ha agregado.", "Registro satisfactorio", JOptionPane.INFORMATION_MESSAGE);
 								limpiarCampos();
