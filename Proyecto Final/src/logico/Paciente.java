@@ -15,7 +15,8 @@ public class Paciente implements Serializable {
 	private String telefono;
 	private HistoriaClinica historial;
 	
-	public Paciente(String cedula, String nombre, String genero, Date fechaNacimiento, String direccion, String telefono, HistoriaClinica historial) {
+	public Paciente(String cedula, String nombre, String genero, Date fechaNacimiento, String direccion, String telefono,
+			HistoriaClinica historial) {
 		this.cedula = cedula;
 		this.nombre = nombre;
 		this.genero = genero;

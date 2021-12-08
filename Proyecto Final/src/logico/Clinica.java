@@ -427,10 +427,30 @@ public class Clinica implements Serializable {
 		return cita;
 	}
 	
-	public void insertarConsulta(Consulta c, Medico medico,CitaMedica cita) {
+	public void insertarConsulta(Consulta c, Medico medico,CitaMedica cita, Paciente p) {
 		misConsultas.add(c);
 		medico.getMisConsultas().add(c);
 		medico.getMisCitas().remove(cita);
+		misPacientes.add(p);
+	}
+	
+	public void insertarCita(CitaMedica cita, Medico medico) {
+		
+		citasMedicas.add(cita);
+		medico.getMisCitas().add(cita);
+		
+	}
+	
+	public boolean citaByCedula(String cedula, Date fecha) {
+		boolean bandera = false;
+		
+		for (CitaMedica citaMedica : citasMedicas) {
+			if(citaMedica.getCedulaPersona().equalsIgnoreCase(cedula) && citaMedica.getFechaCita().equals(fecha)) {
+				bandera = true;
+			}
+		}
+		
+		return bandera;
 	}
 	
 }

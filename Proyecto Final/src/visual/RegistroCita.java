@@ -28,6 +28,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
+import java.util.Calendar;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class RegistroCita extends JDialog {
 
@@ -38,7 +45,6 @@ public class RegistroCita extends JDialog {
 	private JTextField txtDireccion;
 	private JButton btnBuscarCedula;
 	private JTextField txtCodigoCita;
-	private JTextField txtFecha;
 	private JTable tableDoctoresDisponibles;
 	private JButton btnBuscarFecha;
 
@@ -48,6 +54,10 @@ public class RegistroCita extends JDialog {
 	
 	private DefaultTableModel modelMedicos;
 	private Object[] rowsMedicos;
+	private JSpinner spnFechaCita;
+	private String fecha;
+	private JComboBox cbxSexoPersona;
+	private JSpinner spnNacimiento;
 	
 	/**
 	 * Launch the application.
@@ -89,31 +99,49 @@ public class RegistroCita extends JDialog {
 			panelDatosCliente.setLayout(null);
 			
 			txtCedula = new JTextField();
-			txtCedula.setBounds(83, 31, 165, 23);
+			txtCedula.setBounds(83, 31, 143, 23);
 			panelDatosCliente.add(txtCedula);
 			txtCedula.setColumns(10);
 			
 			btnBuscarCedula = new JButton("Buscar\r\n");
 			btnBuscarCedula.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-				
+					
 				if(txtCedula.getText().toString().equalsIgnoreCase("")) {	
 					JOptionPane.showMessageDialog(null, "Favor completar todas los campos", "Error", JOptionPane.ERROR_MESSAGE);
 	
 				}else {
 					if(Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null){
 						
+						
+						txtCedula.setEditable(false);
+						txtNombre.setEditable(false);
+						txtDireccion.setEditable(false);
+						txtTelefono.setEditable(false);
+						cbxSexoPersona.setEnabled(false);
+						spnNacimiento.setEnabled(false);
+						
 						paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText());
 						txtNombre.setText(paciente.getNombre());
 						txtDireccion.setText(paciente.getDireccion());
 						txtTelefono.setText(paciente.getTelefono());
 						
+						if(paciente.getGenero().equalsIgnoreCase("Masculino")) {
+								cbxSexoPersona.setSelectedIndex(0);
+							}else {
+								cbxSexoPersona.setSelectedIndex(1);
+							}
+						
+						
+						
 					}else {
-						JOptionPane.showMessageDialog(null, "Este paciente no existe o la cedula esta incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
-						txtCedula.setText("");
-						txtNombre.setText("");
-						txtDireccion.setText("");
-						txtTelefono.setText("");
+						txtCedula.setEditable(true);
+						txtNombre.setEditable(true);
+						txtDireccion.setEditable(true);
+						txtTelefono.setEditable(true);
+						cbxSexoPersona.setEnabled(true);
+						spnNacimiento.setEnabled(true);
+						cbxSexoPersona.setSelectedItem(-1);
 					}
 				}
 				}
@@ -123,20 +151,20 @@ public class RegistroCita extends JDialog {
 			
 			txtNombre = new JTextField();
 			txtNombre.setEditable(false);
-			txtNombre.setBounds(83, 82, 165, 23);
+			txtNombre.setBounds(83, 82, 143, 23);
 			panelDatosCliente.add(txtNombre);
 			txtNombre.setColumns(10);
 			
 			txtTelefono = new JTextField();
 			txtTelefono.setEditable(false);
 			txtTelefono.setColumns(10);
-			txtTelefono.setBounds(356, 82, 165, 23);
+			txtTelefono.setBounds(327, 82, 143, 23);
 			panelDatosCliente.add(txtTelefono);
 			
 			txtDireccion = new JTextField();
 			txtDireccion.setEditable(false);
 			txtDireccion.setColumns(10);
-			txtDireccion.setBounds(83, 131, 438, 23);
+			txtDireccion.setBounds(83, 131, 387, 23);
 			panelDatosCliente.add(txtDireccion);
 			
 			JLabel lblNewLabel = new JLabel("Cedula:");
@@ -144,7 +172,7 @@ public class RegistroCita extends JDialog {
 			panelDatosCliente.add(lblNewLabel);
 			
 			JLabel lblNewLabel_1 = new JLabel("Nombre:");
-			lblNewLabel_1.setBounds(10, 86, 63, 14);
+			lblNewLabel_1.setBounds(9, 86, 63, 14);
 			panelDatosCliente.add(lblNewLabel_1);
 			
 			JLabel lblDireccion = new JLabel("Direccion:");
@@ -152,8 +180,31 @@ public class RegistroCita extends JDialog {
 			panelDatosCliente.add(lblDireccion);
 			
 			JLabel lblTelefono = new JLabel("Telefono:");
-			lblTelefono.setBounds(283, 86, 63, 14);
+			lblTelefono.setBounds(250, 86, 63, 14);
 			panelDatosCliente.add(lblTelefono);
+			
+			JLabel labelSexo = new JLabel("Sexo:");
+			labelSexo.setBounds(503, 86, 63, 14);
+			panelDatosCliente.add(labelSexo);
+			
+			cbxSexoPersona = new JComboBox();
+			cbxSexoPersona.setEnabled(false);
+			cbxSexoPersona.setModel(new DefaultComboBoxModel(new String[] {"<<Seleccione>>", "Masculino", "Femenino"}));
+			cbxSexoPersona.setBounds(576, 82, 144, 23);
+			panelDatosCliente.add(cbxSexoPersona);
+			
+			JLabel lblNacimiento = new JLabel("Nacimiento:");
+			lblNacimiento.setBounds(503, 135, 73, 14);
+			panelDatosCliente.add(lblNacimiento);
+			
+			spnNacimiento = new JSpinner();
+			spnNacimiento.setEnabled(false);
+			Date date = new Date();
+			spnNacimiento.setModel(new SpinnerDateModel(date, null, null, Calendar.DAY_OF_MONTH));
+			JSpinner.DateEditor de_spnFecha = new JSpinner.DateEditor(spnNacimiento,"dd/MMM/yyyy");
+			spnNacimiento.setEditor(de_spnFecha);
+			spnNacimiento.setBounds(576, 131, 144, 23);
+			panelDatosCliente.add(spnNacimiento);
 			
 			JPanel panelDatosConsulta = new JPanel();
 			panelDatosConsulta.setBorder(new TitledBorder(null, "Datos de la consulta", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -172,27 +223,22 @@ public class RegistroCita extends JDialog {
 			panelDatosConsulta.add(txtCodigoCita);
 			
 			JLabel lblNewLabel_3 = new JLabel("Fecha:");
-			lblNewLabel_3.setBounds(283, 34, 109, 14);
+			lblNewLabel_3.setBounds(267, 34, 63, 14);
 			panelDatosConsulta.add(lblNewLabel_3);
-			
-			txtFecha = new JTextField();
-			txtFecha.setColumns(10);
-			txtFecha.setBounds(356, 30, 165, 23);
-			panelDatosConsulta.add(txtFecha);
 			
 			btnBuscarFecha = new JButton("Buscar\r\n");
 			btnBuscarFecha.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+			
+					Date dateAux2 = (Date) spnFechaCita.getValue();
+					SimpleDateFormat de = new SimpleDateFormat("MM/DD/YYY HH:mm");
+					fecha = de.format(dateAux2);
+					loadMedicos(dateAux2);
+					//System.out.println(fecha);
 					
-					if(txtFecha.getText().toString().equalsIgnoreCase("")) {
-						JOptionPane.showMessageDialog(null, "Favor completar todas los campos", "Error", JOptionPane.ERROR_MESSAGE);
-					}else {
-					//Date fecha = Date.Valueof(txtFecha.getText());
-					//loadMedicos(fecha);
-					}
 				}
 			});
-			btnBuscarFecha.setBounds(544, 30, 89, 23);
+			btnBuscarFecha.setBounds(544, 31, 89, 23);
 			panelDatosConsulta.add(btnBuscarFecha);
 			
 			JPanel panelDoctoresDisponibles = new JPanel();
@@ -222,6 +268,15 @@ public class RegistroCita extends JDialog {
 			modelMedicos.setColumnIdentifiers(heardersMedicos);
 			tableDoctoresDisponibles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			scrollPane.setViewportView(tableDoctoresDisponibles);
+			Date date2 = new Date();
+			
+			spnFechaCita = new JSpinner();
+			spnFechaCita.setModel(new SpinnerDateModel(date2, null, null, Calendar.DAY_OF_MONTH));
+			JSpinner.DateEditor FechaCita = new JSpinner.DateEditor(spnFechaCita,"dd/MMM/yyyy  HH:mm");
+			spnFechaCita.setEditor(FechaCita);
+			spnFechaCita.setBounds(327, 31, 165, 23);
+			panelDatosConsulta.add(spnFechaCita);
+
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -233,10 +288,25 @@ public class RegistroCita extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
-						//CitaMedica cita = new CitaMedica(txtCodigoCita.getText().toString(), fecha, txtNombre.getText(), txtTelefono.getText().toString(), selectedMedico);
-						//Clinica.getInstance().insertarCita(cita);
-						JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
-						txtCodigoCita.setText(Clinica.getInstance().generadorCodigo(4));
+						Date fechaCita = (Date) spnFechaCita.getValue();
+						Date fechaNacimiento = (Date) spnNacimiento.getValue();
+						
+					if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), fechaCita)) {
+						JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
+					}else {
+						
+							if(espaciosVacios()) {
+								JOptionPane.showMessageDialog(null, "Favor completar todos los datos requeridos.", "Error", JOptionPane.ERROR_MESSAGE);
+							}else {
+								
+								CitaMedica cita = new CitaMedica(txtCodigoCita.getText().toString(), fechaCita, txtNombre.getText().toString(), txtTelefono.getText().toString(), selectedMedico, txtCedula.getText().toString(), String.valueOf((cbxSexoPersona.getSelectedItem())),
+										fechaNacimiento,txtDireccion.getText().toString());
+												
+								Clinica.getInstance().insertarCita(cita,selectedMedico);
+								JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
+								txtCodigoCita.setText("Cita-"+Clinica.getInstance().generadorCodigo(4));
+							}
+						}
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -255,7 +325,7 @@ public class RegistroCita extends JDialog {
 			}
 		}
 		
-		txtCodigoCita.setText(Clinica.getInstance().generadorCodigo(4));
+		txtCodigoCita.setText("Cita-"+Clinica.getInstance().generadorCodigo(4));
 	}
 	
 	private ArrayList<Medico> CargarMedicoDisponibles(Date fecha) {
@@ -288,6 +358,24 @@ public class RegistroCita extends JDialog {
 			rowsMedicos[2] = medicosDisp.get(i).getEspecialidad();
 		}
 		
+	}
+	
+	private boolean espaciosVacios() {
+		
+		boolean vacio = false;
+		
+		if(txtCedula.getText().toString().equalsIgnoreCase("") || txtNombre.getText().toString().equalsIgnoreCase("") 
+				|| txtTelefono.getText().toString().equalsIgnoreCase("") ||
+				txtDireccion.getText().toString().equalsIgnoreCase("") || txtCodigoCita.getText().toString().equalsIgnoreCase("") /*|| selectedMedico==null */
+				|| cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("<<Seleccione>>")) {
+			
+			vacio = true;
+			
+		}
+		
+		
+		
+		return vacio;
 	}
 	
 }

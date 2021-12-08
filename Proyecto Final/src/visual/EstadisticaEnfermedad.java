@@ -10,6 +10,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.sun.corba.se.impl.encoding.CodeSetConversion.BTCConverter;
+
 import logico.Clinica;
 import logico.Consulta;
 import logico.Enfermedad;
@@ -34,6 +36,9 @@ import javax.swing.Box;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import java.awt.Font;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerDateModel;
+import java.util.Calendar;
 
 public class EstadisticaEnfermedad extends JDialog {
 
@@ -52,6 +57,8 @@ public class EstadisticaEnfermedad extends JDialog {
 	private JTextField txtCasosHombres;
 	private JTextField txtCasosMujeres;
 	private JTextField txtCasosPorFecha;
+	private JSpinner spnFecha;
+	private JButton btnBuscarFecha;
 	
 
 	/**
@@ -133,6 +140,8 @@ public class EstadisticaEnfermedad extends JDialog {
 						txtCasosMujeres.setText(String.valueOf(h[1])+"%");
 						txtCasosTotales.setText(String.valueOf(Clinica.getInstance().casosEnfermedadTotal(selectedEnfermedad.getCodigo())));
 							//System.out.println(Clinica.getInstance().buscarEnfermedadByCodigo(cod).getNombreEnfermedad());
+						btnBuscarFecha.setEnabled(true);
+						
 					}else {
 						txtCasosHombres.setText("");
 						txtCasosMujeres.setText("");
@@ -205,13 +214,31 @@ public class EstadisticaEnfermedad extends JDialog {
 			panel_3.add(txtCasosPorFecha);
 			txtCasosPorFecha.setColumns(10);
 			
-			JButton btnNewButton = new JButton("Buscar");
-			btnNewButton.setBounds(168, 36, 89, 23);
-			panel_3.add(btnNewButton);
+			btnBuscarFecha = new JButton("Buscar");
+			btnBuscarFecha.setEnabled(false);
+			btnBuscarFecha.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					Date f = (Date) spnFecha.getValue(); 
+					
+					txtCasosTotales.setText(String.valueOf((Clinica.getInstance().casosEnfermedadPorFecha(selectedEnfermedad.getCodigo(),f))));
+				}
+			});
+			btnBuscarFecha.setBounds(168, 36, 89, 23);
+			panel_3.add(btnBuscarFecha);
 			
 			JLabel lblNewLabel_5 = new JLabel("casos");
 			lblNewLabel_5.setBounds(149, 93, 46, 14);
 			panel_3.add(lblNewLabel_5);
+			
+			spnFecha = new JSpinner();
+			Date date = new Date();
+			spnFecha.setFont(new Font("Tahoma", Font.PLAIN, 11));
+			spnFecha.setModel(new SpinnerDateModel(date, null, null, Calendar.DAY_OF_MONTH));
+			JSpinner.DateEditor de_spnFecha = new JSpinner.DateEditor(spnFecha,"dd/MMM/yyyy");
+			spnFecha.setEditor(de_spnFecha);
+			spnFecha.setBounds(10, 37, 129, 20);
+			panel_3.add(spnFecha);
 			
 			JPanel panel_4 = new JPanel();
 			panel_4.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Lista de Vacunas", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -237,7 +264,7 @@ public class EstadisticaEnfermedad extends JDialog {
 			
 			JLabel lblCasosPorFecha = new JLabel("Casos por fecha");
 			lblCasosPorFecha.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			lblCasosPorFecha.setBounds(373, 269, 128, 14);
+			lblCasosPorFecha.setBounds(373, 269, 128, 25);
 			panel.add(lblCasosPorFecha);
 		}
 		{
