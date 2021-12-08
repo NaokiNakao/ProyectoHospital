@@ -341,7 +341,7 @@ public class RegistroCita extends JDialog {
 															
 											Clinica.getInstance().insertarCita(cita,selectedMedico);
 											JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
-											txtCodigoCita.setText("Cita-"+Clinica.getInstance().generadorCodigo(4));
+											vacearEspacios();
 										}
 										
 									}
@@ -380,8 +380,9 @@ public class RegistroCita extends JDialog {
 		
 		for (int i = 0; i < medicosDisp.size(); i++) {
 			rowsMedicos[0]= medicosDisp.get(i).getId();
-			rowsMedicos[1]= medicosDisp.get(i).getNombre()+""+medicosDisp.get(i).getApellido();
+			rowsMedicos[1]= medicosDisp.get(i).getNombre()+" "+medicosDisp.get(i).getApellido();
 			rowsMedicos[2] = medicosDisp.get(i).getEspecialidad();
+			modelMedicos.addRow(rowsMedicos);
 		}
 		
 	}
@@ -400,9 +401,23 @@ public class RegistroCita extends JDialog {
 			
 		}
 		
-		
-		
 		return vacio;
+	}
+	
+	private void vacearEspacios() {
+		
+		Date hoy = new Date();
+		
+		txtCedula.setText("");
+		txtNombre.setText("");
+		txtTelefono.setText("");
+		txtDireccion.setText("");
+		txtCodigoCita.setText("Cita-"+Clinica.getInstance().generadorCodigo(4));
+		cbxSexoPersona.setSelectedItem(-1);
+		spnNacimiento.setValue(hoy);
+		spnFechaCita.setValue(hoy);
+		
+		
 	}
 	
 }

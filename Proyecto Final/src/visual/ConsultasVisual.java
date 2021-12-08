@@ -128,7 +128,6 @@ public class ConsultasVisual extends JDialog {
 				textPaneSintomas = new JTextPane();
 				textPaneSintomas.setBounds(33, 47, 392, 343);
 				panelSintomas.add(textPaneSintomas);
-				//loadEnfermedades();
 			}
 			
 			JPanel panelPaciente = new JPanel();
@@ -292,7 +291,8 @@ public class ConsultasVisual extends JDialog {
 			
 			lblCodigoConsulta = new JLabel("New label");
 			lblCodigoConsulta.setBounds(10, 11, 121, 14);
-			lblCodigoConsulta.setText("Consulta-"+cita.getCodigo());
+			String codigo = cita.getCodigo().substring(5);
+			lblCodigoConsulta.setText("Consulta-"+codigo);
 			panel.add(lblCodigoConsulta);
 			btnFinalizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -320,11 +320,11 @@ public class ConsultasVisual extends JDialog {
 							h.getMisVacunas().add(selectedVacuna);
 						}
 						
+						
 						Clinica.getInstance().getMisPacientes().add(p);
 						Clinica.getInstance().insertarConsulta(n, medico, cita, p);
 						p.setHistorial(h);
 						JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
-						
 					}
 					
 				}

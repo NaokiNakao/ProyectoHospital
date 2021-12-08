@@ -49,6 +49,12 @@ public class MainPrueba {
 			System.out.println(Clinica.getInstance().vacunasParaEnfermedad("1021").get(i).getNombreVacuna());
 		}*/
 		
+		
+		//String cod = "Cita-458282";
+		
+		//System.out.println(cod.substring(5));
+		
+		/*
 		 SimpleDateFormat sdformat = new SimpleDateFormat("yyyy-MM-dd");
 	      Date d1 = null;
 		try {
@@ -90,6 +96,6 @@ public class MainPrueba {
 		}*/
 	
 
-}
+}}
 
 

@@ -50,6 +50,7 @@ public class PanelUsuario extends JDialog {
 	private CitaMedica siguienteCita;
 	private JButton btnConsulta;
 	private JButton btnCitas;
+	private JButton btnRegistroEnfermedades;
 
 	/**
 	 * Create the dialog.
@@ -105,7 +106,7 @@ public class PanelUsuario extends JDialog {
 					listado.setVisible(true);
 				}
 			});
-			btnVacunas.setBounds(10, 155, 134, 25);
+			btnVacunas.setBounds(10, 119, 134, 25);
 			panelMenu.add(btnVacunas);
 			
 			btnUsuarios = new JButton("Usuarios");
@@ -115,14 +116,14 @@ public class PanelUsuario extends JDialog {
 					listado.setVisible(true);
 				}
 			});
-			btnUsuarios.setBounds(10, 83, 134, 25);
+			btnUsuarios.setBounds(10, 189, 134, 25);
 			if (user instanceof Medico) {
 				btnUsuarios.setVisible(false);
 			}
 			panelMenu.add(btnUsuarios);
 			
 			btnConsulta = new JButton("Consulta");
-			btnConsulta.setBounds(10, 119, 134, 25);
+			btnConsulta.setBounds(10, 83, 134, 25);
 			if (user instanceof Administrador) {
 				btnConsulta.setVisible(false);
 			}
@@ -136,8 +137,19 @@ public class PanelUsuario extends JDialog {
 					r.setVisible(true);
 				}
 			});
-			btnCitas.setBounds(10, 191, 134, 25);
+			btnCitas.setBounds(10, 155, 134, 25);
 			panelMenu.add(btnCitas);
+			
+			btnRegistroEnfermedades = new JButton("Nueva Enfermedad");
+			btnRegistroEnfermedades.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					RegistroEnfermedad r = new RegistroEnfermedad();
+					r.setVisible(true);
+				}
+			});
+			btnRegistroEnfermedades.setBounds(10, 233, 134, 25);
+			panelMenu.add(btnRegistroEnfermedades);
 			btnConsulta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
@@ -146,6 +158,7 @@ public class PanelUsuario extends JDialog {
 					if(med.getMisCitas().size() == 0) {			
 						JOptionPane.showMessageDialog(null, "Hasta ahora no tiene ninguna cita pendiente", "Error", JOptionPane.ERROR_MESSAGE);
 					}else {
+						dispose();
 						siguienteCita = med.getMisCitas().get(0);
 						ConsultasVisual rc =new ConsultasVisual(siguienteCita,(Medico) user);
 						rc.setVisible(true);
@@ -206,11 +219,6 @@ public class PanelUsuario extends JDialog {
 		panelAgenda.add(scrollPane, BorderLayout.CENTER);
 		
 		tableAgenda = new JTable();
-		tableAgenda.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
-		});
 		String[] heardersAgenda = {"Codigo","Paciente","Fecha"};
 		modelAgenda = new DefaultTableModel();
 		tableAgenda.setModel(modelAgenda);
