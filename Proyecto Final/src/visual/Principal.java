@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import logico.Administrador;
 import logico.Clinica;
+import logico.Servidor;
 import logico.Usuario;
 
 import javax.swing.JLabel;
@@ -16,12 +17,16 @@ import javax.swing.ImageIcon;
 import java.awt.Toolkit;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import java.awt.event.WindowAdapter;
@@ -35,6 +40,7 @@ public class Principal extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private Dimension dim;
+	private Socket sesion;
 
 	/**
 	 * Launch the application.
@@ -42,27 +48,27 @@ public class Principal extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				FileInputStream dbInput;
-				FileOutputStream dbOutput;
-				ObjectInputStream dbRead;
-				ObjectOutputStream dbWrite;
+				FileInputStream respaldoIn;
+				FileOutputStream respaldoOut;
+				ObjectInputStream respaldoRead;
+				ObjectOutputStream respaldoWrite;
 				
 				try {
-					dbInput = new FileInputStream(Clinica.getInstance().getDbPath());
-					dbRead = new ObjectInputStream(dbInput);
-					Clinica temp = (Clinica) dbRead.readObject();
+					respaldoIn = new FileInputStream(Servidor.respaldo);
+					respaldoRead = new ObjectInputStream(respaldoIn);
+					Clinica temp = (Clinica) respaldoRead.readObject();
 					Clinica.setClinica(temp);
-					dbInput.close();
-					dbRead.close();
+					respaldoIn.close();
+					respaldoRead.close();
 				} catch (FileNotFoundException e) {
 					try {
-						dbOutput = new FileOutputStream(Clinica.getInstance().getDbPath());
-						dbWrite = new ObjectOutputStream(dbOutput);
+						respaldoOut = new FileOutputStream(Servidor.respaldo);
+						respaldoWrite = new ObjectOutputStream(respaldoOut);
 						Administrador aux = new Administrador(Clinica.getInstance().generadorCodigo(8), "admin", "admin", "", "", "", "");
 						Clinica.getInstance().registroUsuario(aux);
-						dbWrite.writeObject(Clinica.getInstance());
-						dbOutput.close();
-						dbWrite.close();
+						respaldoWrite.writeObject(Clinica.getInstance());
+						respaldoOut.close();
+						respaldoWrite.close();
 					} catch (FileNotFoundException e1) {
 						
 					}
@@ -94,7 +100,7 @@ public class Principal extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				guardarInformacion();
+				respaldo();
 			}
 		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/pictures/istockphoto-1130389312-612x612.jpg")));
@@ -132,7 +138,7 @@ public class Principal extends JFrame {
 		JButton btnCancelar = new JButton("Salir");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				guardarInformacion();
+				respaldo();
 				dispose();
 			}
 		});
@@ -146,12 +152,12 @@ public class Principal extends JFrame {
 		setLocationRelativeTo(null);
 	}
 	
-	public void guardarInformacion() {
+	/*private void respaldo() {
 		FileOutputStream file;
 		ObjectOutputStream writer;
 		
 		try {
-			file = new FileOutputStream(Clinica.getInstance().getDbPath());
+			file = new FileOutputStream(Clinica.getInstance().getRespaldo());
 			writer = new ObjectOutputStream(file);
 			writer.writeObject(Clinica.getInstance());
 		} catch (FileNotFoundException e) {
@@ -159,6 +165,21 @@ public class Principal extends JFrame {
 		}
 		catch (IOException e){
 			e.printStackTrace();
+		}
+	}*/
+	
+	private void respaldo() {
+		String serverAddr = Servidor.addr;
+		int serverPort = Servidor.port;
+		
+		try {
+			sesion = new Socket(serverAddr, serverPort);
+			ObjectOutputStream salida = new ObjectOutputStream(sesion.getOutputStream());
+			salida.writeObject(Clinica.getInstance());
+			sesion.close();
+		} catch (IOException ioe) {
+			System.out.println("No se puede conectar al servidor.");
+			System.exit(1);
 		}
 	}
 	

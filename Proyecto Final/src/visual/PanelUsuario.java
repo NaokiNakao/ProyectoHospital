@@ -59,7 +59,6 @@ public class PanelUsuario extends JDialog {
 		setLocationRelativeTo(null);
 		if (user instanceof Administrador) {
 			setTitle("Administrador");
-			btnConsulta.setVisible(false);
 		}
 		else if (user instanceof Medico) {
 			setTitle("Medico");
@@ -122,6 +121,9 @@ public class PanelUsuario extends JDialog {
 			
 			btnConsulta = new JButton("Siguiente Consulta");
 			btnConsulta.setBounds(10, 155, 134, 25);
+			if (user instanceof Administrador) {
+				btnConsulta.setVisible(false);
+			}
 			panelMenu.add(btnConsulta);
 			btnConsulta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -217,16 +219,14 @@ public class PanelUsuario extends JDialog {
 	}
 	
 	private void loadAgenda(Medico medico) {
-		
 		modelAgenda.setRowCount(0);
 		rowsAgenda = new Object[modelAgenda.getColumnCount()];
 				
-				for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
-					rowsAgenda[0]=  medico.getMisCitas().get(i).getCodigo();
-					rowsAgenda[1]=  medico.getMisCitas().get(i).getNombrePersona();
-					rowsAgenda[2]=  medico.getMisCitas().get(i).getFechaCita();
-					modelAgenda.addRow(rowsAgenda);
-				}
-		
+		for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
+			rowsAgenda[0]=  medico.getMisCitas().get(i).getCodigo();
+			rowsAgenda[1]=  medico.getMisCitas().get(i).getNombrePersona();
+			rowsAgenda[2]=  medico.getMisCitas().get(i).getFechaCita();
+			modelAgenda.addRow(rowsAgenda);
+		}
 	}
 }

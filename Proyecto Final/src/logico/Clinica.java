@@ -17,7 +17,7 @@ public class Clinica implements Serializable {
 	private ArrayList<Vacuna> misVacunas;
 	private static Clinica clinica;
 	private static Usuario loginUser; 
-	private String dbPath = "db.dat"; // nombre del archivo donde se almacena la información
+	private String respaldo = "respaldo.dat"; // nombre del fichero donde se almacena la información
 	
 	private Clinica() {
 		this.misPacientes = new ArrayList<Paciente>();
@@ -67,8 +67,8 @@ public class Clinica implements Serializable {
 		return loginUser;
 	}
 	
-	public String getDbPath() {
-		return dbPath;
+	public String getRespaldo() {
+		return respaldo;
 	}
 
 	public void setMisPacientes(ArrayList<Paciente> misPacientes) {
@@ -95,8 +95,8 @@ public class Clinica implements Serializable {
 		this.misVacunas = misVacunas;
 	}
 	
-	public void setDbPath(String dbPath) {
-		this.dbPath = dbPath;
+	public void setRespaldo(String respaldo) {
+		this.respaldo = respaldo;
 	}
 
 	public static void setLoginUser(Usuario loginUser) {
@@ -367,8 +367,8 @@ public class Clinica implements Serializable {
 		
 		return enfermedad;
 	}
-	public void insertarEnfermedad (Enfermedad enfermedad)
-	{
+	
+	public void insertarEnfermedad (Enfermedad enfermedad) {
 		misEnfermedades.add(enfermedad);
 	}
 		
@@ -407,17 +407,13 @@ public class Clinica implements Serializable {
 		}
 		
 		return cita;
-		
 	}
 	
 	public void insertarConsulta(Consulta c, Medico medico,CitaMedica cita) {
-		
 		misConsultas.add(c);
 		medico.getMisConsultas().add(c);
 		medico.getMisCitas().remove(cita);
-		
 	}
-	 
 	
 }
 

@@ -93,6 +93,7 @@ public class EstadisticaEnfermedad extends JDialog {
 			ArrayList<Enfermedad>t = new ArrayList<>();
 			
 			r.add(covid);
+			r.add(covid2);
 			t.add(covid2);
 			
 			Vacuna sinovac = new Vacuna("620", "Sinovac", "Yo", r, "P", "P");
@@ -122,17 +123,16 @@ public class EstadisticaEnfermedad extends JDialog {
 					
 					int aux = tableEnfermedades.getSelectedRow();
 					if(aux!=-1) {
-						
 						String cod = (String) modelEnfermedades.getValueAt(aux, 0);
 						selectedEnfermedad=Clinica.getInstance().buscarEnfermedadByCodigo(cod);
-						loadVacunas(selectedEnfermedad);
-						
-					float[] h = Clinica.getInstance().porcentajeEnfermedadPorGenero(selectedEnfermedad.getCodigo());
-						
+						loadVacunas();
+							
+						float[] h = Clinica.getInstance().porcentajeEnfermedadPorGenero(selectedEnfermedad.getCodigo());
+							
 						txtCasosHombres.setText(String.valueOf(h[0])+"%");
 						txtCasosMujeres.setText(String.valueOf(h[1])+"%");
 						txtCasosTotales.setText(String.valueOf(Clinica.getInstance().casosEnfermedadTotal(selectedEnfermedad.getCodigo())));
-						//System.out.println(Clinica.getInstance().buscarEnfermedadByCodigo(cod).getNombreEnfermedad());
+							//System.out.println(Clinica.getInstance().buscarEnfermedadByCodigo(cod).getNombreEnfermedad());
 					}else {
 						txtCasosHombres.setText("");
 						txtCasosMujeres.setText("");
@@ -223,10 +223,11 @@ public class EstadisticaEnfermedad extends JDialog {
 			panel_4.add(scrollPane_1, BorderLayout.CENTER);
 			
 			tableVacunas = new JTable();
+			tableVacunas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			String[] heardersVacunas = {"Codigo","Nombre","Fabricante"};
 			modelVacunas = new DefaultTableModel();
-			tableVacunas.setModel(modelVacunas);
 			modelVacunas.setColumnIdentifiers(heardersVacunas);
+			tableVacunas.setModel(modelVacunas);
 			scrollPane_1.setViewportView(tableVacunas);
 			
 			JLabel lblNewLabel_1 = new JLabel("Casos");
@@ -259,44 +260,38 @@ public class EstadisticaEnfermedad extends JDialog {
 				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
-			}
-			
-			loadEnfermedades();	
+			}	
+		}
+		loadEnfermedades();
+	}
+	
+	private void loadEnfermedades() {
+		modelEnfermedades.setRowCount(0);
+		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
+				
+		for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
+			rowsEnfermedades[0]=  Clinica.getInstance().getMisEnfermedades().get(i).getCodigo();
+			rowsEnfermedades[1]=  Clinica.getInstance().getMisEnfermedades().get(i).getNombreEnfermedad();
+			rowsEnfermedades[2]=  Clinica.getInstance().getMisEnfermedades().get(i).getTipoEnfermedad();
+			modelEnfermedades.addRow(rowsEnfermedades);
 		}
 	}
 	
 	
-	private void loadEnfermedades() {
-		
-		modelEnfermedades.setRowCount(0);
-		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
-				
-				for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
-					rowsEnfermedades[0]=  Clinica.getInstance().getMisEnfermedades().get(i).getCodigo();
-					rowsEnfermedades[1]=  Clinica.getInstance().getMisEnfermedades().get(i).getNombreEnfermedad();
-					rowsEnfermedades[2]=  Clinica.getInstance().getMisEnfermedades().get(i).getTipoEnfermedad();
-					modelEnfermedades.addRow(rowsEnfermedades);
-				}
-		
-	}
-	
-	
-	private void loadVacunas(Enfermedad enfermedad) {
-	
+	private void loadVacunas() {
 		modelVacunas.setRowCount(0);
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
 		
-		ArrayList<Vacuna> misVacunas = new ArrayList<Vacuna>();
-		if(enfermedad!= null) {
-			misVacunas =  Clinica.getInstance().vacunasParaEnfermedad(enfermedad.getCodigo());
-		
-			for (int i = 0; i < misVacunas.size(); i++) {
-				rowsVacunas[0]= misVacunas.get(i).getCodigo();
-				rowsVacunas[1]=  misVacunas.get(i).getNombreVacuna();
-				rowsVacunas[2]= misVacunas.get(i).getFabricante();
+		ArrayList<Vacuna> misVacunas = null;
+		if(selectedEnfermedad != null) {
+			misVacunas =  Clinica.getInstance().vacunasParaEnfermedad(selectedEnfermedad.getCodigo());
+			
+			for (Vacuna vacuna : misVacunas) {
+				rowsVacunas[0]= vacuna.getCodigo();
+				rowsVacunas[1]=  vacuna.getNombreVacuna();
+				rowsVacunas[2]= vacuna.getFabricante();
 				modelVacunas.addRow(rowsVacunas);
 			}
-		
 		}
 	}
 }
