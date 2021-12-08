@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import javax.swing.JSpinner;
@@ -234,8 +235,7 @@ public class RegistroCita extends JDialog {
 					SimpleDateFormat de = new SimpleDateFormat("MM/DD/YYY HH:mm");
 					fecha = de.format(dateAux2);
 					loadMedicos(dateAux2);
-					//System.out.println(fecha);
-					
+									
 				}
 			});
 			btnBuscarFecha.setBounds(544, 31, 89, 23);
@@ -289,6 +289,18 @@ public class RegistroCita extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						
 						Date fechaCita = (Date) spnFechaCita.getValue();
+						
+						SimpleDateFormat r = new SimpleDateFormat("MM/DD/YYY");
+						String	fecha2 = r.format(fechaCita);
+						
+						Date date1 = null;
+						try {
+							date1 = new SimpleDateFormat("MM/DD/YYY").parse(fecha2);
+						} catch (ParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
 						Date fechaNacimiento = (Date) spnNacimiento.getValue();
 						
 					if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), fechaCita)) {
@@ -300,7 +312,7 @@ public class RegistroCita extends JDialog {
 							}else {
 								
 								CitaMedica cita = new CitaMedica(txtCodigoCita.getText().toString(), fechaCita, txtNombre.getText().toString(), txtTelefono.getText().toString(), selectedMedico, txtCedula.getText().toString(), String.valueOf((cbxSexoPersona.getSelectedItem())),
-										fechaNacimiento,txtDireccion.getText().toString());
+											fechaNacimiento,txtDireccion.getText().toString(),date1);
 												
 								Clinica.getInstance().insertarCita(cita,selectedMedico);
 								JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
@@ -328,26 +340,11 @@ public class RegistroCita extends JDialog {
 		txtCodigoCita.setText("Cita-"+Clinica.getInstance().generadorCodigo(4));
 	}
 	
-	private ArrayList<Medico> CargarMedicoDisponibles(Date fecha) {
-		
-		ArrayList<Medico> medicosDisp = new ArrayList<>();
-		
-		for (Usuario user : Clinica.getInstance().getMisUsuarios()) {
-			
-			if(user instanceof Medico) {
-				if(Clinica.getInstance().medicoDisponible(fecha, user.getId())) {
-					medicosDisp.add((Medico) user);
-				}
-			}
-		}
-		
-		return medicosDisp;
-	}
-	
+
 	private void loadMedicos(Date fecha) {
 		
 		ArrayList<Medico> medicosDisp = new ArrayList<>();
-		medicosDisp = CargarMedicoDisponibles(fecha);
+		medicosDisp = Clinica.getInstance().CargarMedicoDisponibles(fecha);
 		
 		modelMedicos.setRowCount(0);
 		rowsMedicos = new Object[modelMedicos.getColumnCount()];

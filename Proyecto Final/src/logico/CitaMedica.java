@@ -16,9 +16,10 @@ public class CitaMedica implements Serializable {
 	private Date fechaNacimientoPersona;
 	private String direccionPersona;
 	private HistoriaClinica historialPersona;
+	private Date fechaN;
 	
 	public CitaMedica(String codigo, Date fechaCita, String nombrePersona, String telefono, Medico medico,
-			String cedulaPersona, String generoPersona, Date fechaNacimientoPersona, String direccionPersona) {
+			String cedulaPersona, String generoPersona, Date fechaNacimientoPersona, String direccionPersona, Date fechaN) {
 		
 		this.codigo = codigo;
 		this.fechaCita = fechaCita;
@@ -29,6 +30,7 @@ public class CitaMedica implements Serializable {
 		this.generoPersona = generoPersona;
 		this.fechaNacimientoPersona = fechaNacimientoPersona;
 		this.direccionPersona = direccionPersona;
+		this.fechaN = fechaN;
 	}
 
 	public String getCodigo() {
@@ -109,6 +111,14 @@ public class CitaMedica implements Serializable {
 
 	public void setHistorialPersona(HistoriaClinica historialPersona) {
 		this.historialPersona = historialPersona;
+	}
+
+	public Date getFechaN() {
+		return fechaN;
+	}
+
+	public void setFechaN(Date fechaN) {
+		this.fechaN = fechaN;
 	}
 	
 }

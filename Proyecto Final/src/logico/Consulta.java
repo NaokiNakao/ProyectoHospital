@@ -15,14 +15,16 @@ public class Consulta implements Serializable {
 	private Medico miMedico;
 	private Vacuna misVacunas;
 	private String receta;
+	private Date fechaT;
 	
-	public Consulta(String codigo, Date fechaConsulta, String sintomas, String diagnostico, Medico miMedico,String receta) {
+	public Consulta(String codigo, Date fechaConsulta, String sintomas, String diagnostico, Medico miMedico,String receta, Date fechaT) {
 		this.codigo = codigo;
 		this.fechaConsulta = fechaConsulta;
 		this.sintomas = sintomas;
 		this.diagnostico = diagnostico;
 		this.miMedico = miMedico;
 		this.receta = receta;
+		this.fechaT = fechaT;
 	}
 
 	public String getCodigo() {
@@ -87,6 +89,14 @@ public class Consulta implements Serializable {
 
 	public void setReceta(String receta) {
 		this.receta = receta;
+	}
+
+	public Date getFechaT() {
+		return fechaT;
+	}
+
+	public void setFechaT(Date fechaT) {
+		this.fechaT = fechaT;
 	}
 
 }

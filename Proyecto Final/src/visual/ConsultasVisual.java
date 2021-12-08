@@ -104,25 +104,6 @@ public class ConsultasVisual extends JDialog {
 			panelSintomas.setLayout(null);
 			
 			
-
-			Enfermedad covid = new Enfermedad("1021", "covid", "Respiratoria", "Malisima compai");
-			Clinica.getInstance().insertarEnfermedad(covid);
-			
-			Enfermedad covid2 = new Enfermedad("1028", "covid2", "Respiratoria", "Malisima compai");
-			Clinica.getInstance().insertarEnfermedad(covid2);
-			
-			ArrayList<Enfermedad> r = new ArrayList<>();
-			ArrayList<Enfermedad>t = new ArrayList<>();
-			
-			r.add(covid);
-			t.add(covid2);
-			
-			Vacuna sinovac = new Vacuna("620", "Sinovac", "Yo", r, "P", "P");
-			Vacuna rv = new Vacuna("8952", "tula", "Tambien yo", t, "Ayh", "p");
-			
-			Clinica.getInstance().agregarVacuna(rv);
-			Clinica.getInstance().agregarVacuna(sinovac);
-			
 			JButton btnSiguiente = new JButton("Siguiente");
 			btnSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -327,7 +308,7 @@ public class ConsultasVisual extends JDialog {
 						
 						
 						Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(), textPaneDiagnostico.getText().toString(),
-								medico, textPaneReceta.getText().toString());
+								medico, textPaneReceta.getText().toString(),cita.getFechaN());
 						
 						if(selectedEnfermedad!=null) {
 							n.setEnfermedad(selectedEnfermedad);

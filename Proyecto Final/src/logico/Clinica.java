@@ -151,7 +151,7 @@ public class Clinica implements Serializable {
 		
 		for (Paciente paciente : misPacientes) {
 			for (Consulta consulta : paciente.getHistorial().getMisConsultas()) {
-				if (consulta.getEnfermedad().getCodigo().equalsIgnoreCase(codigoEnfermedad) && consulta.getFechaConsulta().equals(fecha)) {
+				if (consulta.getEnfermedad().getCodigo().equalsIgnoreCase(codigoEnfermedad) && consulta.getFechaT().equals(fecha)) {
 					total++;
 				}
 			}
@@ -198,10 +198,8 @@ public class Clinica implements Serializable {
 		ArrayList<Vacuna> vacunasDisponibles = new ArrayList<Vacuna>();
 		
 		for (Vacuna vacuna : misVacunas) {
-			for (Enfermedad enfermedad : vacuna.getProteccion()) {
-				if (enfermedad.getCodigo().equalsIgnoreCase(codigoEnfermedad)) {
-					vacunasDisponibles.add(vacuna);
-				}
+			if(vacuna.getProteccion().getCodigo().equalsIgnoreCase(codigoEnfermedad)) {
+				vacunasDisponibles.add(vacuna);
 			}
 		}
 		
@@ -351,7 +349,10 @@ public class Clinica implements Serializable {
 	private boolean datosVacunaValidos(Vacuna vacuna) {
 		boolean validacion = false;
 		
-		if ( codigoVacunaValido(vacuna.getCodigo()) && (vacuna.getNombreVacuna() != null) && (vacuna.getFabricante() != null) && (!vacuna.getTipoVacuna().equalsIgnoreCase("<Seleccionar>")) && (!vacuna.getFormaAdministracion().equalsIgnoreCase("<Seleccionar>")) /*&& (vacuna.getProteccion().size() > 0)*/ ) {
+		if ( codigoVacunaValido(vacuna.getCodigo()) && (vacuna.getNombreVacuna() != null) && 
+			(vacuna.getFabricante() != null) && (!vacuna.getTipoVacuna().equalsIgnoreCase("<Seleccionar>")) &&
+			(!vacuna.getFormaAdministracion().equalsIgnoreCase("<Seleccionar>")) /*&& (vacuna.getProteccion().size() > 0)*/ ) {
+			
 			validacion = true;
 		}
 		
@@ -452,6 +453,28 @@ public class Clinica implements Serializable {
 		
 		return bandera;
 	}
+	
+	public void insertarMedico(Medico med) {
+		misUsuarios.add(med);
+	}
+	
+	
+	public ArrayList<Medico> CargarMedicoDisponibles(Date fecha) {
+		
+		ArrayList<Medico> medicosDisp = new ArrayList<>();
+		
+		for (Usuario user : misUsuarios) {
+			
+			if(user instanceof Medico) {
+				if(medicoDisponible(fecha, user.getId())) {
+					medicosDisp.add((Medico) user);
+				}
+			}
+		}
+		
+		return medicosDisp; 
+	}
+	
 	
 }
 

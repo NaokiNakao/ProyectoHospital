@@ -90,10 +90,10 @@ public class EstadisticaEnfermedad extends JDialog {
 			
 			
 			
-			Enfermedad covid = new Enfermedad("1021", "covid", "Respiratoria", "Malisima compai");
+			Enfermedad covid = new Enfermedad("10211111", "covid", "Respiratoria", "Malisima compai");
 			Clinica.getInstance().insertarEnfermedad(covid);
 			
-			Enfermedad covid2 = new Enfermedad("1028", "covid2", "Respiratoria", "Malisima compai");
+			Enfermedad covid2 = new Enfermedad("10281111", "covid2", "Respiratoria", "Malisima compai");
 			Clinica.getInstance().insertarEnfermedad(covid2);
 			
 			ArrayList<Enfermedad> r = new ArrayList<>();
@@ -103,8 +103,8 @@ public class EstadisticaEnfermedad extends JDialog {
 			r.add(covid2);
 			t.add(covid2);
 			
-			Vacuna sinovac = new Vacuna("620", "Sinovac", "Yo", r, "P", "P");
-			Vacuna rv = new Vacuna("8952", "tula", "Tambien yo", t, "Ayh", "p");
+			Vacuna sinovac = new Vacuna("620", "Sinovac", "Yo", covid, "P", "P");
+			Vacuna rv = new Vacuna("8952", "tula", "Tambien yo", covid, "Ayh", "p");
 			
 			Clinica.getInstance().agregarVacuna(rv);
 			Clinica.getInstance().agregarVacuna(sinovac);

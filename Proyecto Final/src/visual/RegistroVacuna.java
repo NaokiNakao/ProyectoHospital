@@ -240,7 +240,7 @@ public class RegistroVacuna extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						if (vacuna == null) {
-							ArrayList<Enfermedad> proteccion = new ArrayList<Enfermedad>();
+							Enfermedad proteccion = null;
 							Vacuna nuevaVacuna = new Vacuna(txtCodigo.getText(), txtNombre.getText(), txtFabricante.getText(), proteccion, cbxTipo.getSelectedItem().toString(), cbxAdministracion.getSelectedItem().toString());
 							if (Clinica.getInstance().agregarVacuna(nuevaVacuna)) {
 								JOptionPane.showMessageDialog(null, "La vacuna se ha agregado.", "Registro satisfactorio", JOptionPane.INFORMATION_MESSAGE);
@@ -297,7 +297,7 @@ public class RegistroVacuna extends JDialog {
 	}
 	
 	private void cargarProteccion() {
-		modelProteccion.setRowCount(0);
+	/*	modelProteccion.setRowCount(0);
 		rowsProteccion = new Object[modelProteccion.getColumnCount()];
 		
 		try {
@@ -307,7 +307,7 @@ public class RegistroVacuna extends JDialog {
 			}
 		} catch (NullPointerException e) {
 			// El objeto "vacuna" es nulo 
-		}
+		}*/
 	}
 	
 	private void cargarDatosCampos() {
