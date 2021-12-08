@@ -14,18 +14,22 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
+import javax.swing.ListSelectionModel;
+import logico.Clinica;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
+import java.awt.Color;
 
 public class ListadoEnfermedad extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTable table;
-	private JTextField txtCodigoRegistrado;
-	private JTextField txtNombre;
-	private JTextField txtTipo;
-	private JTextField txtDescripcion;
-	private JTextField txtCodigo;
+	private JPanel panel_enfermedades;
+	private JTable tableenfer;
+	private DefaultTableModel modelenfer;
+	private Object[] rowsenfer;
 
 	/**
 	 * Launch the application.
@@ -46,117 +50,18 @@ public class ListadoEnfermedad extends JDialog {
 	public ListadoEnfermedad() {
 		setResizable(false);
 		setTitle("Listado de enfermedades");
-		setBounds(100, 100, 521, 533);
+		setBounds(100, 100, 539, 370);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		setLocationRelativeTo(null);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(21, 195, 468, 240);
-		contentPanel.add(scrollPane);
-		
-		table = new JTable();
-		table.setEnabled(false);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-				{null, null, null, null},
-			},
-			new String[] {
-				"Nombre", "Codigo", "Tipo", "Descripcion"
-			}
-		));
-		scrollPane.setViewportView(table);
-		
-		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "Buscador:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(21, 11, 468, 173);
-		contentPanel.add(panel);
-		panel.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("Codigo:");
-		lblNewLabel.setBounds(10, 24, 58, 14);
-		panel.add(lblNewLabel);
-		
-		txtCodigoRegistrado = new JTextField();
-		txtCodigoRegistrado.setBounds(66, 21, 93, 20);
-		panel.add(txtCodigoRegistrado);
-		txtCodigoRegistrado.setColumns(10);
-		
-		JLabel lblNewLabel_1 = new JLabel("Nombre:");
-		lblNewLabel_1.setBounds(41, 49, 66, 14);
-		panel.add(lblNewLabel_1);
-		
-		txtNombre = new JTextField();
-		txtNombre.setEditable(false);
-		txtNombre.setColumns(10);
-		txtNombre.setBounds(41, 74, 93, 20);
-		panel.add(txtNombre);
-		
-		JLabel lblTipo = new JLabel("Tipo:");
-		lblTipo.setBounds(175, 49, 66, 14);
-		panel.add(lblTipo);
-		
-		txtTipo = new JTextField();
-		txtTipo.setEditable(false);
-		txtTipo.setBounds(175, 74, 93, 20);
-		panel.add(txtTipo);
-		txtTipo.setColumns(10);
-		
-		JLabel lblDescripcion = new JLabel("Descripcion:");
-		lblDescripcion.setBounds(41, 112, 93, 14);
-		panel.add(lblDescripcion);
-		
-		txtDescripcion = new JTextField();
-		txtDescripcion.setEditable(false);
-		txtDescripcion.setColumns(10);
-		txtDescripcion.setBounds(41, 133, 227, 20);
-		panel.add(txtDescripcion);
-		
-		JLabel lblCodigo = new JLabel("Codigo:");
-		lblCodigo.setBounds(290, 49, 66, 14);
-		panel.add(lblCodigo);
-		
-		txtCodigo = new JTextField();
-		txtCodigo.setEditable(false);
-		txtCodigo.setColumns(10);
-		txtCodigo.setBounds(290, 74, 93, 20);
-		panel.add(txtCodigo);
-		
 		JPanel buttonpane = new JPanel();
 		buttonpane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		buttonpane.setBounds(0, 446, 515, 58);
+		buttonpane.setBounds(0, 283, 533, 58);
 		contentPanel.add(buttonpane);
 		buttonpane.setLayout(null);
-		
-		JButton btnNewButton = new JButton("Crear");
-		btnNewButton.setBounds(166, 11, 89, 23);
-		buttonpane.add(btnNewButton);
 		
 		JButton btnEliminar = new JButton("Eliminar");
 		btnEliminar.setBounds(284, 11, 89, 23);
@@ -170,5 +75,40 @@ public class ListadoEnfermedad extends JDialog {
 		});
 		btnSalir.setBounds(400, 11, 89, 23);
 		buttonpane.add(btnSalir);
+		
+		panel_enfermedades = new JPanel();
+		panel_enfermedades.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Listado de enfermedades:", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		panel_enfermedades.setBounds(10, 25, 495, 239);
+		contentPanel.add(panel_enfermedades);
+		panel_enfermedades.setLayout(new BorderLayout(0, 0));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		panel_enfermedades.add(scrollPane, BorderLayout.CENTER);
+		{
+			tableenfer = new JTable();
+			tableenfer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			String[] heardersenfer = {"Codigo","Nombre","Tipo","Descripcion"};
+			modelenfer = new DefaultTableModel();
+			tableenfer.setModel(modelenfer);
+			modelenfer.setColumnIdentifiers(heardersenfer);
+			scrollPane.setViewportView(tableenfer);
+		}
+		loadEnfermedades();
+	}
+	private void loadEnfermedades()
+	{
+		modelenfer.setRowCount(0);
+		rowsenfer = new Object[modelenfer.getColumnCount()];
+		
+		for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
+			rowsenfer[0] = Clinica.getInstance().getMisEnfermedades().get(i).getCodigo();
+			rowsenfer[1] = Clinica.getInstance().getMisEnfermedades().get(i).getNombreEnfermedad();
+			rowsenfer[2] = Clinica.getInstance().getMisEnfermedades().get(i).getTipoEnfermedad();
+			rowsenfer[3] = Clinica.getInstance().getMisEnfermedades().get(i).getDescripcionEnfermedad();
+			modelenfer.addRow(rowsenfer);
+		}
+		
 	}
 }
+

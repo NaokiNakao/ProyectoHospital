@@ -24,7 +24,7 @@ import java.awt.event.ActionEvent;
 import logico.Clinica;
 import logico.Consulta;
 
-public class PanelConsulta extends JDialog {
+public class ListadoConsulta extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JPanel panel_consultas;
@@ -38,7 +38,7 @@ public class PanelConsulta extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			PanelConsulta dialog = new PanelConsulta();
+			ListadoConsulta dialog = new ListadoConsulta();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -49,8 +49,8 @@ public class PanelConsulta extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public PanelConsulta() {
-		setTitle("Panel de consultas");
+	public ListadoConsulta() {
+		setTitle("Listado de consultas");
 		setModal(true);
 		setResizable(false);
 		setBounds(100, 100, 1064, 437);
@@ -80,7 +80,7 @@ public class PanelConsulta extends JDialog {
 		{
 			tableconsulta = new JTable();
 			tableconsulta.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			String[] heardersconsultas = {"Codigo","Fecha de consulta","Enfermedad","Sintomas","Diagnostico","Medico","Vacunas","Receta medica"};
+			String[] heardersconsultas = {"Codigo","Fecha de consulta","Paciente","Enfermedad","Medico"};
 			modelconsulta = new DefaultTableModel();
 			tableconsulta.setModel(modelconsulta);
 			modelconsulta.setColumnIdentifiers(heardersconsultas);
@@ -103,24 +103,6 @@ public class PanelConsulta extends JDialog {
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
-		}
-		loadConsultas();
-	}
-	private void loadConsultas()
-	{
-		modelconsulta.setRowCount(0);
-		rowsconsulta = new Object[modelconsulta.getColumnCount()];
-		
-		for (int i = 0; i < Clinica.getInstance().getMisConsultas().size(); i++) {
-			rowsconsulta[0] = Clinica.getInstance().getMisConsultas().get(i).getCodigo();
-			rowsconsulta[1] = Clinica.getInstance().getMisConsultas().get(i).getFechaT();
-			rowsconsulta[2] = Clinica.getInstance().getMisConsultas().get(i).getEnfermedad();
-			rowsconsulta[3] = Clinica.getInstance().getMisConsultas().get(i).getSintomas();
-			rowsconsulta[4] = Clinica.getInstance().getMisConsultas().get(i).getDiagnostico();
-			rowsconsulta[5] = Clinica.getInstance().getMisConsultas().get(i).getMiMedico();
-			rowsconsulta[6] = Clinica.getInstance().getMisConsultas().get(i).getMisVacunas();
-			rowsconsulta[7] = Clinica.getInstance().getMisConsultas().get(i).getReceta();
-			modelconsulta.addRow(rowsconsulta);
 		}
 		
 	}
