@@ -87,29 +87,6 @@ public class EstadisticaEnfermedad extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new BorderLayout(0, 0));
 		{
-			
-			
-			
-			Enfermedad covid = new Enfermedad("10211111", "covid", "Respiratoria", "Malisima compai");
-			Clinica.getInstance().insertarEnfermedad(covid);
-			
-			Enfermedad covid2 = new Enfermedad("10281111", "covid2", "Respiratoria", "Malisima compai");
-			Clinica.getInstance().insertarEnfermedad(covid2);
-			
-			ArrayList<Enfermedad> r = new ArrayList<>();
-			ArrayList<Enfermedad>t = new ArrayList<>();
-			
-			r.add(covid);
-			r.add(covid2);
-			t.add(covid2);
-			
-			Vacuna sinovac = new Vacuna("620", "Sinovac", "Yo", r, "P", "P");
-			Vacuna rv = new Vacuna("8952", "tula", "Tambien yo", t, "Ayh", "p");
-			
-			Clinica.getInstance().agregarVacuna(rv);
-			Clinica.getInstance().agregarVacuna(sinovac);
-			
-			
 			JPanel panel = new JPanel();
 			contentPanel.add(panel, BorderLayout.CENTER);
 			panel.setLayout(null);
@@ -132,7 +109,7 @@ public class EstadisticaEnfermedad extends JDialog {
 					if(aux!=-1) {
 						String cod = (String) modelEnfermedades.getValueAt(aux, 0);
 						selectedEnfermedad=Clinica.getInstance().buscarEnfermedadByCodigo(cod);
-						loadVacunas();
+						loadVacunas(selectedEnfermedad);
 							
 						float[] h = Clinica.getInstance().porcentajeEnfermedadPorGenero(selectedEnfermedad.getCodigo());
 							
@@ -305,13 +282,13 @@ public class EstadisticaEnfermedad extends JDialog {
 	}
 	
 	
-	private void loadVacunas() {
+	private void loadVacunas(Enfermedad enfermedad) {
 		modelVacunas.setRowCount(0);
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
 		
 		ArrayList<Vacuna> misVacunas = null;
-		if(selectedEnfermedad != null) {
-			misVacunas =  Clinica.getInstance().vacunasParaEnfermedad(selectedEnfermedad.getCodigo());
+		if(enfermedad != null) {
+			misVacunas =  Clinica.getInstance().vacunasParaEnfermedad(enfermedad.getCodigo());
 			
 			for (Vacuna vacuna : misVacunas) {
 				rowsVacunas[0]= vacuna.getCodigo();

@@ -324,6 +324,7 @@ public class ConsultasVisual extends JDialog {
 						Clinica.getInstance().getMisPacientes().add(p);
 						Clinica.getInstance().insertarConsulta(n, medico, cita, p);
 						p.setHistorial(h);
+						dispose();
 						JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
 					}
 					
