@@ -169,7 +169,7 @@ public class RegistroVacuna extends JDialog {
 					String aux = (String) tableEnfermedades.getValueAt(index, 0);
 					String codigoEnfermedad = aux.substring(0, 8);
 					selectedEnfermedad = Clinica.getInstance().buscarEnfermedadByCodigo(codigoEnfermedad);
-					btnPasarDerecha.setVisible(true);
+					btnPasarDerecha.setEnabled(true);
 				}
 			}
 		});
@@ -197,7 +197,7 @@ public class RegistroVacuna extends JDialog {
 					String aux = (String) tableProteccion.getValueAt(index, 0);
 					String codigoProteccion = aux.substring(0, 8);
 					selectedProteccion = Clinica.getInstance().buscarEnfermedadByCodigo(codigoProteccion);
-					btnPasarIzquierda.setVisible(true);
+					btnPasarIzquierda.setEnabled(true);
 				}
 			}
 		});
@@ -227,7 +227,7 @@ public class RegistroVacuna extends JDialog {
 				if (index != -1) {
 					vacuna.getProteccion().remove(index);
 					cargarProteccion();
-					btnPasarIzquierda.setVisible(false);
+					btnPasarIzquierda.setEnabled(false);
 				}
 			}
 		});
@@ -249,7 +249,8 @@ public class RegistroVacuna extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						if (vacuna == null) {
-							Vacuna nuevaVacuna = new Vacuna(txtCodigo.getText(), txtNombre.getText(), txtFabricante.getText(), null, cbxTipo.getSelectedItem().toString(), cbxAdministracion.getSelectedItem().toString());
+							ArrayList<Enfermedad> proteccion = new ArrayList<Enfermedad>();
+							Vacuna nuevaVacuna = new Vacuna(txtCodigo.getText(), txtNombre.getText(), txtFabricante.getText(), proteccion, cbxTipo.getSelectedItem().toString(), cbxAdministracion.getSelectedItem().toString());
 							if (Clinica.getInstance().agregarVacuna(nuevaVacuna)) {
 								JOptionPane.showMessageDialog(null, "La vacuna se ha agregado.", "Registro satisfactorio", JOptionPane.INFORMATION_MESSAGE);
 								limpiarCampos();
