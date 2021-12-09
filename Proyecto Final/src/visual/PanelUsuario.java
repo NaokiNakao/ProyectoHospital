@@ -51,6 +51,7 @@ public class PanelUsuario extends JDialog {
 	private JButton btnConsulta;
 	private JButton btnNuevaCitas;
 	private JButton btnMisConsultas;
+	private JButton btnNewButton;
 
 	/**
 	 * Create the dialog.
@@ -152,6 +153,16 @@ public class PanelUsuario extends JDialog {
 			});
 			btnMisConsultas.setBounds(10, 121, 134, 23);
 			panelMenu.add(btnMisConsultas);
+			
+			btnNewButton = new JButton("Historial");
+			btnNewButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					HistorialPaciente t = new HistorialPaciente();
+					t.setVisible(true);
+				}
+			});
+			btnNewButton.setBounds(10, 194, 134, 23);
+			panelMenu.add(btnNewButton);
 			btnConsulta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
