@@ -251,10 +251,10 @@ public class PanelUsuario extends JDialog {
 		modelAgenda.setRowCount(0);
 		rowsAgenda = new Object[modelAgenda.getColumnCount()];
 				
-		for (int i = 0; i <1; i++) {
+		for (int i = 0; i <((Medico) medico).getMisCitas().size(); i++) {
 			rowsAgenda[0]=  ((Medico) medico).getMisCitas().get(i).getCodigo();
 			rowsAgenda[1]=  ((Medico) medico).getMisCitas().get(i).getNombrePersona();
-			rowsAgenda[2]=  ((Medico) medico).getMisCitas().get(i).getFechaCita();
+			rowsAgenda[2]=  ((Medico) medico).getMisCitas().get(i).getFechaN();
 			modelAgenda.addRow(rowsAgenda);
 		}
 	}

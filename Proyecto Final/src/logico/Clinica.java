@@ -174,10 +174,10 @@ public class Clinica implements Serializable {
 		for (Paciente paciente : misPacientes) {
 			for (Enfermedad enfermedad : paciente.getHistorial().getPadecimientos()) {
 				if (enfermedad.getCodigo().equalsIgnoreCase(codigoEnfermedad)) {
-					if (paciente.getGenero().equalsIgnoreCase("Hombre")) {
+					if (paciente.getGenero().equalsIgnoreCase("Masculino")) {
 						tasa[0]++;
 					}
-					else if (paciente.getGenero().equalsIgnoreCase("Mujer")) {
+					else if (paciente.getGenero().equalsIgnoreCase("Femenino")) {
 						tasa[1]++;
 					}
 				}
