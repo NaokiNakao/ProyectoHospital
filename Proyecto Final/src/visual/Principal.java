@@ -152,21 +152,7 @@ public class Principal extends JFrame {
 		setLocationRelativeTo(null);
 	}
 	
-	/*private void respaldo() {
-		FileOutputStream file;
-		ObjectOutputStream writer;
-		
-		try {
-			file = new FileOutputStream(Clinica.getInstance().getRespaldo());
-			writer = new ObjectOutputStream(file);
-			writer.writeObject(Clinica.getInstance());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		catch (IOException e){
-			e.printStackTrace();
-		}
-	}*/
+
 	
 	private void respaldo() {
 		String serverAddr = Servidor.addr;

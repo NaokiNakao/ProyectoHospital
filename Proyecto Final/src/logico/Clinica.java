@@ -481,6 +481,24 @@ public class Clinica implements Serializable {
 		return medicosDisp; 
 	}
 	
+	public Usuario buscarUsuarioByLogin(String login) {
+		
+		Usuario user = null;
+		boolean encontrada = false;
+		int i = 0;
+		
+		while (!encontrada && i < misUsuarios.size()) {
+			if (misUsuarios.get(i).getLogin().equalsIgnoreCase(login)) {
+				user = misUsuarios.get(i);
+				encontrada = true;
+			}
+			i++;
+		}
+		return user;
+		
+	}
+	
+	
 	
 }
 

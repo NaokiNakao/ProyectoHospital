@@ -295,7 +295,7 @@ public class RegistroUsuario extends JDialog {
 					 JOptionPane.showMessageDialog(null, "Favor escoger otro usuario.", "Error", JOptionPane.ERROR_MESSAGE);
 				 }else {
 					 
-					if(Clinica.getInstance().buscarUsuarioById(txtLogin.getText().toString())!= null) {
+					if(Clinica.getInstance().buscarUsuarioByLogin(txtLogin.getText().toString())!= null) {
 						JOptionPane.showMessageDialog(null, "Este usuario ya existe", "Error", JOptionPane.ERROR_MESSAGE);
 					}else { 
 					 if(rdbtnMedico.isSelected()) {
