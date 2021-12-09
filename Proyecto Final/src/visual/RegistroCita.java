@@ -128,9 +128,11 @@ public class RegistroCita extends JDialog {
 						txtTelefono.setText(paciente.getTelefono());
 						
 						if(paciente.getGenero().equalsIgnoreCase("Masculino")) {
-								cbxSexoPersona.setSelectedIndex(0);
+								String sexo = "Masculino";
+								cbxSexoPersona.setSelectedItem(sexo);
 							}else {
-								cbxSexoPersona.setSelectedIndex(1);
+								String sexo = "Femenino";
+								cbxSexoPersona.setSelectedItem(sexo);
 							}
 						
 						spnNacimiento.setValue(paciente.getFechaNacimiento());

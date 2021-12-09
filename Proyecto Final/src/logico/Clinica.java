@@ -432,12 +432,23 @@ public class Clinica implements Serializable {
 		return cita;
 	}
 	
-	public void insertarConsulta(Consulta c, Medico medico,CitaMedica cita, Paciente p) {
+	public void insertarConsulta(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) {
 		misConsultas.add(c);
 		medico.getMisConsultas().add(c);
 		medico.getMisCitas().remove(cita);
 		misPacientes.add(p);
+		b.getMisConsultas().add(c);
+		p.setHistorial(b);
 	}
+	
+	public void insertarConsultaV2(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) {
+		misConsultas.add(c);
+		medico.getMisConsultas().add(c);
+		medico.getMisCitas().remove(cita);
+		b.getMisConsultas().add(c);
+		
+	}
+	
 	
 	public void insertarCita(CitaMedica cita, Medico medico) {
 		
