@@ -1,11 +1,13 @@
 package logico;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
-public class HistoriaClinica {
+public class HistoriaClinica implements Serializable {
 
+	private static final long serialVersionUID = -3069775145935662782L;
 	private String codigo;
 	private ArrayList<Consulta> misConsultas;
 	private ArrayList<Vacuna> misVacunas;
