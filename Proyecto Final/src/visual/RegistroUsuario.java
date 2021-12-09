@@ -174,6 +174,9 @@ public class RegistroUsuario extends JDialog {
 				panelMedico.setVisible(true);
 				panelAdmins.setVisible(false);
 				rdbtnAdmin.setSelected(false);
+				
+				txtId.setText("Med-"+Clinica.getInstance().generadorCodigo(8));
+			
 			}
 		});
 		rdbtnMedico.setSelected(true);
@@ -186,6 +189,8 @@ public class RegistroUsuario extends JDialog {
 				panelAdmins.setVisible(true);
 				panelMedico.setVisible(false);
 				rdbtnMedico.setSelected(false);
+				
+				txtId.setText("Admin-"+Clinica.getInstance().generadorCodigo(8));
 			}
 		});
 		rdbtnAdmin.setBounds(309, 15, 109, 23);

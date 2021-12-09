@@ -49,8 +49,8 @@ public class PanelUsuario extends JDialog {
 	private static Object[] rowsAgenda;
 	private CitaMedica siguienteCita;
 	private JButton btnConsulta;
-	private JButton btnCitas;
-	private JButton btnRegistroEnfermedades;
+	private JButton btnNuevaCitas;
+	private JButton btnMisConsultas;
 
 	/**
 	 * Create the dialog.
@@ -106,7 +106,7 @@ public class PanelUsuario extends JDialog {
 					listado.setVisible(true);
 				}
 			});
-			btnVacunas.setBounds(10, 119, 134, 25);
+			btnVacunas.setBounds(10, 83, 134, 25);
 			panelMenu.add(btnVacunas);
 			
 			btnUsuarios = new JButton("Usuarios");
@@ -116,40 +116,36 @@ public class PanelUsuario extends JDialog {
 					listado.setVisible(true);
 				}
 			});
-			btnUsuarios.setBounds(10, 189, 134, 25);
+			btnUsuarios.setBounds(10, 155, 134, 25);
 			if (user instanceof Medico) {
 				btnUsuarios.setVisible(false);
 			}
 			panelMenu.add(btnUsuarios);
 			
-			btnConsulta = new JButton("Consulta");
-			btnConsulta.setBounds(10, 83, 134, 25);
+			btnConsulta = new JButton("Sgte Consulta");
+			btnConsulta.setBounds(10, 155, 134, 25);
 			if (user instanceof Administrador) {
 				btnConsulta.setVisible(false);
 			}
 			panelMenu.add(btnConsulta);
 			
-			btnCitas = new JButton("Nueva cita");
-			btnCitas.addActionListener(new ActionListener() {
+			btnNuevaCitas = new JButton("Nueva cita");
+			btnNuevaCitas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
 					RegistroCita r = new RegistroCita();
 					r.setVisible(true);
 				}
 			});
-			btnCitas.setBounds(10, 155, 134, 25);
-			panelMenu.add(btnCitas);
+			btnNuevaCitas.setBounds(10, 120, 134, 25);
+			if (user instanceof Medico) {
+				btnNuevaCitas.setVisible(false);
+			}
+			panelMenu.add(btnNuevaCitas);
 			
-			btnRegistroEnfermedades = new JButton("Nueva Enfermedad");
-			btnRegistroEnfermedades.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-					RegistroEnfermedad r = new RegistroEnfermedad();
-					r.setVisible(true);
-				}
-			});
-			btnRegistroEnfermedades.setBounds(10, 233, 134, 25);
-			panelMenu.add(btnRegistroEnfermedades);
+			btnMisConsultas = new JButton("Mis Consultas");
+			btnMisConsultas.setBounds(10, 121, 134, 23);
+			panelMenu.add(btnMisConsultas);
 			btnConsulta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					

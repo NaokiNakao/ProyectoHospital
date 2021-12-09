@@ -40,6 +40,8 @@ public class MainPrueba {
 		Clinica.getInstance().agregarVacuna(sinovac);
 		
 		
+		
+	/*	
 		ArrayList<Vacuna> p = new ArrayList();
 		p = Clinica.getInstance().getMisVacunas();
 		
@@ -80,6 +82,9 @@ public class MainPrueba {
 	         System.out.println("Both dates are equal");
 	      }
 	   }
+	
+		//CitaMedica cita1 = new CitaMedica("115", d1, "juan", telefono, medico, cedulaPersona, generoPersona, fechaNacimientoPersona, direccionPersona, fechaN)
+			
 
 		//CitaMedica r = new CitaMedica("895", f, "", "", med1, "", "", f, "");
 		//Clinica.getInstance().insertarCita(r, med1);
