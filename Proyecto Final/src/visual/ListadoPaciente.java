@@ -12,6 +12,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import logico.Clinica;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
@@ -100,9 +103,26 @@ public class ListadoPaciente extends JDialog {
 			modelpac.setColumnIdentifiers(hearderspac);
 			scrollpac.setViewportView(tablepac);
 		}
-		
+		loadPacientes();
 		JButton btnNewButton = new JButton("Historial clinico");
 		btnNewButton.setBounds(10, 21, 125, 23);
 		contentPanel.add(btnNewButton);
+	}
+	private void loadPacientes()
+	{
+		modelpac.setRowCount(0);
+		rowpac = new Object[modelpac.getColumnCount()];
+		
+		for (int i = 0; i < Clinica.getInstance().getMisPacientes().size(); i++) {
+			rowpac[0] = Clinica.getInstance().getMisPacientes().get(i).getCedula();
+			rowpac[1] = Clinica.getInstance().getMisPacientes().get(i).getNombre();
+			rowpac[2] = Clinica.getInstance().getMisPacientes().get(i).getGenero();
+			rowpac[3] = Clinica.getInstance().getMisPacientes().get(i).getFechaNacimiento();
+			rowpac[4] = Clinica.getInstance().getMisPacientes().get(i).getDireccion();
+			rowpac[5] = Clinica.getInstance().getMisPacientes().get(i).getTelefono();
+			
+			modelpac.addRow(rowpac);
+		}
+		
 	}
 }

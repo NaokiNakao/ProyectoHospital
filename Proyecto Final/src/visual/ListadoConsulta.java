@@ -104,6 +104,20 @@ public class ListadoConsulta extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+		loadConsultas();
+	}
+	private void loadConsultas()
+	{
+		modelconsulta.setRowCount(0);
+		rowsconsulta = new Object[modelconsulta.getColumnCount()];
+		
+		for (int i = 0; i < Clinica.getInstance().getCitasMedicas().size(); i++) {
+			rowsconsulta[0] = Clinica.getInstance().getCitasMedicas().get(i).getCodigo();
+			rowsconsulta[1] = Clinica.getInstance().getCitasMedicas().get(i).getFechaCita();
+			rowsconsulta[2] = Clinica.getInstance().getCitasMedicas().get(i).getNombrePersona();
+			rowsconsulta[3] = Clinica.getInstance().getCitasMedicas().get(i).getMedico();
+			modelconsulta.addRow(rowsconsulta);
+		}
 		
 	}
 }
