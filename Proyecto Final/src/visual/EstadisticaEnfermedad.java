@@ -207,7 +207,7 @@ public class EstadisticaEnfermedad extends JDialog {
 					
 					Date f = (Date) spnFecha.getValue(); 
 					
-					txtCasosPorFecha.setText(String.valueOf((Clinica.getInstance().casosEnfermedadPorFecha(selectedEnfermedad.getCodigo(),f))));
+					txtCasosPorFecha.setText(String.valueOf((Clinica.getInstance().casosEnfermedadTotal(selectedEnfermedad.getCodigo()))));
 				}
 			});
 			btnBuscarFecha.setBounds(168, 36, 89, 23);
