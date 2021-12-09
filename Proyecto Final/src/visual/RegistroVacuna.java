@@ -296,7 +296,7 @@ public class RegistroVacuna extends JDialog {
 	}
 	
 	private void cargarProteccion() {
-	/*	modelProteccion.setRowCount(0);
+		modelProteccion.setRowCount(0);
 		rowsProteccion = new Object[modelProteccion.getColumnCount()];
 		
 		try {
@@ -306,7 +306,7 @@ public class RegistroVacuna extends JDialog {
 			}
 		} catch (NullPointerException e) {
 			// El objeto "vacuna" es nulo 
-		}*/
+		}
 	}
 	
 	private void cargarDatosCampos() {

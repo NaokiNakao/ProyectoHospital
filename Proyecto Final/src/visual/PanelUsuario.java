@@ -65,7 +65,7 @@ public class PanelUsuario extends JDialog {
 		}
 		else if (user instanceof Medico) {
 			setTitle("Medico");
-			loadAgenda((Medico) user);
+			//loadAgenda(user);
 		}
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -242,17 +242,19 @@ public class PanelUsuario extends JDialog {
 			}
 		}
 		
-		loadAgenda((Medico) user);
+		if (user instanceof Medico) {
+			loadAgenda(user);
+		}
 	}
 	
-	private void loadAgenda(Medico medico) {
+	private void loadAgenda(Usuario medico) {
 		modelAgenda.setRowCount(0);
 		rowsAgenda = new Object[modelAgenda.getColumnCount()];
 				
 		for (int i = 0; i <1; i++) {
-			rowsAgenda[0]=  medico.getMisCitas().get(i).getCodigo();
-			rowsAgenda[1]=  medico.getMisCitas().get(i).getNombrePersona();
-			rowsAgenda[2]=  medico.getMisCitas().get(i).getFechaCita();
+			rowsAgenda[0]=  ((Medico) medico).getMisCitas().get(i).getCodigo();
+			rowsAgenda[1]=  ((Medico) medico).getMisCitas().get(i).getNombrePersona();
+			rowsAgenda[2]=  ((Medico) medico).getMisCitas().get(i).getFechaCita();
 			modelAgenda.addRow(rowsAgenda);
 		}
 	}
