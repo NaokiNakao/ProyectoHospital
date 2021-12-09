@@ -144,6 +144,12 @@ public class PanelUsuario extends JDialog {
 			panelMenu.add(btnNuevaCitas);
 			
 			btnMisConsultas = new JButton("Mis Consultas");
+			btnMisConsultas.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					ListadoConsulta t = new ListadoConsulta();
+					t.setVisible(true);
+				}
+			});
 			btnMisConsultas.setBounds(10, 121, 134, 23);
 			panelMenu.add(btnMisConsultas);
 			btnConsulta.addActionListener(new ActionListener() {
