@@ -104,6 +104,7 @@ public class ListadoUsuario extends JDialog {
 			JButton btnNuevo = new JButton("Nuevo");
 			btnNuevo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					dispose();
 					RegistroUsuario registro = new RegistroUsuario(null);
 					registro.setVisible(true);
 				}

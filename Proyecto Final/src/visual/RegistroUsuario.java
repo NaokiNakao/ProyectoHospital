@@ -277,6 +277,8 @@ public class RegistroUsuario extends JDialog {
 				btnSalir.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
+						ListadoUsuario p = new ListadoUsuario();
+						p.setVisible(true);
 					}
 				});
 				btnSalir.setActionCommand("Cancel");

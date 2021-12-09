@@ -322,7 +322,6 @@ public class ConsultasVisual extends JDialog {
 							}
 							
 							Clinica.getInstance().insertarConsultaV2(n, medico, cita, p, h);
-							//dispose();
 							JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
 							dispose();
 							PanelUsuario u = new PanelUsuario(medico);
@@ -376,7 +375,9 @@ public class ConsultasVisual extends JDialog {
 				JButton cancelButton = new JButton("Salir");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						dispose();
+						dispose();	
+						PanelUsuario u = new PanelUsuario(medico);
+						u.setVisible(true);
 					}
 				});
 				cancelButton.setActionCommand("Cancel");

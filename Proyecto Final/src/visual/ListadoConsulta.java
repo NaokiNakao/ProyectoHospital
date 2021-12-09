@@ -115,7 +115,7 @@ public class ListadoConsulta extends JDialog {
 			rowsconsulta[0] = Clinica.getInstance().getCitasMedicas().get(i).getCodigo();
 			rowsconsulta[1] = Clinica.getInstance().getCitasMedicas().get(i).getFechaCita();
 			rowsconsulta[2] = Clinica.getInstance().getCitasMedicas().get(i).getNombrePersona();
-			rowsconsulta[3] = Clinica.getInstance().getCitasMedicas().get(i).getMedico();
+			rowsconsulta[3] = Clinica.getInstance().getCitasMedicas().get(i).getMedico().getNombre()+" "+Clinica.getInstance().getCitasMedicas().get(i).getMedico().getApellido();
 			modelconsulta.addRow(rowsconsulta);
 		}
 		

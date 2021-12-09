@@ -241,13 +241,15 @@ public class PanelUsuario extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+		
+		loadAgenda((Medico) user);
 	}
 	
 	private void loadAgenda(Medico medico) {
 		modelAgenda.setRowCount(0);
 		rowsAgenda = new Object[modelAgenda.getColumnCount()];
 				
-		for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
+		for (int i = 0; i <1; i++) {
 			rowsAgenda[0]=  medico.getMisCitas().get(i).getCodigo();
 			rowsAgenda[1]=  medico.getMisCitas().get(i).getNombrePersona();
 			rowsAgenda[2]=  medico.getMisCitas().get(i).getFechaCita();
