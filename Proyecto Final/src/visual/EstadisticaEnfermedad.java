@@ -18,6 +18,7 @@ import logico.Enfermedad;
 import logico.HistoriaClinica;
 import logico.Medico;
 import logico.Paciente;
+import logico.Usuario;
 import logico.Vacuna;
 
 import javax.swing.JScrollPane;
@@ -35,6 +36,8 @@ import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
@@ -59,6 +62,9 @@ public class EstadisticaEnfermedad extends JDialog {
 	private JTextField txtCasosPorFecha;
 	private JSpinner spnFecha;
 	private JButton btnBuscarFecha;
+	private JButton btnRegistrar;
+	private JButton btnModificar;
+	private JButton btnEliminar;
 	
 
 	/**
@@ -66,7 +72,7 @@ public class EstadisticaEnfermedad extends JDialog {
 	 */
 	public static void main(String[] args) {
 		try {
-			EstadisticaEnfermedad dialog = new EstadisticaEnfermedad();
+			EstadisticaEnfermedad dialog = new EstadisticaEnfermedad(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -77,7 +83,7 @@ public class EstadisticaEnfermedad extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public EstadisticaEnfermedad() {
+	public EstadisticaEnfermedad(Usuario user) {
 		setModal(true);
 		setResizable(false);
 		setBounds(100, 100, 855, 550);
@@ -107,6 +113,9 @@ public class EstadisticaEnfermedad extends JDialog {
 					
 					int aux = tableEnfermedades.getSelectedRow();
 					if(aux!=-1) {
+						btnModificar.setEnabled(true);
+						btnEliminar.setEnabled(true);
+						
 						String cod = (String) modelEnfermedades.getValueAt(aux, 0);
 						selectedEnfermedad=Clinica.getInstance().buscarEnfermedadByCodigo(cod);
 						loadVacunas(selectedEnfermedad);
@@ -250,10 +259,48 @@ public class EstadisticaEnfermedad extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				btnRegistrar = new JButton("Nueva Enfermedad");
+				if(user instanceof Medico) {
+					btnRegistrar.setVisible(false);
+				}
+				btnRegistrar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+						RegistroEnfermedad r = new RegistroEnfermedad(user,selectedEnfermedad);
+						r.setVisible(true);
+					}
+				});
+				
+				btnModificar = new JButton("Modificar");
+				btnModificar.setEnabled(false);
+				btnModificar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dispose();
+						RegistroEnfermedad r = new RegistroEnfermedad(user,selectedEnfermedad);
+						r.setVisible(true);
+					}
+				});
+				
+				btnEliminar = new JButton("Eliminar");
+				btnEliminar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						
+						int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro desea eliminar la enfermedad?", "Confirmación", JOptionPane.WARNING_MESSAGE);
+						if (opcion == JOptionPane.YES_OPTION) {
+							Clinica.getInstance().getMisEnfermedades().remove(selectedEnfermedad);
+							JOptionPane.showMessageDialog(null, "Vacuna borrada", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
+							loadEnfermedades();
+						}
+						
+					}
+				});
+				btnEliminar.setEnabled(false);
+				buttonPane.add(btnEliminar);
+				buttonPane.add(btnModificar);
+				btnRegistrar.setActionCommand("OK");
+				buttonPane.add(btnRegistrar);
+				getRootPane().setDefaultButton(btnRegistrar);
 			}
 			{
 				JButton cancelButton = new JButton("Cancel");

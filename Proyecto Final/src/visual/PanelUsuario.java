@@ -92,7 +92,7 @@ public class PanelUsuario extends JDialog {
 			btnEnfermedades = new JButton("Enfermedades");
 			btnEnfermedades.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					EstadisticaEnfermedad frame = new EstadisticaEnfermedad();
+					EstadisticaEnfermedad frame = new EstadisticaEnfermedad(user);
 					frame.setVisible(true);
 				}
 			});

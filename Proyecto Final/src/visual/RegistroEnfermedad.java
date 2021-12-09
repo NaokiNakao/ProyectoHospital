@@ -16,7 +16,7 @@ import javax.swing.border.TitledBorder;
 
 import logico.Clinica;
 import logico.Enfermedad;
-
+import logico.Usuario;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -33,20 +33,21 @@ public class RegistroEnfermedad extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	/*public static void main(String[] args) {
+	public static void main(String[] args) {
 		try {
-			RegistroEnfermedad dialog = new RegistroEnfermedad();
+			RegistroEnfermedad dialog = new RegistroEnfermedad(null,null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}*/
+	}
 
 	/**
 	 * Create the dialog.
+	 * @param user 
 	 */
-	public RegistroEnfermedad(Enfermedad enfer) {
+	public RegistroEnfermedad(Usuario user,Enfermedad enfermedad) {
 		setModal(true);
 		setResizable(false);
 		setTitle("Registro de enfermedad");
@@ -65,6 +66,9 @@ public class RegistroEnfermedad extends JDialog {
 		
 		textPaneDescripcion = new JTextPane();
 		textPaneDescripcion.setBounds(30, 175, 419, 129);
+		if(enfermedad!=null) {
+			textPaneDescripcion.setText(enfermedad.getDescripcionEnfermedad().toString());
+		}
 		panel.add(textPaneDescripcion);
 		
 		JLabel lblNewLabel = new JLabel("ID:");
@@ -73,9 +77,15 @@ public class RegistroEnfermedad extends JDialog {
 		
 		txtCodigo = new JTextField();
 		txtCodigo.setBounds(85, 14, 149, 20);
+		if(enfermedad!=null) {
+			txtCodigo.setText(enfermedad.getCodigo().toString());
+		}else {
+			txtCodigo.setText("E-" + Clinica.getInstance().generadorCodigo(5));
+		}
+		
 		panel.add(txtCodigo);
 		txtCodigo.setEditable(false);
-		txtCodigo.setText("E-" + Clinica.getInstance().generadorCodigo(5));
+		//txtCodigo.setText("E-" + Clinica.getInstance().generadorCodigo(5));
 		txtCodigo.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Nombre:");
@@ -84,6 +94,9 @@ public class RegistroEnfermedad extends JDialog {
 		
 		txtNombre = new JTextField();
 		txtNombre.setBounds(85, 53, 149, 20);
+		if(enfermedad!=null) {
+			txtNombre.setText(enfermedad.getNombreEnfermedad().toString());
+		}
 		panel.add(txtNombre);
 		txtNombre.setColumns(10);
 		
@@ -93,6 +106,9 @@ public class RegistroEnfermedad extends JDialog {
 		
 		cbxTipo = new JComboBox();
 		cbxTipo.setBounds(85, 100, 149, 20);
+		if(enfermedad!=null) {
+		//	txtCodigo.setText(enfermedad.getCodigo().toString());
+		}
 		panel.add(cbxTipo);
 		cbxTipo.setModel(new DefaultComboBoxModel(new String[] {"<< Seleccione >>", "Respiratoria", "Gastrointestinal", "Neurologica", "Muscular", "Sexual", "Cardiovascular"}));
 		
@@ -108,6 +124,20 @@ public class RegistroEnfermedad extends JDialog {
 				JButton btnRegistrar = new JButton("Registrar");
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+					if(enfermedad != null) {
+						enfermedad.setDescripcionEnfermedad(textPaneDescripcion.getText().toString());
+						enfermedad.setNombreEnfermedad(txtNombre.getText().toString());
+						
+						if(cbxTipo.getSelectedItem().toString().equalsIgnoreCase("<< Seleccione >>")) {
+							JOptionPane.showMessageDialog(null, "Favor seleccionar un tipo.", "Error", JOptionPane.ERROR_MESSAGE);
+						}else {
+							enfermedad.setTipoEnfermedad(cbxTipo.getSelectedItem().toString());
+						
+							JOptionPane.showMessageDialog(null, "Modificacion Exitosa", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
+							dispose();
+							EstadisticaEnfermedad r = new EstadisticaEnfermedad(user);
+						}
+					}else {
 					  if(espaciovacio())
 					  {
 						  	JOptionPane.showMessageDialog(null, "Tienes que completar todos los espacios", "Error", JOptionPane.ERROR_MESSAGE);
@@ -124,6 +154,7 @@ public class RegistroEnfermedad extends JDialog {
 							limpiar();
 							txtCodigo.setText("E-" + Clinica.getInstance().generadorCodigo(5));
 					  }
+				  }
 			    }
 
 				});
@@ -135,7 +166,13 @@ public class RegistroEnfermedad extends JDialog {
 				JButton btnSalir = new JButton("Salir");
 				btnSalir.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+					}
+				});
+				btnSalir.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
 						dispose();
+						EstadisticaEnfermedad r = new EstadisticaEnfermedad(user);
+						r.setVisible(true);
 					}
 				});
 				btnSalir.setActionCommand("Cancel");
