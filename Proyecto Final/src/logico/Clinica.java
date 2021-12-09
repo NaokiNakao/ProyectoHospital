@@ -17,7 +17,6 @@ public class Clinica implements Serializable {
 	private ArrayList<Vacuna> misVacunas;
 	private static Clinica clinica;
 	private static Usuario loginUser; 
-	private String respaldo = "respaldo.dat"; // nombre del fichero donde se almacena la información
 	
 	private Clinica() {
 		this.misPacientes = new ArrayList<Paciente>();
@@ -66,10 +65,6 @@ public class Clinica implements Serializable {
 	public static Usuario getLoginUser() {
 		return loginUser;
 	}
-	
-	public String getRespaldo() {
-		return respaldo;
-	}
 
 	public void setMisPacientes(ArrayList<Paciente> misPacientes) {
 		this.misPacientes = misPacientes;
@@ -93,10 +88,6 @@ public class Clinica implements Serializable {
 
 	public void setMisVacunas(ArrayList<Vacuna> misVacunas) {
 		this.misVacunas = misVacunas;
-	}
-	
-	public void setRespaldo(String respaldo) {
-		this.respaldo = respaldo;
 	}
 
 	public static void setLoginUser(Usuario loginUser) {
