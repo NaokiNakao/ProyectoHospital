@@ -86,6 +86,11 @@ public class ListadoUsuario extends JDialog {
 			}
 			{
 				btnEliminar = new JButton("Eliminar");
+				btnEliminar.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						eliminarUsuario();
+					}
+				});
 				btnEliminar.setEnabled(false);
 				btnEliminar.setBounds(375, 11, 89, 23);
 				buttonpane.add(btnEliminar);
@@ -219,7 +224,26 @@ public class ListadoUsuario extends JDialog {
 		btnModificar.setEnabled(false);
 		btnEliminar.setEnabled(false);
 	}
-}
+	private void eliminarUsuario()
+	{
+		int fila = table.getSelectedRow();
+		if(fila >= 0)
+		{
+			model.removeRow(fila);
+			
+		}
+	}
+	/*private void modificarUsuario()
+	{
+		int columna = table.getSelectedColumnCount();
+		if(columna >= 0)
+		{
+			
+		}*/
+		
+		
+		
+	}
 
 
 
