@@ -14,6 +14,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import logico.Clinica;
+import logico.Medico;
+import logico.Usuario;
+import logico.CitaMedica;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
@@ -35,15 +38,16 @@ public class ListadoPaciente extends JDialog {
 	private DefaultTableModel modelpac;
 	private Object[] rowpac;
 	private JScrollPane scrollpac;
-	private JButton btnNewButton_1;
 	private JButton btnNewButton_2;
+	private Medico med;
+	
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		try {
-			ListadoPaciente dialog = new ListadoPaciente();
+			ListadoPaciente dialog = new ListadoPaciente(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -51,10 +55,14 @@ public class ListadoPaciente extends JDialog {
 		}
 	}
 
-	/**
+	/*
 	 * Create the dialog.
 	 */
-	public ListadoPaciente() {
+	public ListadoPaciente(Usuario user) {
+		if(user instanceof Medico)
+		{
+			med = (Medico) user;
+		}
 		setResizable(false);
 		setModal(true);
 		setTitle("Listado de pacientes");
@@ -71,10 +79,6 @@ public class ListadoPaciente extends JDialog {
 		contentPanel.add(buttonpane);
 		buttonpane.setLayout(null);
 		
-		btnNewButton_1 = new JButton("Eliminar");
-		btnNewButton_1.setBounds(701, 11, 89, 23);
-		buttonpane.add(btnNewButton_1);
-		
 		btnNewButton_2 = new JButton("Salir");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -86,7 +90,7 @@ public class ListadoPaciente extends JDialog {
 		
 		panelpac = new JPanel();
 		panelpac.setBorder(new TitledBorder(null, "Listado de pacientes:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelpac.setBounds(10, 69, 933, 345);
+		panelpac.setBounds(10, 11, 933, 403);
 		contentPanel.add(panelpac);
 		panelpac.setLayout(new BorderLayout(0, 0));
 		
@@ -109,17 +113,35 @@ public class ListadoPaciente extends JDialog {
 	{
 		modelpac.setRowCount(0);
 		rowpac = new Object[modelpac.getColumnCount()];
-		
-		for (int i = 0; i < Clinica.getInstance().getMisPacientes().size(); i++) {
-			rowpac[0] = Clinica.getInstance().getMisPacientes().get(i).getCedula();
-			rowpac[1] = Clinica.getInstance().getMisPacientes().get(i).getNombre();
-			rowpac[2] = Clinica.getInstance().getMisPacientes().get(i).getGenero();
-			rowpac[3] = Clinica.getInstance().getMisPacientes().get(i).getFechaNacimiento();
-			rowpac[4] = Clinica.getInstance().getMisPacientes().get(i).getDireccion();
-			rowpac[5] = Clinica.getInstance().getMisPacientes().get(i).getTelefono();
-			
-			modelpac.addRow(rowpac);
+		if(med != null)
+		{
+			for (int i = 0; i < Clinica.getInstance().getCitasMedicas().size(); i++) {
+				CitaMedica citaAct = Clinica.getInstance().getCitasMedicas().get(i);
+				if(citaAct.getMedico().getId().equalsIgnoreCase(med.getId()))
+				{
+					rowpac[0] = citaAct.getCedulaPersona();
+					rowpac[1] = citaAct.getNombrePersona();
+					rowpac[2] = citaAct.getGeneroPersona();
+					rowpac[3] = citaAct.getFechaNacimientoPersona();
+					rowpac[4] = citaAct.getDireccionPersona();
+					rowpac[5] = citaAct.getTelefono();
+					modelpac.addRow(rowpac);
+				}
+			}
 		}
-		
+		else
+		{
+			for (int i = 0; i < Clinica.getInstance().getCitasMedicas().size(); i++) {
+				CitaMedica citaAct = Clinica.getInstance().getCitasMedicas().get(i);
+				rowpac[0] = citaAct.getCedulaPersona();
+				rowpac[1] = citaAct.getNombrePersona();
+				rowpac[2] = citaAct.getGeneroPersona();
+				rowpac[3] = citaAct.getFechaNacimientoPersona();
+				rowpac[4] = citaAct.getDireccionPersona();
+				rowpac[5] = citaAct.getTelefono();
+				modelpac.addRow(rowpac);
+			}
+		}
 	}
 }
+
