@@ -33,7 +33,7 @@ public class RegistroEnfermedad extends JDialog {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		try {
 			RegistroEnfermedad dialog = new RegistroEnfermedad();
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -41,12 +41,12 @@ public class RegistroEnfermedad extends JDialog {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	/**
 	 * Create the dialog.
 	 */
-	public RegistroEnfermedad() {
+	public RegistroEnfermedad(Enfermedad enfer) {
 		setModal(true);
 		setResizable(false);
 		setTitle("Registro de enfermedad");

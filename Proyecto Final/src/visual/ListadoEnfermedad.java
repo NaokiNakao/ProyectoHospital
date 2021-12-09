@@ -16,8 +16,11 @@ import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 import logico.Clinica;
+import logico.Enfermedad;
 
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
@@ -28,8 +31,11 @@ public class ListadoEnfermedad extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JPanel panel_enfermedades;
 	private JTable tableenfer;
+	private Enfermedad selectedenfer;
 	private DefaultTableModel modelenfer;
 	private Object[] rowsenfer;
+	private JButton btnmodificar;
+	private JButton btneliminar;
 
 	/**
 	 * Launch the application.
@@ -63,9 +69,29 @@ public class ListadoEnfermedad extends JDialog {
 		contentPanel.add(buttonpane);
 		buttonpane.setLayout(null);
 		
-		JButton btnEliminar = new JButton("Eliminar");
-		btnEliminar.setBounds(284, 11, 89, 23);
-		buttonpane.add(btnEliminar);
+		tableenfer = new JTable();
+		tableenfer.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				int fila = tableenfer.getSelectedRow();
+				if (fila != -1) {
+					btnmodificar.setEnabled(true);
+					btneliminar.setEnabled(true);
+					String codigoenfer = (String) tableenfer.getValueAt(fila,0);
+					selectedenfer = Clinica.getInstance().buscarEnfermedadByCodigo(codigoenfer);
+				}
+			}
+		});
+		
+		btneliminar = new JButton("Eliminar");
+		btneliminar.setEnabled(false);
+		btneliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				eliminarEnfermedad();
+			}
+		});
+		btneliminar.setBounds(284, 11, 89, 23);
+		buttonpane.add(btneliminar);
 		
 		JButton btnSalir = new JButton("Salir");
 		btnSalir.addActionListener(new ActionListener() {
@@ -75,6 +101,20 @@ public class ListadoEnfermedad extends JDialog {
 		});
 		btnSalir.setBounds(400, 11, 89, 23);
 		buttonpane.add(btnSalir);
+		
+		btnmodificar = new JButton("Modificar");
+		btnmodificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(selectedenfer != null)
+				{
+					RegistroEnfermedad enfer = new RegistroEnfermedad(selectedenfer);
+					enfer.setVisible(true);
+				}
+			}
+		});
+		btnmodificar.setEnabled(false);
+		btnmodificar.setBounds(169, 11, 89, 23);
+		buttonpane.add(btnmodificar);
 		
 		panel_enfermedades = new JPanel();
 		panel_enfermedades.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Listado de enfermedades:", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -86,7 +126,6 @@ public class ListadoEnfermedad extends JDialog {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		panel_enfermedades.add(scrollPane, BorderLayout.CENTER);
 		{
-			tableenfer = new JTable();
 			tableenfer.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			String[] heardersenfer = {"Codigo","Nombre","Tipo","Descripcion"};
 			modelenfer = new DefaultTableModel();
@@ -109,6 +148,16 @@ public class ListadoEnfermedad extends JDialog {
 			modelenfer.addRow(rowsenfer);
 		}
 		
+	}
+	private void eliminarEnfermedad()
+	{
+		int fila = tableenfer.getSelectedRow();
+		if(fila >= 0)
+		{
+			modelenfer.removeRow(fila);
+			Clinica.getInstance().getMisEnfermedades().remove(fila);
+			
+		}
 	}
 }
 

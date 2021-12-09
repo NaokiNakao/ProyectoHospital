@@ -104,9 +104,6 @@ public class ListadoPaciente extends JDialog {
 			scrollpac.setViewportView(tablepac);
 		}
 		loadPacientes();
-		JButton btnNewButton = new JButton("Historial clinico");
-		btnNewButton.setBounds(10, 21, 125, 23);
-		contentPanel.add(btnNewButton);
 	}
 	private void loadPacientes()
 	{

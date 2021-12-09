@@ -66,6 +66,9 @@ public class ListadoUsuario extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		setLocationRelativeTo(null);
+		
+		
+		
 		{
 			JPanel buttonpane = new JPanel();
 			buttonpane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -76,8 +79,11 @@ public class ListadoUsuario extends JDialog {
 				btnModificar = new JButton("Modificar");
 				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						RegistroUsuario registro = new RegistroUsuario(selectedUser);
-						registro.setVisible(true);
+						if(selectedUser != null)
+						{
+							RegistroUsuario registro = new RegistroUsuario(selectedUser);
+							registro.setVisible(true);
+						}
 					}
 				});
 				btnModificar.setEnabled(false);
@@ -165,7 +171,7 @@ public class ListadoUsuario extends JDialog {
 				if (fila != -1) {
 					btnModificar.setEnabled(true);
 					btnEliminar.setEnabled(true);
-					String idUsuario = (String) table.getValueAt(fila, 0);
+					String idUsuario = (String) table.getValueAt(fila,0);
 					selectedUser = Clinica.getInstance().buscarUsuarioById(idUsuario);
 				}
 			}
@@ -230,20 +236,13 @@ public class ListadoUsuario extends JDialog {
 		if(fila >= 0)
 		{
 			model.removeRow(fila);
+			Clinica.getInstance().getMisUsuarios().remove(fila);
 			
 		}
 	}
-	/*private void modificarUsuario()
-	{
-		int columna = table.getSelectedColumnCount();
-		if(columna >= 0)
-		{
-			
-		}*/
-		
-		
-		
-	}
+	
+     
+}
 
 
 

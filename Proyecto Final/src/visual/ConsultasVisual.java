@@ -44,6 +44,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.ImageIcon;
 
 public class ConsultasVisual extends JDialog {
 
@@ -132,7 +133,7 @@ public class ConsultasVisual extends JDialog {
 			
 			JPanel panelPaciente = new JPanel();
 			panelPaciente.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Paciente", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-			panelPaciente.setBounds(616, 71, 224, 371);
+			panelPaciente.setBounds(519, 71, 334, 371);
 			panel.add(panelPaciente);
 			panelPaciente.setLayout(null);
 			
@@ -142,6 +143,11 @@ public class ConsultasVisual extends JDialog {
 			txtPaciente.setBounds(10, 342, 204, 20);
 			panelPaciente.add(txtPaciente);
 			txtPaciente.setColumns(10);
+			
+			JLabel lblNewLabel_2 = new JLabel("New label");
+			lblNewLabel_2.setIcon(new ImageIcon(ConsultasVisual.class.getResource("/pictures/paciente hablando.gif")));
+			lblNewLabel_2.setBounds(10, 27, 308, 304);
+			panelPaciente.add(lblNewLabel_2);
 			
 			Panel panelDiagnostico = new Panel();
 			panelDiagnostico.setBounds(20, 38, 459, 456);
