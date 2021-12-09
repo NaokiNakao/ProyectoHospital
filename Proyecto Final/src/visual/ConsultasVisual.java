@@ -210,7 +210,6 @@ public class ConsultasVisual extends JDialog {
 					if(aux!=-1) {
 						String cod = (String) modelEnfermedades.getValueAt(aux, 0);
 						selectedEnfermedad=Clinica.getInstance().buscarEnfermedadByCodigo(cod);
-						loadVacunas(selectedEnfermedad);
 					}
 					
 				}
@@ -389,7 +388,9 @@ public class ConsultasVisual extends JDialog {
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
+			loadVacunas();
 		}
+		loadVacunas();
 	}
 	private void loadEnfermedades() {
 		
@@ -405,21 +406,17 @@ public class ConsultasVisual extends JDialog {
 		
 	}
 	
-	private void loadVacunas(Enfermedad enfermedad) {
+	private void loadVacunas() {
 		
 		modelVacunas.setRowCount(0);
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
-		
-		ArrayList<Vacuna> misVacunas = new ArrayList<Vacuna>();
-		if(enfermedad!= null) {
-			misVacunas =  Clinica.getInstance().vacunasParaEnfermedad(enfermedad.getCodigo());
 		
 			for (int i = 0; i < Clinica.getInstance().getMisVacunas().size(); i++) {
 				rowsVacunas[0]= Clinica.getInstance().getMisVacunas().get(i).getCodigo();
 				rowsVacunas[1]= Clinica.getInstance().getMisVacunas().get(i).getNombreVacuna();
 				rowsVacunas[2]= Clinica.getInstance().getMisVacunas().get(i).getFabricante();
 				modelVacunas.addRow(rowsVacunas);
-			}
+
 		
 		}
 	}
