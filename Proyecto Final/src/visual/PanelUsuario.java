@@ -162,6 +162,11 @@ public class PanelUsuario extends JDialog {
 				}
 			});
 			btnNewButton.setBounds(10, 194, 134, 23);
+			if (user instanceof Administrador) {
+				btnNewButton.setVisible(false);
+			}
+			panelMenu.add(btnConsulta);
+			
 			panelMenu.add(btnNewButton);
 			btnConsulta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {

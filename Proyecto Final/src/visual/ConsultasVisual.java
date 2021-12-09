@@ -414,10 +414,10 @@ public class ConsultasVisual extends JDialog {
 		if(enfermedad!= null) {
 			misVacunas =  Clinica.getInstance().vacunasParaEnfermedad(enfermedad.getCodigo());
 		
-			for (int i = 0; i < misVacunas.size(); i++) {
-				rowsVacunas[0]= misVacunas.get(i).getCodigo();
-				rowsVacunas[1]=  misVacunas.get(i).getNombreVacuna();
-				rowsVacunas[2]= misVacunas.get(i).getFabricante();
+			for (int i = 0; i < Clinica.getInstance().getMisVacunas().size(); i++) {
+				rowsVacunas[0]= Clinica.getInstance().getMisVacunas().get(i).getCodigo();
+				rowsVacunas[1]= Clinica.getInstance().getMisVacunas().get(i).getNombreVacuna();
+				rowsVacunas[2]= Clinica.getInstance().getMisVacunas().get(i).getFabricante();
 				modelVacunas.addRow(rowsVacunas);
 			}
 		

@@ -317,7 +317,7 @@ public class HistorialPaciente extends JDialog {
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
 		
 		if(paciente!= null) {
-			for (int i = 0; i < rowsVacunas.length; i++) {
+			for (int i = 0; i < paciente.getHistorial().getMisVacunas().size(); i++) {
 				rowsVacunas[0]= paciente.getHistorial().getMisVacunas().get(i).getCodigo();
 				rowsVacunas[1]=  paciente.getHistorial().getMisVacunas().get(i).getNombreVacuna();
 				rowsVacunas[2]= paciente.getHistorial().getMisVacunas().get(i).getFabricante();
@@ -335,7 +335,7 @@ public class HistorialPaciente extends JDialog {
 		rowsConsultas = new Object[modelConsultas.getColumnCount()];
 		
 		if(paciente!= null) {
-			for (int i = 0; i < rowsConsultas.length; i++) {
+			for (int i = 0; i < paciente.getHistorial().getMisConsultas().size(); i++) {
 				rowsConsultas[0]=paciente.getHistorial().getMisVacunas().get(i).getCodigo();
 				//rowsConsultas[0] = paciente.getHistorial().getMisConsultas().get(i).getCodigo();
 				rowsConsultas[1] = paciente.getHistorial().getMisConsultas().get(i).getFechaConsulta();
