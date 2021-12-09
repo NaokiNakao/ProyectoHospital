@@ -125,17 +125,22 @@ public class RegistroEnfermedad extends JDialog {
 				btnRegistrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 					if(enfermedad != null) {
-						enfermedad.setDescripcionEnfermedad(textPaneDescripcion.getText().toString());
-						enfermedad.setNombreEnfermedad(txtNombre.getText().toString());
+						if(espaciovacio()) {
+								JOptionPane.showMessageDialog(null, "Tienes que completar todos los espacios", "Error", JOptionPane.ERROR_MESSAGE);
+						}else {
+								enfermedad.setDescripcionEnfermedad(textPaneDescripcion.getText().toString());
+								enfermedad.setNombreEnfermedad(txtNombre.getText().toString());
 						
 						if(cbxTipo.getSelectedItem().toString().equalsIgnoreCase("<< Seleccione >>")) {
-							JOptionPane.showMessageDialog(null, "Favor seleccionar un tipo.", "Error", JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(null, "Favor seleccionar un tipo.", "Error", JOptionPane.ERROR_MESSAGE);
 						}else {
-							enfermedad.setTipoEnfermedad(cbxTipo.getSelectedItem().toString());
-						
-							JOptionPane.showMessageDialog(null, "Modificacion Exitosa", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
-							dispose();
-							EstadisticaEnfermedad r = new EstadisticaEnfermedad(user);
+								enfermedad.setTipoEnfermedad(cbxTipo.getSelectedItem().toString());
+							
+								JOptionPane.showMessageDialog(null, "Modificacion Exitosa", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
+								dispose();
+								EstadisticaEnfermedad r = new EstadisticaEnfermedad(user);
+								r.setVisible(true);
+							}
 						}
 					}else {
 					  if(espaciovacio())

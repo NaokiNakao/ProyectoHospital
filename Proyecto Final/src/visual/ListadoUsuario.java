@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -16,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 
 import logico.Administrador;
 import logico.Clinica;
+import logico.Enfermedad;
 import logico.Medico;
 import logico.Usuario;
 
@@ -79,11 +81,9 @@ public class ListadoUsuario extends JDialog {
 				btnModificar = new JButton("Modificar");
 				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						if(selectedUser != null)
-						{
-							RegistroUsuario registro = new RegistroUsuario(selectedUser);
-							registro.setVisible(true);
-						}
+			
+						RegistroUsuario r = new RegistroUsuario(selectedUser);
+						r.setVisible(true);
 					}
 				});
 				btnModificar.setEnabled(false);
@@ -116,7 +116,9 @@ public class ListadoUsuario extends JDialog {
 			btnNuevo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					dispose();
-					RegistroUsuario registro = new RegistroUsuario(null);
+					
+					Usuario r = null;
+					RegistroUsuario registro = new RegistroUsuario(r);
 					registro.setVisible(true);
 				}
 			});
@@ -171,6 +173,7 @@ public class ListadoUsuario extends JDialog {
 				if (fila != -1) {
 					btnModificar.setEnabled(true);
 					btnEliminar.setEnabled(true);
+					
 					String idUsuario = (String) table.getValueAt(fila,0);
 					selectedUser = Clinica.getInstance().buscarUsuarioById(idUsuario);
 				}

@@ -82,7 +82,7 @@ public class PanelUsuario extends JDialog {
 			btnPacientes = new JButton("Pacientes");
 			btnPacientes.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					ListadoPaciente listado = new ListadoPaciente();
+					ListadoPaciente listado = new ListadoPaciente(user);
 					listado.setVisible(true);
 				}
 			});
