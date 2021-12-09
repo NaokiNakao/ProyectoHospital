@@ -169,6 +169,7 @@ public class RegistroVacuna extends JDialog {
 					String aux = (String) tableEnfermedades.getValueAt(index, 0);
 					String codigoEnfermedad = aux.substring(0, 8);
 					selectedEnfermedad = Clinica.getInstance().buscarEnfermedadByCodigo(codigoEnfermedad);
+					btnPasarDerecha.setVisible(true);
 				}
 			}
 		});
@@ -196,6 +197,7 @@ public class RegistroVacuna extends JDialog {
 					String aux = (String) tableProteccion.getValueAt(index, 0);
 					String codigoProteccion = aux.substring(0, 8);
 					selectedProteccion = Clinica.getInstance().buscarEnfermedadByCodigo(codigoProteccion);
+					btnPasarIzquierda.setVisible(true);
 				}
 			}
 		});
@@ -209,7 +211,9 @@ public class RegistroVacuna extends JDialog {
 		btnPasarDerecha.setEnabled(false);
 		btnPasarDerecha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				vacuna.getProteccion().add(selectedEnfermedad);
+				cargarProteccion();
+				btnPasarDerecha.setEnabled(false);
 			}
 		});
 		btnPasarDerecha.setBounds(216, 114, 77, 23);
@@ -219,7 +223,12 @@ public class RegistroVacuna extends JDialog {
 		btnPasarIzquierda.setEnabled(false);
 		btnPasarIzquierda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				int index = tableProteccion.getSelectedRow();
+				if (index != -1) {
+					vacuna.getProteccion().remove(index);
+					cargarProteccion();
+					btnPasarIzquierda.setVisible(false);
+				}
 			}
 		});
 		btnPasarIzquierda.setBounds(216, 161, 77, 23);
@@ -280,7 +289,9 @@ public class RegistroVacuna extends JDialog {
 			}
 		}
 		
-		cargarDatosCampos();
+		if (vacuna != null) {
+			cargarDatosCampos();
+		}
 		cargarEnfermedades();
 		cargarProteccion();
 	}
