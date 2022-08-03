@@ -22,8 +22,6 @@ import java.awt.Panel;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.sun.media.jfxmedia.Media;
-
 import logico.CitaMedica;
 import logico.Clinica;
 import logico.Consulta;

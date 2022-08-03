@@ -10,8 +10,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.sun.corba.se.impl.encoding.CodeSetConversion.BTCConverter;
-
 import logico.Clinica;
 import logico.Consulta;
 import logico.Enfermedad;
@@ -286,7 +284,7 @@ public class EstadisticaEnfermedad extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						
 						
-						int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro desea eliminar la enfermedad?", "Confirmación", JOptionPane.WARNING_MESSAGE);
+						int opcion = JOptionPane.showConfirmDialog(null, "ï¿½Seguro desea eliminar la enfermedad?", "Confirmaciï¿½n", JOptionPane.WARNING_MESSAGE);
 						if (opcion == JOptionPane.YES_OPTION) {
 							Clinica.getInstance().getMisEnfermedades().remove(selectedEnfermedad);
 							JOptionPane.showMessageDialog(null, "Vacuna borrada", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);

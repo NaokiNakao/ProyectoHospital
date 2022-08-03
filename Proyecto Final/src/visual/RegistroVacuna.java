@@ -14,8 +14,6 @@ import logico.Vacuna;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.sun.javafx.scene.control.SelectedCellsMap;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -201,7 +199,7 @@ public class RegistroVacuna extends JDialog {
 				}
 			}
 		});
-		String headerProteccion[] = {"Protección"};
+		String headerProteccion[] = {"Protecciï¿½n"};
 		modelProteccion = new DefaultTableModel();
 		modelProteccion.setColumnIdentifiers(headerProteccion);
 		tableProteccion.setModel(modelProteccion);
@@ -256,7 +254,7 @@ public class RegistroVacuna extends JDialog {
 								limpiarCampos();
 							}
 							else {
-								JOptionPane.showMessageDialog(null, "Datos no válidos.", "Error", JOptionPane.ERROR_MESSAGE);
+								JOptionPane.showMessageDialog(null, "Datos no vï¿½lidos.", "Error", JOptionPane.ERROR_MESSAGE);
 							}
 						}
 						else {
@@ -268,7 +266,7 @@ public class RegistroVacuna extends JDialog {
 							vacuna.setTipoVacuna(cbxTipo.getSelectedItem().toString());
 							vacuna.setFormaAdministracion(cbxAdministracion.getSelectedItem().toString());
 							Clinica.getInstance().modificarVacuna(vacuna, indexAux);
-							JOptionPane.showMessageDialog(null, "Datos modificados.", "Información", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Datos modificados.", "Informaciï¿½n", JOptionPane.INFORMATION_MESSAGE);
 							dispose();
 						}
 						ListadoVacuna.cargarVacunas();
