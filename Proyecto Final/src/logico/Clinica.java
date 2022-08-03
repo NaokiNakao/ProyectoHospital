@@ -19,8 +19,6 @@ public class Clinica {
 	private ArrayList<Vacuna> misVacunas;
 	private static Clinica clinica;
 	private static Usuario loginUser; 
-	private static Connection db;
-	private static Statement statement;
 	
 	private Clinica() {
 		this.misPacientes = new ArrayList<Paciente>();
@@ -205,46 +203,22 @@ public class Clinica {
 		return vacunasDisponibles;
 	}
 	
-	/*
-	 * Dado el id de un m�dico y una fecha, verifica si este est� disponible.
-	 * En caso afirmativo, devuelve "true"; devuelve "false" en caso contrario. 
-	*/
-	public boolean medicoDisponible(Date fecha, String idMedico) {
-		boolean disponible = true;
-		int i = 0;
-		
-		while (disponible && i < citasMedicas.size()) {
-			if (citasMedicas.get(i).getFechaCita().equals(fecha) && citasMedicas.get(i).getMedico().getId().equalsIgnoreCase(idMedico)) {
-				disponible = false;
-			}
-			i++;
-		}
-		
-		return disponible;
-	}
 	
-	public ResultSet buscarPaciente(String cedula) throws SQLException {
-		/*Paciente aux = null;
-		boolean encontrado = false;
-		int i = 0;
+	public Paciente buscarPaciente(String cedula) throws SQLException {
 		
-		while(!encontrado && i < misPacientes.size()) {
-			if(misPacientes.get(i).getCedula().equalsIgnoreCase(cod)) {
-				aux = misPacientes.get(i);
-				encontrado = true;
-			}
-			i++;
-		}
+		Paciente paciente= null;
 		
-		return aux;*/
+		String query = "select paciente.*, from paciente where ced_paciente = ?";
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setString(1, cedula);
+		ResultSet result = stament.executeQuery();
 		
-		String query = "select * "
-				+ "from paciente "
-				+ "where ced_paciente = " + cedula;
+		paciente = new Paciente(cedula, result.getString("nombre"), result.getString("genero"), result.getDate("fecha_nac"), 
+				result.getInt("cod_ciudad"),result.getString("telefono"));
 		
-		abrirConexionDB();
-		ResultSet paciente = statement.executeQuery(query);
-		cerrarConexionDB();
+		result.close();
+		stament.close();
+
 		return paciente;
 	}
 	
@@ -269,42 +243,60 @@ public class Clinica {
 		return validacion;
 	}
 	
-	public void registroUsuario(Usuario user) {
-		misUsuarios.add(user);
-	}
 	
 	////////////////////Utils (Usuario) ////////////////////
 	
-	public Usuario buscarUsuarioById(String idUsuario) {
+	public Usuario buscarUsuarioById(String idUsuario) throws SQLException {
 		Usuario user = null;
-		boolean encontrado = false;
-		int i = 0;
 		
-		while (!encontrado && i < misUsuarios.size()) {
-			if (misUsuarios.get(i).getId().equalsIgnoreCase(idUsuario)) {
-				user = misUsuarios.get(i);
-				encontrado = true;
-			}
-			i++;
+		
+		if(idUsuario.contains("M")) {
+		
+			String query = "select * from medico where cod_medico = ?";
+			PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+			stament.setString(1, idUsuario);
+			ResultSet res = stament.executeQuery();
+			
+			user = new Usuario(idUsuario, res.getString("username"),res.getString("password") ,res.getString("nombre"), res.getString("apellido")
+					, res.getString("telefono"));
+			
+			stament.close();
+			res.close();
+			
+		}else if(idUsuario.contains("A")) {
+			
+			String query = "select * from administrador where cod_admin = ?";
+			PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+			stament.setString(1, idUsuario);
+			ResultSet res = stament.executeQuery();
+			
+			user = new Usuario(idUsuario, res.getString("username"),res.getString("password") 
+					,res.getString("nombre"), res.getString("apellido"), res.getString("telefono"));	
+			
+			stament.close();
+			res.close();
 		}
-		
 		return user;
 	}
 	
 	//////////////////// Utils (Vacuna) ////////////////////
 	
-	public Vacuna buscarVacunaByCodigo(String codigoVacuna) {
+	public Vacuna buscarVacunaByCodigo(String codigoVacuna) throws SQLException {
 		Vacuna vacuna = null;
-		boolean encontrado = false;
-		int i = 0;
+
+		String query1 = "select * from vacuna where cod_vacuna = ?";
+		String query3 = "select nombre_fab from fabricante,vacuna where vacuna.cod_vacuna = ? and fabricante.cod_fab = vacuna.cod_fab";
 		
-		while (!encontrado && i < misVacunas.size()) {
-			if (misVacunas.get(i).getCodigo().equalsIgnoreCase(codigoVacuna)) {
-				vacuna = misVacunas.get(i);
-				encontrado = true;
-			}
-			i++;
-		}
+		PreparedStatement stament1 = ConexionSQL.getConexion().prepareStatement(query1);
+		stament1.setString(1, codigoVacuna);
+		ResultSet res = stament1.executeQuery();
+		
+		PreparedStatement stament2 = ConexionSQL.getConexion().prepareStatement(query3);
+		stament2.setString(1, codigoVacuna);
+		ResultSet res2 = stament2.executeQuery();
+		
+		
+		vacuna = new Vacuna(codigoVacuna, res.getString("nombre_vacuna"), res2.getString("nombre_fab"), misEnfermedades, res.getString("tipo_vacuna"), res.getString("forma_admin"));
 		
 		return vacuna;
 	}
@@ -437,13 +429,6 @@ public class Clinica {
 	}
 	
 	public void insertarConsulta(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) {
-		misConsultas.add(c);
-		medico.getMisConsultas().add(c);
-		medico.getMisCitas().remove(cita);
-		misPacientes.add(p);
-		b.getMisConsultas().add(c);
-		p.setHistorial(b);
-		
 		
 		String InsertConsul = "Insert Into consulta(fecha_consulta,diagnostico,cod_medico,cod_historia) Values (?,?,?,?)";
 		PreparedStatement consulta = null;
@@ -496,7 +481,79 @@ public class Clinica {
 	}
 	
 	public void insertarMedico(Medico med) {
-		misUsuarios.add(med);
+		
+		String InsertConsul = "Insert Into medico (cod_medico,nombre,apellido,username,pass,telefono) Values (?,?,?,?,?,?)";
+		PreparedStatement consulta = null;
+		
+		try {
+		consulta = ConexionSQL.getConexion().prepareStatement(InsertConsul);
+		consulta.setString(1,med.getId());
+		consulta.setString(2,med.getNombre());
+		consulta.setString(3,med.getApellido());
+		consulta.setString(4,med.getLogin());
+		consulta.setString(5,med.getPassword());
+		consulta.setString(6,med.getTelefono());
+		
+		consulta.executeUpdate();
+		
+		} catch (SQLException e) {
+			
+			System.out.println("Fallo la consulta");
+			e.printStackTrace();
+		}
+		
+		String InsertConsul2 = "Insert Into especialidad (nombre_especialidad) Values (?)";
+		PreparedStatement consulta2 = null;
+		
+		try {
+			consulta2 = ConexionSQL.getConexion().prepareStatement(InsertConsul2);
+			consulta2.setString(1,med.getEspecialidad());
+		
+		consulta.executeUpdate();
+		
+		} catch (SQLException e) {
+			
+			System.out.println("Fallo la consulta");
+			e.printStackTrace();
+		}
+		
+		
+		String InsertConsul3 = "Insert Into medico_especialidad (cod_medico,cod_especialidad) Values (?,?)";
+		PreparedStatement consulta3 = null;
+		
+		try {
+			consulta3 = ConexionSQL.getConexion().prepareStatement(InsertConsul3);
+			consulta3.setString(1,med.getId());
+			consulta3.setString(2,med.getEspecialidad());
+		
+		
+		consulta.executeUpdate();
+		
+		} catch (SQLException e) {
+			
+			System.out.println("Fallo la consulta");
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	/*
+	 * Dado el id de un m�dico y una fecha, verifica si este est� disponible.
+	 * En caso afirmativo, devuelve "true"; devuelve "false" en caso contrario. 
+	*/
+	public boolean medicoDisponible(Date fecha, String idMedico) {
+		boolean disponible = true;
+		int i = 0;
+		
+		while (disponible && i < citasMedicas.size()) {
+			if (citasMedicas.get(i).getFechaCita().equals(fecha) && citasMedicas.get(i).getMedico().getId().equalsIgnoreCase(idMedico)) {
+				disponible = false;
+			}
+			i++;
+		}
+		
+		return disponible;
 	}
 	
 	
@@ -517,26 +574,29 @@ public class Clinica {
 	}
 	
 	
-	public void abrirConexionDB() throws SQLException {
-		db = ConexionSQL.getConexion();
-		statement = db.createStatement();
-	}
-
-	public void cerrarConexionDB() throws SQLException {
-		db.close();
-	}
 	
-public Usuario buscarUsuarioByLogin(String login) throws SQLException {
+public Usuario buscarUsuarioByLoginMed(String login) throws SQLException {
 		
 		Usuario user = null;
 
-		Statement provincia = ConexionSQL.getConexion().createStatement();
-		String consulta = "select * from medico where medico.loggin = "+ login;
-		ResultSet result = provincia.executeQuery(consulta);
+		Statement stament = ConexionSQL.getConexion().createStatement();
+		String consulta = "select * from medico,administrador where medico.loggin = "+ login+"or administrador.loggin = "+ login;
+		ResultSet result = stament.executeQuery(consulta);
 		
-		//revisar result.getString("id_medico") conflicto de tipo de datos.
-		user= new Usuario(result.getString("id_medico"), login, result.getString("passwordd"), result.getString("nombre"), result.getString("apellido"), 
+		if(result.getString(1).contains("M")) {
+		
+			user= new Usuario(result.getString("cod_medico"), login, result.getString("passwordd"), result.getString("nombre"), result.getString("apellido"), 
 				result.getString("telefono"));
+			
+		}else if(result.getString(1).contains("A")){
+			
+			user= new Usuario(result.getString("cod_admin"), login, result.getString("passwordd"), result.getString("nombre"), result.getString("apellido"), 
+					result.getString("telefono"));
+			
+		}
+		
+		stament.close();
+		result.close();
 		
 		return user;
 		
@@ -545,13 +605,10 @@ public Usuario buscarUsuarioByLogin(String login) throws SQLException {
 	public  String BuscarProvinciaByCod(int cod) throws SQLException {
 		
 		
+		
 		Statement provincia = ConexionSQL.getConexion().createStatement();
 		String consulta = "select nombre_provincia from provincia where cod_provincia = "+cod;
 		ResultSet result = provincia.executeQuery(consulta);
-		
-	/*	while(result.next()) {
-			System.out.println(result.getString("nombre_provincia"));
-		}*/
 		
 		provincia.close();
 		result.close();
@@ -570,17 +627,26 @@ public Usuario buscarUsuarioByLogin(String login) throws SQLException {
 		provincia.setString(1, nombre_provincia);
 		
 		ResultSet result = provincia.executeQuery();
-		
-		while(result.next()) {
-			System.out.println(result.getInt("cod_provincia"));
-		}
-		
-		
 		provincia.close();
 		result.close();	
 		
 		return result.getString("cod_provincia");	
+
+	}
 	
+	public String BuscarEspecialidadByNombre(String nombre_provincia) throws SQLException {
+		
+
+		
+		String consulta = "select cod_provincia from provincia where nombre_provincia = ?";
+		PreparedStatement provincia = ConexionSQL.getConexion().prepareStatement(consulta);
+		provincia.setString(1, nombre_provincia);
+		
+		ResultSet result = provincia.executeQuery();
+		provincia.close();
+		result.close();	
+		
+		return result.getString("cod_provincia");	
 
 	}
 	

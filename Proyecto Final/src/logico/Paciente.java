@@ -9,19 +9,17 @@ public class Paciente {
 	private String nombre;
 	private String genero;
 	private Date fechaNacimiento;
-	private String direccion;
+	private int direccion;
 	private String telefono;
 	private HistoriaClinica historial;
 	
-	public Paciente(String cedula, String nombre, String genero, Date fechaNacimiento, String direccion, String telefono,
-			HistoriaClinica historial) {
+	public Paciente(String cedula, String nombre, String genero, Date fechaNacimiento, int direccion, String telefono) {
 		this.cedula = cedula;
 		this.nombre = nombre;
 		this.genero = genero;
 		this.fechaNacimiento = fechaNacimiento;
 		this.direccion = direccion;
 		this.telefono = telefono;
-		this.historial = historial;
 	}
 
 	public String getCedula() {
@@ -40,7 +38,7 @@ public class Paciente {
 		return fechaNacimiento;
 	}
 
-	public String getDireccion() {
+	public int getDireccion() {
 		return direccion;
 	}
 
@@ -68,7 +66,7 @@ public class Paciente {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
-	public void setDireccion(String direccion) {
+	public void setDireccion(int direccion) {
 		this.direccion = direccion;
 	}
 

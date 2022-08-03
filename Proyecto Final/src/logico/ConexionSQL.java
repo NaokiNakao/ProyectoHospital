@@ -10,7 +10,7 @@ public class ConexionSQL {
 	public static Connection getConexion() {
 			
 	        String Conurl = "jdbc:sqlserver://192.168.100.118:1433;" 
-	        				+ "database=ventas_Grupo_2;"
+	        				+ "database=Clinica;"
 	        				+ "user=mvasquez;"
 	        				+ "password=Eict@2022;"
 	        				+ "loginTimeout=30;"
