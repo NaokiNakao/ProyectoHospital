@@ -1,6 +1,7 @@
 package logico;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -442,6 +443,28 @@ public class Clinica {
 		misPacientes.add(p);
 		b.getMisConsultas().add(c);
 		p.setHistorial(b);
+		
+		
+		String InsertConsul = "Insert Into consulta(fecha_consulta,diagnostico,cod_medico,cod_historia) Values (?,?,?,?)";
+		PreparedStatement consulta = null;
+		
+		try {
+		consulta = ConexionSQL.getConexion().prepareStatement(InsertConsul);
+		consulta.setDate(1, (java.sql.Date) c.getFechaConsulta());
+		consulta.setString(2, c.getDiagnostico());
+		consulta.setString(3, medico.getId());
+		consulta.setString(4, b.getCodigo());
+		
+		consulta.executeUpdate();
+		
+		} catch (SQLException e) {
+			
+			System.out.println("Fallo la consulta");
+			e.printStackTrace();
+			
+		}
+		
+		
 	}
 	
 	public void insertarConsultaV2(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) {
@@ -493,22 +516,6 @@ public class Clinica {
 		return medicosDisp; 
 	}
 	
-	public Usuario buscarUsuarioByLogin(String login) {
-		
-		Usuario user = null;
-		boolean encontrada = false;
-		int i = 0;
-		
-		while (!encontrada && i < misUsuarios.size()) {
-			if (misUsuarios.get(i).getLogin().equalsIgnoreCase(login)) {
-				user = misUsuarios.get(i);
-				encontrada = true;
-			}
-			i++;
-		}
-		return user;
-		
-	}
 	
 	public void abrirConexionDB() throws SQLException {
 		db = ConexionSQL.getConexion();
@@ -518,6 +525,65 @@ public class Clinica {
 	public void cerrarConexionDB() throws SQLException {
 		db.close();
 	}
+	
+public Usuario buscarUsuarioByLogin(String login) throws SQLException {
+		
+		Usuario user = null;
+
+		Statement provincia = ConexionSQL.getConexion().createStatement();
+		String consulta = "select * from medico where medico.loggin = "+ login;
+		ResultSet result = provincia.executeQuery(consulta);
+		
+		//revisar result.getString("id_medico") conflicto de tipo de datos.
+		user= new Usuario(result.getString("id_medico"), login, result.getString("passwordd"), result.getString("nombre"), result.getString("apellido"), 
+				result.getString("telefono"));
+		
+		return user;
+		
+	}
+	
+	public  String BuscarProvinciaByCod(int cod) throws SQLException {
+		
+		
+		Statement provincia = ConexionSQL.getConexion().createStatement();
+		String consulta = "select nombre_provincia from provincia where cod_provincia = "+cod;
+		ResultSet result = provincia.executeQuery(consulta);
+		
+	/*	while(result.next()) {
+			System.out.println(result.getString("nombre_provincia"));
+		}*/
+		
+		provincia.close();
+		result.close();
+	
+		return result.getString("nombre_provincia");
+	
+	}
+	
+	
+	public String BuscarProvinciaByNombre(String nombre_provincia) throws SQLException {
+		
+
+		
+		String consulta = "select cod_provincia from provincia where nombre_provincia = ?";
+		PreparedStatement provincia = ConexionSQL.getConexion().prepareStatement(consulta);
+		provincia.setString(1, nombre_provincia);
+		
+		ResultSet result = provincia.executeQuery();
+		
+		while(result.next()) {
+			System.out.println(result.getInt("cod_provincia"));
+		}
+		
+		
+		provincia.close();
+		result.close();	
+		
+		return result.getString("cod_provincia");	
+	
+
+	}
+	
 	
 }
 
