@@ -8,7 +8,6 @@ import java.util.Random;
 
 public class Clinica implements Serializable {
 
-	private static final long serialVersionUID = 3627439187370750264L;
 	private ArrayList<Paciente> misPacientes;
 	private ArrayList<Usuario> misUsuarios;
 	private ArrayList<CitaMedica> citasMedicas;
@@ -94,10 +93,10 @@ public class Clinica implements Serializable {
 		Clinica.loginUser = loginUser;
 	}
 	
-	//////////////////// Métodos para estadísticas de enfermedades ////////////////////
+	//////////////////// Mï¿½todos para estadï¿½sticas de enfermedades ////////////////////
 	
 	/*
-	 * Retorna un String de caracteres alfanuméricos aleatorios
+	 * Retorna un String de caracteres alfanumï¿½ricos aleatorios
 	 * dada una longitud para este. 
 	*/
 	public String generadorCodigo(int longitud) {
@@ -119,7 +118,7 @@ public class Clinica implements Serializable {
 	
 	/*
 	 * Retorna un entero que representa la cantidad total de casos
-	 * que se han reportado para cierta enfermedad dado su código.
+	 * que se han reportado para cierta enfermedad dado su cï¿½digo.
 	*/
 	public int casosEnfermedadTotal(String codigoEnfermedad) {
 		int total = 0;
@@ -136,7 +135,7 @@ public class Clinica implements Serializable {
 	}
 	
 	/*
-	 * Dado el código de una enfermedad y una fecha, retorna un entero
+	 * Dado el cï¿½digo de una enfermedad y una fecha, retorna un entero
 	 * que reprenta la cantidad de casos diagnosticados en esa fecha. 
 	*/
 	public int casosEnfermedadPorFecha(String codigoEnfermedad, Date fecha) {
@@ -154,7 +153,7 @@ public class Clinica implements Serializable {
 	}
 	
 	/*
-	 * Dado el código de una enfermedad, retonrna un arreglo de números
+	 * Dado el cï¿½digo de una enfermedad, retonrna un arreglo de nï¿½meros
 	 * reales con la tasa de hombres y de mujeres que la padecieron.
 	 * tasa[0] --> porcentaje de hombres
 	 * tasa[1] --> porcentaje de mujeres
@@ -184,8 +183,8 @@ public class Clinica implements Serializable {
 	}
 	
 	/*
-	 * Retorna un ArrayList<Vacuna> con las vacunas que ofrecen protección
-	 * para cierta enfermedad dado su código.
+	 * Retorna un ArrayList<Vacuna> con las vacunas que ofrecen protecciï¿½n
+	 * para cierta enfermedad dado su cï¿½digo.
 	*/
 	public ArrayList<Vacuna> vacunasParaEnfermedad(String codigoEnfermedad) {
 		ArrayList<Vacuna> vacunasDisponibles = new ArrayList<Vacuna>();
@@ -202,7 +201,7 @@ public class Clinica implements Serializable {
 	}
 	
 	/*
-	 * Dado el id de un médico y una fecha, verifica si este está disponible.
+	 * Dado el id de un mï¿½dico y una fecha, verifica si este estï¿½ disponible.
 	 * En caso afirmativo, devuelve "true"; devuelve "false" en caso contrario. 
 	*/
 	public boolean medicoDisponible(Date fecha, String idMedico) {
@@ -236,8 +235,8 @@ public class Clinica implements Serializable {
 	}
 	
 	/*
-	 * Valida las credenciales de inicio de sesión para un usuario 
-	 * (administrador o médico) dado su login y password. 
+	 * Valida las credenciales de inicio de sesiï¿½n para un usuario 
+	 * (administrador o mï¿½dico) dado su login y password. 
 	*/
 	public boolean validacionCredenciales(String login, String password) {
 		boolean validacion = false;
