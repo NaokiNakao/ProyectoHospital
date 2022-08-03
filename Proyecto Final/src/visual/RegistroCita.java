@@ -368,7 +368,8 @@ public class RegistroCita extends JDialog {
 			}
 		}
 		
-		txtCodigoCita.setText("Cita-"+Clinica.getInstance().generadorCodigo(4));
+		// Genera codigo para la cita
+		txtCodigoCita.setText("CT-"+Clinica.getInstance().generadorCodigo(8));
 	}
 	
 

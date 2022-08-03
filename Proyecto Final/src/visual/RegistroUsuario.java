@@ -93,12 +93,12 @@ public class RegistroUsuario extends JDialog {
 		{
 			txtId = new JTextField();
 			txtId.setBounds(125, 23, 139, 20);
-			if (user!= null) {
+			if (user != null) {
 				txtId.setText(user.getId().toString());
 			}
 			panel_general.add(txtId);
 			txtId.setEditable(false);
-			txtId.setText(Clinica.getInstance().generadorCodigo(8));
+			//txtId.setText(Clinica.getInstance().generadorCodigo(8));
 			txtId.setColumns(10);
 		}
 		{
@@ -109,7 +109,7 @@ public class RegistroUsuario extends JDialog {
 		{
 			txtNombre = new JTextField();
 			txtNombre.setBounds(125, 77, 137, 20);
-			if(user!=null) {
+			if(user != null) {
 				txtNombre.setText(user.getNombre().toString());
 			}
 			panel_general.add(txtNombre);
@@ -136,7 +136,7 @@ public class RegistroUsuario extends JDialog {
 		
 		txtTelefono = new JTextField();
 		txtTelefono.setBounds(125, 124, 139, 20);
-		if(user!=null) {
+		if(user != null) {
 			txtTelefono.setText(user.getTelefono().toString());
 		}
 		panel_general.add(txtTelefono);
@@ -193,13 +193,13 @@ public class RegistroUsuario extends JDialog {
 				panelAdmins.setVisible(false);
 				rdbtnAdmin.setSelected(false);
 				
+				// Generacion de codigo para usuario medico
 				txtId.setText("M"+Clinica.getInstance().generadorCodigo(4));
-			
 			}
 		});
 		rdbtnMedico.setSelected(true);
 		rdbtnMedico.setBounds(100, 15, 109, 23);
-		if(user!=null && user instanceof Medico) {
+		if(user !=null && user instanceof Medico) {
 		
 		//rdbtnAdmin.setSelected(false);
 		rdbtnMedico.setSelected(true);
@@ -214,11 +214,12 @@ public class RegistroUsuario extends JDialog {
 				panelMedico.setVisible(false);
 				rdbtnMedico.setSelected(false);
 				
+				// Generacion de codigo para usuario administrador
 				txtId.setText("A"+Clinica.getInstance().generadorCodigo(4));
 			}
 		});
 		rdbtnAdmin.setBounds(309, 15, 109, 23);
-		if(user!=null && user instanceof Administrador) {
+		if(user !=null && user instanceof Administrador) {
 		
 			rdbtnAdmin.setSelected(true);
 			//rdbtnMedico.setSelected(false);

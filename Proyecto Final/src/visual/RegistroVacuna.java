@@ -332,7 +332,7 @@ public class RegistroVacuna extends JDialog {
 	private void limpiarCampos() {
 		String codigo;
 		do {
-			codigo = "V-" + Clinica.getInstance().generadorCodigo(6);
+			codigo = "V-" + Clinica.getInstance().generadorCodigo(5);
 			txtCodigo.setText(codigo);
 		} while (!Clinica.getInstance().codigoVacunaValido(codigo));
 		txtNombre.setText("");

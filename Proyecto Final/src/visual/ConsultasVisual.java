@@ -294,8 +294,9 @@ public class ConsultasVisual extends JDialog {
 			
 			lblCodigoConsulta = new JLabel("New label");
 			lblCodigoConsulta.setBounds(10, 11, 121, 14);
-			String codigo = cita.getCodigo().substring(5);
-			lblCodigoConsulta.setText("Consulta-"+codigo);
+			// Se toman los ultimos 8 digitos CitaMedica para formar en codigo de Consulta
+			String codigo = cita.getCodigo().substring(3);
+			lblCodigoConsulta.setText("CS-"+codigo);
 			panel.add(lblCodigoConsulta);
 			btnFinalizar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
