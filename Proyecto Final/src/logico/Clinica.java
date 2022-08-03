@@ -123,6 +123,8 @@ public class Clinica {
 	 * Retorna un entero que representa la cantidad total de casos
 	 * que se han reportado para cierta enfermedad dado su c�digo.
 	*/
+	
+	/*NECESITA SQL NAOKI*/
 	public int casosEnfermedadTotal(String codigoEnfermedad) {
 		int total = 0;
 		
@@ -141,6 +143,8 @@ public class Clinica {
 	 * Dado el c�digo de una enfermedad y una fecha, retorna un entero
 	 * que reprenta la cantidad de casos diagnosticados en esa fecha. 
 	*/
+	
+	/*NECESITA SQL MISAEL*/
 	public int casosEnfermedadPorFecha(String codigoEnfermedad, Date fecha) {
 		int total = 0;
 		
@@ -161,6 +165,8 @@ public class Clinica {
 	 * tasa[0] --> porcentaje de hombres
 	 * tasa[1] --> porcentaje de mujeres
 	*/
+	
+	/*NECETIA SQL NAOKI  TAAA FEEAAAA*/
 	public float[] porcentajeEnfermedadPorGenero(String codigoEnfermedad) {
 		float[] tasa = new float[2];
 		
@@ -189,6 +195,8 @@ public class Clinica {
 	 * Retorna un ArrayList<Vacuna> con las vacunas que ofrecen protecci�n
 	 * para cierta enfermedad dado su c�digo.
 	*/
+	
+	/*MUY NECESARIA MISAEL*/
 	public ArrayList<Vacuna> vacunasParaEnfermedad(String codigoEnfermedad) {
 		ArrayList<Vacuna> vacunasDisponibles = new ArrayList<Vacuna>();
 		
@@ -226,6 +234,9 @@ public class Clinica {
 	 * Valida las credenciales de inicio de sesi�n para un usuario 
 	 * (administrador o m�dico) dado su login y password. 
 	*/
+	
+	
+	/*NECESARIA NAOKI*/
 	public boolean validacionCredenciales(String login, String password) {
 		boolean validacion = false;
 		Usuario user = null;
@@ -291,6 +302,9 @@ public class Clinica {
 		return vacuna;
 	}
 	
+	
+	
+	/*NECESARIA MISAEL*/
 	public int indexByCodigoVacuna(String codigoVacuna) {
 		int index = -1;
 		boolean encontrado = false;
@@ -307,6 +321,8 @@ public class Clinica {
 		return index;
 	}
 	
+	
+	/*NO NECESARIA*/
 	public boolean codigoVacunaValido(String codigoVacuna) {
 		boolean validacion = true;
 		int i = 0;
@@ -325,6 +341,8 @@ public class Clinica {
 		return validacion;
 	}
 	
+	
+	/*NECESARIA NAOKI*/
 	public boolean agregarVacuna(Vacuna nuevaVacuna) {
 		boolean operacionCorrecta = false;
 		
@@ -349,18 +367,21 @@ public class Clinica {
 		return validacion;
 	}
 	
+	/*NECESARIA MISAEL*/
 	public void modificarVacuna(Vacuna modificacion, int index) {
 		if (index != -1) {
 			misVacunas.set(index, modificacion);
 		}
 	}
-
+	
+	/*NECESARIA NAOKI*/
 	public void eliminarVacuna(int index) {
 		misVacunas.remove(index);
 	}
 	
 	////////////////////Utils (Enfermedad) ////////////////////
-
+	
+	/*NECESARIA MISAEL*/
 	public Enfermedad buscarEnfermedadByCodigo(String codigoEnfermedad) {
 		Enfermedad enfermedad = null;
 		boolean encontrada = false;
@@ -377,10 +398,12 @@ public class Clinica {
 		return enfermedad;
 	}
 	
+	/*NECESARIA NAOKI*/
 	public void insertarEnfermedad (Enfermedad enfermedad) {
 		misEnfermedades.add(enfermedad);
 	}
-		
+	
+	/*NECESARIA MISAEL*/
 	public Medico buscarMedicoByCodigo(String cod) {
 		Medico medico = null;
 		boolean encontrada = false;
@@ -398,10 +421,12 @@ public class Clinica {
 		
 	}
 	
+	/*NECESARIA NAOKI*/
 	public void insertarCita(CitaMedica cita) {
 		citasMedicas.add(cita);
 	}
 	
+	/*NECESARIA MISAEL*/
 	public CitaMedica buscarCitaMedicaByCod(String cod) {
 		CitaMedica cita = null;
 		boolean encontrada = false;
@@ -418,7 +443,7 @@ public class Clinica {
 		return cita;
 	}
 	
-	public void insertarConsulta(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) {
+	/*sql*/public void insertarConsulta(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) {
 		
 		String InsertConsul = "Insert Into consulta(fecha_consulta,diagnostico,cod_medico,cod_historia) Values (?,?,?,?)";
 		PreparedStatement consulta = null;
@@ -442,6 +467,7 @@ public class Clinica {
 		
 	}
 	
+	/*REVISION*/
 	public void insertarConsultaV2(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) {
 		misConsultas.add(c);
 		medico.getMisConsultas().add(c);
@@ -450,7 +476,7 @@ public class Clinica {
 		
 	}
 	
-	
+	/*NECESARIA NAOKI*/
 	public void insertarCita(CitaMedica cita, Medico medico) {
 		
 		citasMedicas.add(cita);
@@ -458,6 +484,7 @@ public class Clinica {
 		
 	}
 	
+	/*NECESARIA MISAEL*/
 	public boolean citaByCedula(String cedula, Date fecha) {
 		boolean bandera = false;
 		
@@ -470,7 +497,7 @@ public class Clinica {
 		return bandera;
 	}
 	
-	public void insertarMedico(Medico med) {
+/*sql*/	public void insertarMedico(Medico med) {
 		
 		String InsertConsul = "Insert Into medico (cod_medico,nombre,apellido,username,pass,telefono) Values (?,?,?,?,?,?)";
 		PreparedStatement consulta = null;
@@ -532,6 +559,8 @@ public class Clinica {
 	 * Dado el id de un m�dico y una fecha, verifica si este est� disponible.
 	 * En caso afirmativo, devuelve "true"; devuelve "false" en caso contrario. 
 	*/
+
+	/*NECESARIA NAOKI*/
 	public boolean medicoDisponible(Date fecha, String idMedico) {
 		boolean disponible = true;
 		int i = 0;
@@ -546,7 +575,7 @@ public class Clinica {
 		return disponible;
 	}
 	
-	
+	/*NECESARIA MISAEL*/
 	public ArrayList<Medico> CargarMedicoDisponibles(Date fecha) {
 		
 		ArrayList<Medico> medicosDisp = new ArrayList<>();
@@ -565,7 +594,7 @@ public class Clinica {
 	
 	
 	
-public Usuario buscarUsuarioByLoginMed(String login) throws SQLException {
+	public Usuario buscarUsuarioByLoginMed(String login) throws SQLException {
 		
 		Usuario user = null;
 
