@@ -237,8 +237,8 @@ public class Clinica {
 		
 		return aux;*/
 		
-		String query = "select *"
-				+ "from paciente"
+		String query = "select * "
+				+ "from paciente "
 				+ "where ced_paciente = " + cedula;
 		
 		abrirConexionDB();
