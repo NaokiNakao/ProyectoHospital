@@ -5,7 +5,6 @@ import java.util.Date;
 
 public class CitaMedica implements Serializable {
 
-	private static final long serialVersionUID = 6970972586473307276L;
 	private String codigo;
 	private Date fechaCita;
 	private String nombrePersona;
