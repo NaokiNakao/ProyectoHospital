@@ -68,7 +68,7 @@ public class RegistroUsuario extends JDialog {
 		setModal(true);
 		setBounds(100, 100, 615, 601);
 		if (user != null) {
-			setTitle("Modificación de usuario");
+			setTitle("Modificaciï¿½n de usuario");
 		}
 		else {
 			setTitle("Registro de usuario");
@@ -193,7 +193,7 @@ public class RegistroUsuario extends JDialog {
 				panelAdmins.setVisible(false);
 				rdbtnAdmin.setSelected(false);
 				
-				txtId.setText("Med-"+Clinica.getInstance().generadorCodigo(8));
+				txtId.setText("M"+Clinica.getInstance().generadorCodigo(4));
 			
 			}
 		});
@@ -214,7 +214,7 @@ public class RegistroUsuario extends JDialog {
 				panelMedico.setVisible(false);
 				rdbtnMedico.setSelected(false);
 				
-				txtId.setText("Admin-"+Clinica.getInstance().generadorCodigo(8));
+				txtId.setText("A"+Clinica.getInstance().generadorCodigo(4));
 			}
 		});
 		rdbtnAdmin.setBounds(309, 15, 109, 23);
@@ -307,7 +307,7 @@ public class RegistroUsuario extends JDialog {
 							 JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
 							 txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4)); 
 					 	}else{
-					 		JOptionPane.showMessageDialog(null, "Favor repetir las contraseñas correctamente", "Error", JOptionPane.ERROR_MESSAGE);
+					 		JOptionPane.showMessageDialog(null, "Favor repetir las contraseï¿½as correctamente", "Error", JOptionPane.ERROR_MESSAGE);
 					 		}
 						 }else if (rdbtnAdmin.isSelected()) {
 	
@@ -319,7 +319,7 @@ public class RegistroUsuario extends JDialog {
 								 JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
 								 txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4)); 
 						 	}else{
-						 		JOptionPane.showMessageDialog(null, "Favor repetir las contraseñas correctamente", "Error", JOptionPane.ERROR_MESSAGE);
+						 		JOptionPane.showMessageDialog(null, "Favor repetir las contraseï¿½as correctamente", "Error", JOptionPane.ERROR_MESSAGE);
 					 		
 					 	}
 			 		}
@@ -367,7 +367,7 @@ public class RegistroUsuario extends JDialog {
 					if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
 						user.setPassword(pfContrasenna.getText().toString());
 					}else {
-						JOptionPane.showMessageDialog(null, "Favor repetir las contraseñas correctamente", "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Favor repetir las contraseï¿½as correctamente", "Error", JOptionPane.ERROR_MESSAGE);
 						pfContrasenna.setText("");
 						pfRepetirContrasenna.setText("");
 					}
