@@ -248,34 +248,24 @@ public class Clinica {
 	
 	public Usuario buscarUsuarioById(String idUsuario) throws SQLException {
 		Usuario user = null;
-		
+		String query = null;
 		
 		if(idUsuario.contains("M")) {
-		
-			String query = "select * from medico where cod_medico = ?";
-			PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
-			stament.setString(1, idUsuario);
-			ResultSet res = stament.executeQuery();
-			
-			user = new Usuario(idUsuario, res.getString("username"),res.getString("password") ,res.getString("nombre"), res.getString("apellido")
-					, res.getString("telefono"));
-			
-			stament.close();
-			res.close();
-			
+			query = "select * from medico where cod_medico = ?";
 		}else if(idUsuario.contains("A")) {
-			
-			String query = "select * from administrador where cod_admin = ?";
-			PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
-			stament.setString(1, idUsuario);
-			ResultSet res = stament.executeQuery();
-			
-			user = new Usuario(idUsuario, res.getString("username"),res.getString("password") 
-					,res.getString("nombre"), res.getString("apellido"), res.getString("telefono"));	
-			
-			stament.close();
-			res.close();
+			query = "select * from administrador where cod_admin = ?";
 		}
+		
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setString(1, idUsuario);
+		ResultSet res = stament.executeQuery();
+		
+		user = new Usuario(idUsuario, res.getString("username"),res.getString("password") 
+				,res.getString("nombre"), res.getString("apellido"), res.getString("telefono"));	
+		
+		stament.close();
+		res.close();
+		
 		return user;
 	}
 	
