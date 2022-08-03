@@ -1,12 +1,10 @@
 package logico;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
-
-public class Clinica implements Serializable {
+public class Clinica {
 
 	private ArrayList<Paciente> misPacientes;
 	private ArrayList<Usuario> misUsuarios;

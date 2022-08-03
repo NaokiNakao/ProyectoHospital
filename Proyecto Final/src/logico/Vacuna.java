@@ -1,9 +1,8 @@
 package logico;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Vacuna implements Serializable{
+public class Vacuna {
 	
 	private String codigo; // una letra y seis (6) d�gitos --> "V-[c�digo]"
 	private String nombreVacuna;

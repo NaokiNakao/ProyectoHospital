@@ -1,11 +1,10 @@
 package logico;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
-public class HistoriaClinica implements Serializable {
+public class HistoriaClinica {
 
 	private String codigo;
 	private ArrayList<Consulta> misConsultas;
