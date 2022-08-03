@@ -1,5 +1,9 @@
 package logico;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -14,6 +18,8 @@ public class Clinica {
 	private ArrayList<Vacuna> misVacunas;
 	private static Clinica clinica;
 	private static Usuario loginUser; 
+	private static Connection db;
+	private static Statement statement;
 	
 	private Clinica() {
 		this.misPacientes = new ArrayList<Paciente>();
@@ -216,8 +222,8 @@ public class Clinica {
 		return disponible;
 	}
 	
-	public Paciente buscarPaciente(String cod) {
-		Paciente aux = null;
+	public ResultSet buscarPaciente(String cedula) throws SQLException {
+		/*Paciente aux = null;
 		boolean encontrado = false;
 		int i = 0;
 		
@@ -229,7 +235,16 @@ public class Clinica {
 			i++;
 		}
 		
-		return aux;
+		return aux;*/
+		
+		String query = "select *"
+				+ "from paciente"
+				+ "where ced_paciente = " + cedula;
+		
+		abrirConexionDB();
+		ResultSet paciente = statement.executeQuery(query);
+		cerrarConexionDB();
+		return paciente;
 	}
 	
 	/*
@@ -495,7 +510,14 @@ public class Clinica {
 		
 	}
 	
-	
+	public void abrirConexionDB() throws SQLException {
+		db = ConexionSQL.getConexion();
+		statement = db.createStatement();
+	}
+
+	public void cerrarConexionDB() throws SQLException {
+		db.close();
+	}
 	
 }
 
