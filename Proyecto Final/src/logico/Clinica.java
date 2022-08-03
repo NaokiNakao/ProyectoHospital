@@ -208,7 +208,7 @@ public class Clinica {
 		
 		Paciente paciente= null;
 		
-		String query = "select paciente.*, from paciente where ced_paciente = ?";
+		String query = "select paciente.* from paciente where ced_paciente = ?";
 		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
 		stament.setString(1, cedula);
 		ResultSet result = stament.executeQuery();
