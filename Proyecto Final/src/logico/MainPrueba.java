@@ -1,5 +1,6 @@
 package logico;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -7,10 +8,10 @@ import java.util.Date;
 
 public class MainPrueba {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 		// TODO Auto-generated method stub
 		
-		Medico med1 = new Medico("123", "Misael", "misael", "Misael", "mmg", "806521", "MMG");
+		/*Medico med1 = new Medico("123", "Misael", "misael", "Misael", "mmg", "806521", "MMG");
 		Clinica.getInstance().insertarMedico(med1);
 		
 		Medico med2 = new Medico("185", "Misael", "misael", "Misael", "mmg", "806521", "MMG");
@@ -37,8 +38,11 @@ public class MainPrueba {
 		Vacuna rv = new Vacuna("89526936", "tula", "Tambien yo", r, "Ayh", "p");
 		
 		Clinica.getInstance().agregarVacuna(rv);
-		Clinica.getInstance().agregarVacuna(sinovac);
+		Clinica.getInstance().agregarVacuna(sinovac);*/
 		
+		//System.out.println(Clinica.getInstance().BuscarCodProvinciaByNombre("Duarte"));
+		
+		System.out.println(Clinica.getInstance().buscarVacunaByCodigo("1").getFabricante());
 		
 		
 	/*	

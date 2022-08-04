@@ -198,7 +198,7 @@ public class Clinica {
 	*/
 	
 	/*MUY NECESARIA MISAEL*/
-	public ArrayList<Vacuna> vacunasParaEnfermedad(String codigoEnfermedad) {
+	public ArrayList<Vacuna> vacunasParaEnfermedad(String codigoEnfermedad) {//PREGUNTALE A LA PROF
 		ArrayList<Vacuna> vacunasDisponibles = new ArrayList<Vacuna>();
 		
 		for (Vacuna vacuna : misVacunas) {
@@ -213,7 +213,7 @@ public class Clinica {
 	}
 	
 	
-	public Paciente buscarPaciente(String cedula) throws SQLException {
+	public Paciente buscarPaciente(String cedula) throws SQLException {//probar main
 		
 		Paciente paciente= null;
 		
@@ -258,7 +258,7 @@ public class Clinica {
 	
 	////////////////////Utils (Usuario) ////////////////////
 	
-	public Usuario buscarUsuarioById(String idUsuario) throws SQLException {
+	public Usuario buscarUsuarioById(String idUsuario) throws SQLException {  //Probar main
 		Usuario user = null;
 		String query = null;
 		
@@ -283,7 +283,7 @@ public class Clinica {
 	
 	//////////////////// Utils (Vacuna) ////////////////////
 	
-	public Vacuna buscarVacunaByCodigo(String codigoVacuna) throws SQLException {
+	public Vacuna buscarVacunaByCodigo(String codigoVacuna) throws SQLException { //Probada main
 		Vacuna vacuna = null;
 
 		String query1 = "select * from vacuna where cod_vacuna = ?";
@@ -297,9 +297,11 @@ public class Clinica {
 		stament2.setString(1, codigoVacuna);
 		ResultSet res2 = stament2.executeQuery();
 		
-		
-		vacuna = new Vacuna(codigoVacuna, res.getString("nombre_vacuna"), res2.getString("nombre_fab"), misEnfermedades, res.getString("tipo_vacuna"), res.getString("forma_admin"));
-		
+		while(res.next() && res2.next()) {
+			
+			vacuna = new Vacuna(codigoVacuna, res.getString("nombre_vacuna"), 
+					res2.getString("nombre_fab"), misEnfermedades, res.getString("tipo_vacuna"), res.getString("forma_admin"));
+		}
 		return vacuna;
 	}
 	
@@ -530,7 +532,7 @@ public class Clinica {
 	}
 	
 	
-/*sql*/	public void insertarMedico(Medico med) throws SQLException { ///probar en el main
+	public void insertarMedico(Medico med) throws SQLException { ///probar en el main
 		
 		String InsertConsul = "Insert Into medico (cod_medico,nombre,apellido,username,pass,telefono) Values (?,?,?,?,?,?)";
 		PreparedStatement consulta = null;
@@ -598,16 +600,20 @@ public class Clinica {
 		
 	}
 	
-	private int buscarCodEspecialidadByNombre(String nombre_especialidad) throws SQLException /*Probar Main*/{
+	public int buscarCodEspecialidadByNombre(String nombre_especialidad) throws SQLException /*Probado Main*/{
 	
-		int cod_especialidad = (Integer) null;
+		int cod_especialidad = 0;
 		
 		String consulta = "select cod_especialidad from especialidad where nombre_especialidad = ?";
 		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(consulta);
 		stament.setString(1, nombre_especialidad);
-		ResultSet result = stament.executeQuery(consulta);
+		ResultSet result = stament.executeQuery();
 		
-		cod_especialidad = result.getInt(1);
+		
+		while (result.next()) {
+			
+			cod_especialidad = result.getInt("cod_especialidad");
+		}
 		
 		stament.close();
 		result.close();
@@ -664,14 +670,17 @@ public class Clinica {
 		
 		if(result.getString(1).contains("M")) {
 		
+			while(result.next()) {
 			user= new Usuario(result.getString("cod_medico"), login, result.getString("passwordd"), result.getString("nombre"), result.getString("apellido"), 
 				result.getString("telefono"));
+			}
 			
 		}else if(result.getString(1).contains("A")){
 			
+			while(result.next()) {
 			user= new Usuario(result.getString("cod_admin"), login, result.getString("passwordd"), result.getString("nombre"), result.getString("apellido"), 
 					result.getString("telefono"));
-			
+			}
 		}
 		
 		stament.close();
@@ -681,7 +690,7 @@ public class Clinica {
 		
 	}
 	
-	public  String BuscarNombreProvinciaByCod(int cod) throws SQLException /*Probar Main*/ {
+	public  String BuscarNombreProvinciaByCod(int cod) throws SQLException /*Probada Main*/ {
 		
 		String nombre_provincia = null;
 		
@@ -689,7 +698,10 @@ public class Clinica {
 		String consulta = "select nombre_provincia from provincia where cod_provincia = "+cod;
 		ResultSet result = provincia.executeQuery(consulta);
 		
-		nombre_provincia = result.getString("nombre_provincia");
+		while(result.next()) {
+			nombre_provincia = result.getString("nombre_provincia");
+			
+		}
 		
 		provincia.close();
 		result.close();
@@ -697,7 +709,7 @@ public class Clinica {
 		return nombre_provincia;
 	}
 	
-	public String BuscarCodProvinciaByNombre(String nombre_provincia) throws SQLException /*Probar Main*/{
+	public String BuscarCodProvinciaByNombre(String nombre_provincia) throws SQLException /*Probada Main*/{
 		
 		String cod_provincia=null;
 		
@@ -707,7 +719,10 @@ public class Clinica {
 		
 		ResultSet result = provincia.executeQuery();
 		
-		cod_provincia = result.getString("cod_provincia");
+		while(result.next()) {
+			cod_provincia = result.getString("cod_provincia");
+		
+		}
 		
 		provincia.close();
 		result.close();	
