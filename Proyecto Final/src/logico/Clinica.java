@@ -101,6 +101,14 @@ public class Clinica {
 	
 	//////////////////// M�todos para estad�sticas de enfermedades ////////////////////
 	
+	public static Connection getConexion() {
+		return conexion;
+	}
+
+	public static void setConexion(Connection conexion) {
+		Clinica.conexion = conexion;
+	}
+
 	/*
 	 * Retorna un String de caracteres alfanum�ricos aleatorios
 	 * dada una longitud para este. 
