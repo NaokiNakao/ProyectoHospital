@@ -16,6 +16,8 @@ import java.awt.Checkbox;
 import javax.swing.JLabel;
 import java.awt.Dialog.ModalExclusionType;
 import java.awt.Font;
+import java.awt.HeadlessException;
+
 import javax.swing.JTextField;
 import java.awt.Button;
 import java.awt.Panel;
@@ -42,6 +44,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import javax.swing.ImageIcon;
 
 public class ConsultasVisual extends JDialog {
@@ -207,7 +212,12 @@ public class ConsultasVisual extends JDialog {
 					int aux = tableEnfermedades.getSelectedRow();
 					if(aux!=-1) {
 						String cod = (String) modelEnfermedades.getValueAt(aux, 0);
-						selectedEnfermedad=Clinica.getInstance().buscarEnfermedadByCodigo(cod);
+						try {
+							selectedEnfermedad=Clinica.getInstance().buscarEnfermedadByCodigo(cod);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 					
 				}
@@ -281,7 +291,12 @@ public class ConsultasVisual extends JDialog {
 					int aux = tableVacunas.getSelectedRow();
 					if(aux!=-1) {
 						String cod = (String) modelVacunas.getValueAt(aux, 0);
-						selectedVacuna=Clinica.getInstance().buscarVacunaByCodigo(cod);
+						try {
+							selectedVacuna=Clinica.getInstance().buscarVacunaByCodigo(cod);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 			});
@@ -306,59 +321,65 @@ public class ConsultasVisual extends JDialog {
 					}else { 
 						
 						
-						if(Clinica.getInstance().buscarPaciente(cita.getCedulaPersona())!= null) {
-							
-							Paciente p = Clinica.getInstance().buscarPaciente(cita.getCedulaPersona());
-							HistoriaClinica h = p.getHistorial();
+						try {
+							if(Clinica.getInstance().buscarPaciente(cita.getCedulaPersona())!= null) {
+								
+								Paciente p = Clinica.getInstance().buscarPaciente(cita.getCedulaPersona());
+								HistoriaClinica h = p.getHistorial();
 
-							
-							Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(), textPaneDiagnostico.getText().toString(),
-									medico, textPaneReceta.getText().toString(),cita.getFechaN());
-							
-							if(selectedEnfermedad!=null) {
-								n.setEnfermedad(selectedEnfermedad);
-								h.getPadecimientos().add(selectedEnfermedad);
+								
+								Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(), textPaneDiagnostico.getText().toString(),
+										medico, textPaneReceta.getText().toString(),cita.getFechaN());
+								
+								if(selectedEnfermedad!=null) {
+									n.setEnfermedad(selectedEnfermedad);
+									h.getPadecimientos().add(selectedEnfermedad);
+								}
+								
+								if(selectedVacuna != null) {
+									n.setMisVacunas(selectedVacuna);
+									h.getMisVacunas().add(selectedVacuna);
+								}
+								
+								Clinica.getInstance().insertarConsultaV2(n, medico, cita, p, h);
+								JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
+								dispose();
+								PanelUsuario u = new PanelUsuario(medico);
+								u.setVisible(true);
+								
+							}else {
+								HistoriaClinica h = new HistoriaClinica("Historial-"+cita.getCedulaPersona());
+								
+								Paciente p = new Paciente(cita.getCedulaPersona(), cita.getNombrePersona(), cita.getGeneroPersona(), cita.getFechaNacimientoPersona(), 
+											cita.getDireccionPersona(), cita.getTelefono());
+								
+								p.setHistorial(h);
+								
+								Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(), textPaneDiagnostico.getText().toString(),
+										medico, textPaneReceta.getText().toString(),cita.getFechaN());
+								
+								if(selectedEnfermedad!=null) {
+									n.setEnfermedad(selectedEnfermedad);
+									h.getPadecimientos().add(selectedEnfermedad);
+								}
+								
+								if(selectedVacuna != null) {
+									n.setMisVacunas(selectedVacuna);
+									h.getMisVacunas().add(selectedVacuna);
+								}
+								
+								
+								Clinica.getInstance().insertarConsulta(n, medico, cita, p, h);
+								//dispose();
+								JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
+								dispose();
+								
+								PanelUsuario u = new PanelUsuario(medico);
+								u.setVisible(true);
 							}
-							
-							if(selectedVacuna != null) {
-								n.setMisVacunas(selectedVacuna);
-								h.getMisVacunas().add(selectedVacuna);
-							}
-							
-							Clinica.getInstance().insertarConsultaV2(n, medico, cita, p, h);
-							JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
-							dispose();
-							PanelUsuario u = new PanelUsuario(medico);
-							u.setVisible(true);
-							
-						}else {
-							HistoriaClinica h = new HistoriaClinica("Historial-"+cita.getCedulaPersona());
-							
-							Paciente p = new Paciente(cita.getCedulaPersona(), cita.getNombrePersona(), cita.getGeneroPersona(), cita.getFechaNacimientoPersona(), 
-										cita.getDireccionPersona(), cita.getTelefono(), h);
-							
-							
-							Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(), textPaneDiagnostico.getText().toString(),
-									medico, textPaneReceta.getText().toString(),cita.getFechaN());
-							
-							if(selectedEnfermedad!=null) {
-								n.setEnfermedad(selectedEnfermedad);
-								h.getPadecimientos().add(selectedEnfermedad);
-							}
-							
-							if(selectedVacuna != null) {
-								n.setMisVacunas(selectedVacuna);
-								h.getMisVacunas().add(selectedVacuna);
-							}
-							
-							
-							Clinica.getInstance().insertarConsulta(n, medico, cita, p, h);
-							//dispose();
-							JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
-							dispose();
-							
-							PanelUsuario u = new PanelUsuario(medico);
-							u.setVisible(true);
+						} catch (HeadlessException | SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
 					}
 					
@@ -395,7 +416,7 @@ public class ConsultasVisual extends JDialog {
 		
 		modelEnfermedades.setRowCount(0);
 		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
-				
+		
 				for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
 					rowsEnfermedades[0]=  Clinica.getInstance().getMisEnfermedades().get(i).getCodigo();
 					rowsEnfermedades[1]=  Clinica.getInstance().getMisEnfermedades().get(i).getNombreEnfermedad();
