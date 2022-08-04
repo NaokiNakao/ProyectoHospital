@@ -272,9 +272,11 @@ public class Clinica {
 		stament.setString(1, idUsuario);
 		ResultSet res = stament.executeQuery();
 		
-		user = new Usuario(idUsuario, res.getString("username"),res.getString("password") 
+		while(res.next()) {
+			
+			user = new Usuario(idUsuario, res.getString("username"),res.getString("password") 
 				,res.getString("nombre"), res.getString("apellido"), res.getString("telefono"));	
-		
+		}
 		stament.close();
 		res.close();
 		
@@ -416,18 +418,22 @@ public class Clinica {
 	////////////////////Utils (Enfermedad) ////////////////////
 	
 	/*NECESARIA MISAEL*/
-	public Enfermedad buscarEnfermedadByCodigo(String codigoEnfermedad) {
+	public Enfermedad buscarEnfermedadByCodigo(String codigoEnfermedad) throws SQLException { //conflicto de tipos en cod_tipo
 		Enfermedad enfermedad = null;
-		boolean encontrada = false;
-		int i = 0;
+	
+		String query = "select * from enfermedad where cod_enf = ?";
+		PreparedStatement consul = ConexionSQL.getConexion().prepareStatement(query);
+		consul.setString(1, codigoEnfermedad);
 		
-		while (!encontrada && i < misEnfermedades.size()) {
-			if (misEnfermedades.get(i).getCodigo().equalsIgnoreCase(codigoEnfermedad)) {
-				enfermedad = misEnfermedades.get(i);
-				encontrada = true;
-			}
-			i++;
+		ResultSet resul = consul.executeQuery();
+		
+		while(resul.next()) {
+			
+			enfermedad = new Enfermedad(codigoEnfermedad, resul.getString("nombre_enf"), codigoEnfermedad, resul.getString("desc_enf"));
+			
 		}
+		consul.close();
+		resul.close();
 		
 		return enfermedad;
 	}
@@ -438,18 +444,24 @@ public class Clinica {
 	}
 	
 	/*NECESARIA MISAEL*/
-	public Medico buscarMedicoByCodigo(String cod) {
+	public Medico buscarMedicoByCodigo(String cod) throws SQLException {
 		Medico medico = null;
-		boolean encontrada = false;
-		int i = 0;
 		
-		while (!encontrada && i < misUsuarios.size()) {
-			if (misUsuarios.get(i).getId().equalsIgnoreCase(cod) && misUsuarios.get(i) instanceof Medico) {
-				medico = (Medico) misUsuarios.get(i);
-				encontrada = true;
-			}
-			i++;
+		String query = "select * from medico where cod_medico = ?";
+		PreparedStatement consul = ConexionSQL.getConexion().prepareStatement(query);
+		consul.setString(1, cod);
+		
+		ResultSet resul = consul.executeQuery();
+		
+		while(resul.next()) {
+			
+			medico = new Medico(cod, resul.getString("username"), "Contraseña", resul.getString("nombre"), resul.getString("apellido"),
+					resul.getString("telefono"),buscarEspecialidadByCodMedico(cod).getString("nombre_especialidad"));
+			
 		}
+		consul.close();
+		resul.close();
+		
 		
 		return medico;
 		
@@ -621,6 +633,43 @@ public class Clinica {
 	return cod_especialidad;
 }
 
+	public String buscarEspecialidadByCod(int cod_especialidad) throws SQLException {
+		
+		String especialidad = null;
+		
+		String consulta = "select nombre_especialidad from especialidad where especialidad.cod_especialidad = ?";
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(consulta);
+		stament.setInt(1, cod_especialidad);
+		
+		ResultSet res = stament.executeQuery();
+		
+		while(res.next()) {
+			especialidad = res.getString("nombre_especialidad");
+		}
+		
+		stament.close();
+		res.close();
+		
+		
+		return especialidad;
+	}
+	
+	
+	public ResultSet buscarEspecialidadByCodMedico(String cod) throws SQLException {
+		
+		String query = "select especialidad.* from especialidad,medico,medico_especialidad"
+				+ "where medico_especialidad.cod_medico = medico.cod_medico"
+				+ "and medico_especialidad.cod_especialidad = especialidad.cod_especialidad and medico.cod_medico = ?;";
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setString(1, cod);
+		
+		ResultSet res = stament.executeQuery();
+		
+		return res;
+		
+	}
+	
+	
 	/*
 	 * Dado el id de un mï¿½dico y una fecha, verifica si este estï¿½ disponible.
 	 * En caso afirmativo, devuelve "true"; devuelve "false" en caso contrario. 
@@ -657,8 +706,7 @@ public class Clinica {
 		
 		return medicosDisp; 
 	}
-	
-	
+
 	
 	public Usuario buscarUsuarioByLoginMed(String login) throws SQLException /*Probar Main*/{
 		
