@@ -2,6 +2,7 @@ package visual;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -19,6 +20,7 @@ import logico.Usuario;
 
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
@@ -296,35 +298,43 @@ public class RegistroUsuario extends JDialog {
 					 JOptionPane.showMessageDialog(null, "Favor escoger otro usuario.", "Error", JOptionPane.ERROR_MESSAGE);
 				 }else {
 					 
-					if(Clinica.getInstance().buscarUsuarioByLoginMed(txtLogin.getText().toString())!= null) {
-						JOptionPane.showMessageDialog(null, "Este usuario ya existe", "Error", JOptionPane.ERROR_MESSAGE);
-					}else { 
-					 if(rdbtnMedico.isSelected()) {
-						 if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
-							 Medico usu = new Medico( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
-									 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText(),txtEspecialidad.getText().toString());
-							 Clinica.getInstance().registroUsuario(usu);
-							 limpiar();
-							 JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
-							 txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4)); 
-					 	}else{
-					 		JOptionPane.showMessageDialog(null, "Favor repetir las contrase�as correctamente", "Error", JOptionPane.ERROR_MESSAGE);
-					 		}
-						 }else if (rdbtnAdmin.isSelected()) {
-	
-					 		if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
-								 Administrador usu = new Administrador( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
-										 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText(),txtCargoLaboral.getText().toString());
+					try {
+						if(Clinica.getInstance().buscarUsuarioByLoginMed(txtLogin.getText().toString())!= null) {
+							JOptionPane.showMessageDialog(null, "Este usuario ya existe", "Error", JOptionPane.ERROR_MESSAGE);
+						}else { 
+						 if(rdbtnMedico.isSelected()) {
+							 if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
+								 Medico usu = new Medico( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
+										 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText(),txtEspecialidad.getText().toString());
 								 Clinica.getInstance().registroUsuario(usu);
 								 limpiar();
 								 JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
 								 txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4)); 
 						 	}else{
 						 		JOptionPane.showMessageDialog(null, "Favor repetir las contrase�as correctamente", "Error", JOptionPane.ERROR_MESSAGE);
-					 		
-					 	}
-			 		}
-				 }
+						 		}
+							 }else if (rdbtnAdmin.isSelected()) {
+
+						 		if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
+									 Administrador usu = new Administrador( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
+											 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText(),txtCargoLaboral.getText().toString());
+									 Clinica.getInstance().registroUsuario(usu);
+									 limpiar();
+									 JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
+									 txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4)); 
+							 	}else{
+							 		JOptionPane.showMessageDialog(null, "Favor repetir las contrase�as correctamente", "Error", JOptionPane.ERROR_MESSAGE);
+						 		
+						 	}
+						}
+ }
+					} catch (HeadlessException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			 
 			 }

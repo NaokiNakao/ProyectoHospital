@@ -728,6 +728,12 @@ public class Clinica {
 		return result.getString("cod_provincia");	
 
 	}
+
+	//Misael
+	public void registroUsuario(Object usu) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }
