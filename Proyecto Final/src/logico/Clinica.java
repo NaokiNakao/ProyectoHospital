@@ -475,7 +475,7 @@ public class Clinica {
 		return cita;
 	}
 	
-	/*sql*/public void insertarConsulta(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) {
+	/*sql*//*Probar Main*/public void insertarConsulta(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) {
 		
 		String InsertConsul = "Insert Into consulta(fecha_consulta,diagnostico,cod_medico,cod_historia) Values (?,?,?,?)";
 		PreparedStatement consulta = null;
@@ -598,7 +598,7 @@ public class Clinica {
 		
 	}
 	
-	private int buscarCodEspecialidadByNombre(String nombre_especialidad) throws SQLException {
+	private int buscarCodEspecialidadByNombre(String nombre_especialidad) throws SQLException /*Probar Main*/{
 	
 		int cod_especialidad = (Integer) null;
 		
@@ -654,7 +654,7 @@ public class Clinica {
 	
 	
 	
-	public Usuario buscarUsuarioByLoginMed(String login) throws SQLException {
+	public Usuario buscarUsuarioByLoginMed(String login) throws SQLException /*Probar Main*/{
 		
 		Usuario user = null;
 
@@ -681,56 +681,43 @@ public class Clinica {
 		
 	}
 	
-	public  String BuscarProvinciaByCod(int cod) throws SQLException {
+	public  String BuscarNombreProvinciaByCod(int cod) throws SQLException /*Probar Main*/ {
 		
-		
+		String nombre_provincia = null;
 		
 		Statement provincia = ConexionSQL.getConexion().createStatement();
 		String consulta = "select nombre_provincia from provincia where cod_provincia = "+cod;
 		ResultSet result = provincia.executeQuery(consulta);
 		
+		nombre_provincia = result.getString("nombre_provincia");
+		
 		provincia.close();
 		result.close();
 	
-		return result.getString("nombre_provincia");
-	
+		return nombre_provincia;
 	}
 	
-	
-	public String BuscarProvinciaByNombre(String nombre_provincia) throws SQLException {
+	public String BuscarCodProvinciaByNombre(String nombre_provincia) throws SQLException /*Probar Main*/{
 		
-
+		String cod_provincia=null;
 		
 		String consulta = "select cod_provincia from provincia where nombre_provincia = ?";
 		PreparedStatement provincia = ConexionSQL.getConexion().prepareStatement(consulta);
 		provincia.setString(1, nombre_provincia);
 		
 		ResultSet result = provincia.executeQuery();
+		
+		cod_provincia = result.getString("cod_provincia");
+		
 		provincia.close();
 		result.close();	
 		
-		return result.getString("cod_provincia");	
+		return cod_provincia;	
 
 	}
 	
-	public String BuscarEspecialidadByNombre(String nombre_provincia) throws SQLException {
-		
-
-		
-		String consulta = "select cod_provincia from provincia where nombre_provincia = ?";
-		PreparedStatement provincia = ConexionSQL.getConexion().prepareStatement(consulta);
-		provincia.setString(1, nombre_provincia);
-		
-		ResultSet result = provincia.executeQuery();
-		provincia.close();
-		result.close();	
-		
-		return result.getString("cod_provincia");	
-
-	}
-
-	//Misael
-	public void registroUsuario(Object usu) {
+	/*Misael*/
+	public void InsertarAdmin(Administrador usu) {
 		// TODO Auto-generated method stub
 		
 	}

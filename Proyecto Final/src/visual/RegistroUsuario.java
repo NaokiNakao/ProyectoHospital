@@ -318,7 +318,7 @@ public class RegistroUsuario extends JDialog {
 						 		if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
 									 Administrador usu = new Administrador( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
 											 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText(),txtCargoLaboral.getText().toString());
-									 Clinica.getInstance().registroUsuario(usu);
+									 Clinica.getInstance().InsertarAdmin(usu);
 									 limpiar();
 									 JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
 									 txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4)); 
