@@ -429,6 +429,11 @@ public class ConsultasVisual extends JDialog {
 	
 	private void loadVacunas() {
 		
+		
+		
+		
+		
+		
 		modelVacunas.setRowCount(0);
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
 		

@@ -20,7 +20,7 @@ public class Clinica {
 	private static Clinica clinica;
 	private static Usuario loginUser; 
 	private String hashkey = "grupo2";
-	private static Connection conexion; 
+	
 	
 	private Clinica() {
 		this.misPacientes = new ArrayList<Paciente>();
@@ -29,7 +29,7 @@ public class Clinica {
 		this.misConsultas = new ArrayList<Consulta>();
 		this.misEnfermedades = new ArrayList<Enfermedad>();
 		this.misVacunas = new ArrayList<Vacuna>();
-		this.conexion = ConexionSQL.getConexion();
+		
 	}
 
 	public static Clinica getInstance() {
@@ -101,13 +101,6 @@ public class Clinica {
 	
 	//////////////////// M�todos para estad�sticas de enfermedades ////////////////////
 	
-	public static Connection getConexion() {
-		return conexion;
-	}
-
-	public static void setConexion(Connection conexion) {
-		Clinica.conexion = conexion;
-	}
 
 	/*
 	 * Retorna un String de caracteres alfanum�ricos aleatorios
