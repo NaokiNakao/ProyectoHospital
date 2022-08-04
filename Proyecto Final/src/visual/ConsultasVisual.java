@@ -417,6 +417,7 @@ public class ConsultasVisual extends JDialog {
 		modelEnfermedades.setRowCount(0);
 		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
 		
+		
 				for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
 					rowsEnfermedades[0]=  Clinica.getInstance().getMisEnfermedades().get(i).getCodigo();
 					rowsEnfermedades[1]=  Clinica.getInstance().getMisEnfermedades().get(i).getNombreEnfermedad();

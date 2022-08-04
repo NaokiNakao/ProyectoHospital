@@ -20,6 +20,7 @@ public class Clinica {
 	private static Clinica clinica;
 	private static Usuario loginUser; 
 	private String hashkey = "grupo2";
+	private static Connection conexion; 
 	
 	private Clinica() {
 		this.misPacientes = new ArrayList<Paciente>();
@@ -28,6 +29,7 @@ public class Clinica {
 		this.misConsultas = new ArrayList<Consulta>();
 		this.misEnfermedades = new ArrayList<Enfermedad>();
 		this.misVacunas = new ArrayList<Vacuna>();
+		this.conexion = ConexionSQL.getConexion();
 	}
 
 	public static Clinica getInstance() {
@@ -223,7 +225,7 @@ public class Clinica {
 		ResultSet result = stament.executeQuery();
 		
 		paciente = new Paciente(cedula, result.getString("nombre"), result.getString("genero"), result.getDate("fecha_nac"), 
-				result.getInt("cod_ciudad"),result.getString("telefono"));
+				result.getString("cod_ciudad"),result.getString("telefono"));
 		
 		result.close();
 		stament.close();
@@ -814,6 +816,19 @@ public class Clinica {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void loadEnfermedades() throws SQLException {
+		
+		modelEnfermedades.setRowCount(0);
+		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
+		
+		String queryEnfCod = "select enfermedad.cod_enf from enfermedad";
+		PreparedStatement stamentCodEnf = ConexionSQL.getConexion().prepareStatement(queryEnfCod);
+		ResultSet res = stamentCodEnf.executeQuery();
+		
+		
+	}
+
 	
 	
 }
