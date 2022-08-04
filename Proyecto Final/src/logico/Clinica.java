@@ -475,8 +475,27 @@ public class Clinica {
 	}
 	
 	/*NECESARIA NAOKI*/
-	public void insertarCita(CitaMedica cita) {
-		citasMedicas.add(cita);
+	public boolean insertarCita(CitaMedica cita) {
+		boolean realizado = false;
+		PreparedStatement statement = null;
+		String sql = "insert into cita (cod_cita, fecha_cita, cod_medico, ced_paciente) "
+				+ "values (?, ?, ?, ?);";
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(sql);
+			statement.setString(1, cita.getCodigo());
+			statement.setDate(2, (java.sql.Date) cita.getFechaCita());
+			statement.setString(3, cita.getMedico().getId());
+			statement.setString(4, cita.getCedulaPersona());
+			
+			statement.executeUpdate();
+			statement.close();
+			realizado = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return realizado;
 	}
 	
 	/*NECESARIA MISAEL*/
