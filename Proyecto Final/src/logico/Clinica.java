@@ -456,7 +456,7 @@ public class Clinica {
 		while(resul.next()) {
 			
 			medico = new Medico(cod, resul.getString("username"), "Contraseña", resul.getString("nombre"), resul.getString("apellido"),
-					resul.getString("telefono"),buscarEspecialidadByCodMedico(cod).getString("nombre_especialidad"));
+					resul.getString("telefono"),buscarEspecialidadByCodMedico(cod));
 			
 		}
 		consul.close();
@@ -655,7 +655,9 @@ public class Clinica {
 	}
 	
 	
-	public ResultSet buscarEspecialidadByCodMedico(String cod) throws SQLException {
+	public String buscarEspecialidadByCodMedico(String cod) throws SQLException {
+		
+		String especialidad = null;
 		
 		String query = "select especialidad.* from especialidad,medico,medico_especialidad"
 				+ "where medico_especialidad.cod_medico = medico.cod_medico"
@@ -665,7 +667,31 @@ public class Clinica {
 		
 		ResultSet res = stament.executeQuery();
 		
-		return res;
+		while(res.next()) {
+			especialidad = res.getString("nombre_especialidad");
+		}
+		
+		return especialidad;
+		
+	}
+	
+	public String buscarEspecialidadCodByCodMedico(String cod) throws SQLException {
+		
+		String especialidad = null;
+		
+		String query = "select especialidad.* from especialidad,medico,medico_especialidad"
+				+ "where medico_especialidad.cod_medico = medico.cod_medico"
+				+ "and medico_especialidad.cod_especialidad = especialidad.cod_especialidad and medico.cod_medico = ?;";
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setString(1, cod);
+		
+		ResultSet res = stament.executeQuery();
+		
+		while(res.next()) {
+			especialidad = res.getString("cod_especialidad");
+		}
+		
+		return especialidad;
 		
 	}
 	
