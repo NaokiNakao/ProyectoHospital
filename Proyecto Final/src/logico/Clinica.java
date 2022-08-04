@@ -529,7 +529,8 @@ public class Clinica {
 		return bandera;
 	}
 	
-/*sql*/	public void insertarMedico(Medico med) {
+	
+/*sql*/	public void insertarMedico(Medico med) throws SQLException { ///probar en el main
 		
 		String InsertConsul = "Insert Into medico (cod_medico,nombre,apellido,username,pass,telefono) Values (?,?,?,?,?,?)";
 		PreparedStatement consulta = null;
@@ -545,10 +546,16 @@ public class Clinica {
 		
 		consulta.executeUpdate();
 		
+		
+		
 		} catch (SQLException e) {
 			
 			System.out.println("Fallo la consulta");
 			e.printStackTrace();
+		}finally {
+			
+			if(consulta != null)
+			consulta.close();
 		}
 		
 		String InsertConsul2 = "Insert Into especialidad (nombre_especialidad) Values (?)";
@@ -557,13 +564,16 @@ public class Clinica {
 		try {
 			consulta2 = ConexionSQL.getConexion().prepareStatement(InsertConsul2);
 			consulta2.setString(1,med.getEspecialidad());
-		
-		consulta.executeUpdate();
+			consulta2.executeUpdate();
 		
 		} catch (SQLException e) {
 			
 			System.out.println("Fallo la consulta");
 			e.printStackTrace();
+		}finally {
+			
+			if(consulta2 != null)
+				consulta2.close();
 		}
 		
 		
@@ -573,20 +583,38 @@ public class Clinica {
 		try {
 			consulta3 = ConexionSQL.getConexion().prepareStatement(InsertConsul3);
 			consulta3.setString(1,med.getId());
-			consulta3.setString(2,med.getEspecialidad());
-		
-		
-		consulta.executeUpdate();
+			consulta3.setInt(2,buscarCodEspecialidadByNombre(med.getEspecialidad()));
+			consulta3.executeUpdate();
 		
 		} catch (SQLException e) {
 			
 			System.out.println("Fallo la consulta");
 			e.printStackTrace();
+		}finally {
+			
+			if(consulta3 != null)
+				consulta3.close();
 		}
-		
 		
 	}
 	
+	private int buscarCodEspecialidadByNombre(String nombre_especialidad) throws SQLException {
+	
+		int cod_especialidad = (Integer) null;
+		
+		String consulta = "select cod_especialidad from especialidad where nombre_especialidad = ?";
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(consulta);
+		stament.setString(1, nombre_especialidad);
+		ResultSet result = stament.executeQuery(consulta);
+		
+		cod_especialidad = result.getInt(1);
+		
+		stament.close();
+		result.close();
+		
+	return cod_especialidad;
+}
+
 	/*
 	 * Dado el id de un m�dico y una fecha, verifica si este est� disponible.
 	 * En caso afirmativo, devuelve "true"; devuelve "false" en caso contrario. 
