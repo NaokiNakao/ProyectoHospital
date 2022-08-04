@@ -243,7 +243,7 @@ public class Clinica {
 	/*NECESARIA NAOKI*/
 	public boolean validacionCredenciales(String login, String password) {
 		boolean validacion = false;
-		Usuario user = null;
+		/*Usuario user = null;
 		int i = 0;
 		
 		while (!validacion && i < misUsuarios.size()) {
@@ -253,7 +253,9 @@ public class Clinica {
 				validacion = true;
 			}
 			i++;
-		}
+		}*/
+		
+		
 		
 		return validacion;
 	}
@@ -765,7 +767,7 @@ public class Clinica {
 		Usuario user = null;
 
 		Statement stament = ConexionSQL.getConexion().createStatement();
-		String consulta = "select * from medico,administrador where medico.loggin = "+ login+"or administrador.loggin = "+ login;
+		String consulta = "select * from medico,administrador where medico.loggin = "+ login +" or administrador.loggin = "+ login;
 		ResultSet result = stament.executeQuery(consulta);
 		
 		if(result.getString(1).contains("M")) {
@@ -836,20 +838,6 @@ public class Clinica {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	public void loadEnfermedades() throws SQLException {
-		
-		modelEnfermedades.setRowCount(0);
-		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
-		
-		String queryEnfCod = "select enfermedad.cod_enf from enfermedad";
-		PreparedStatement stamentCodEnf = ConexionSQL.getConexion().prepareStatement(queryEnfCod);
-		ResultSet res = stamentCodEnf.executeQuery();
-		
-		
-	}
-
-	
 	
 }
 
