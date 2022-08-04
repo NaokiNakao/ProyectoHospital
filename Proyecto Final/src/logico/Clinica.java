@@ -391,8 +391,24 @@ public class Clinica {
 	}
 	
 	/*NECESARIA NAOKI*/
-	public void eliminarVacuna(int index) {
-		misVacunas.remove(index);
+	public boolean eliminarVacuna(String codVacuna) throws SQLException {
+		boolean realizado = false;
+		PreparedStatement statement = null;
+		String sql = "delete from vacuna "
+				+ "where cod_vacuna = ?;";
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(sql);
+			statement.setString(1, codVacuna);
+			
+			statement.executeUpdate();
+			statement.close();
+			realizado = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return realizado;
 	}
 	
 	////////////////////Utils (Enfermedad) ////////////////////
