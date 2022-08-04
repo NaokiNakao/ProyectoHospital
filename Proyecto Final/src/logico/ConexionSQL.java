@@ -6,6 +6,16 @@ import java.sql.SQLException;
 
 public class ConexionSQL {
 	
+	public static ConexionSQL conexionSQL;
+	
+	private ConexionSQL() {}
+	
+	public static ConexionSQL getInstance() {
+		if (conexionSQL == null) {
+			conexionSQL = new ConexionSQL();
+		}
+		return conexionSQL;
+	}
 	
 	public static Connection getConexion() {
 			
