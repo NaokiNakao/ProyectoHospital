@@ -351,40 +351,25 @@ public class Clinica {
 	public boolean agregarVacuna(Vacuna nuevaVacuna, int codFab) throws SQLException {
 		boolean realizado = false;
 		PreparedStatement statement = null;
-		String sql = "insert into vacuna(cod_vacuna, nombre_vacuna, tipo_vacuna, forma_admin, cod_fab) "
+		String sql = "insert into vacuna (cod_vacuna, nombre_vacuna, tipo_vacuna, forma_admin, cod_fab) "
 				+ "values (?, ?, ?, ?, ?);";
 		
-		if (datosVacunaValidos(nuevaVacuna)) {
-			try {
-				statement = ConexionSQL.getConexion().prepareStatement(sql);
-				statement.setString(1, nuevaVacuna.getCodigo());
-				statement.setString(2, nuevaVacuna.getNombreVacuna());
-				statement.setString(3, nuevaVacuna.getTipoVacuna());
-				statement.setString(4, nuevaVacuna.getFormaAdministracion());
-				statement.setInt(5, codFab);
-				
-				statement.executeUpdate();
-				statement.close();
-				realizado = true;
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(sql);
+			statement.setString(1, nuevaVacuna.getCodigo());
+			statement.setString(2, nuevaVacuna.getNombreVacuna());
+			statement.setString(3, nuevaVacuna.getTipoVacuna());
+			statement.setString(4, nuevaVacuna.getFormaAdministracion());
+			statement.setInt(5, codFab);
+			
+			statement.executeUpdate();
+			statement.close();
+			realizado = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		return realizado;
-	}
-	
-	private boolean datosVacunaValidos(Vacuna vacuna) {
-		boolean validacion = false;
-		
-		if ( codigoVacunaValido(vacuna.getCodigo()) && (vacuna.getNombreVacuna() != null) && 
-			(vacuna.getFabricante() != null) && (!vacuna.getTipoVacuna().equalsIgnoreCase("<Seleccionar>")) &&
-			(!vacuna.getFormaAdministracion().equalsIgnoreCase("<Seleccionar>")) /*&& (vacuna.getProteccion().size() > 0)*/ ) {
-			
-			validacion = true;
-		}
-		
-		return validacion;
 	}
 	
 	/*NECESARIA MISAEL*/
@@ -439,8 +424,27 @@ public class Clinica {
 	}
 	
 	/*NECESARIA NAOKI*/
-	public void insertarEnfermedad (Enfermedad enfermedad) {
-		misEnfermedades.add(enfermedad);
+	public boolean insertarEnfermedad (Enfermedad enfermedad, int codTipo) throws SQLException {
+		boolean realizado = false;
+		PreparedStatement statement = null;
+		String sql = "insert into enfermedad (cod_enf, nombre_enf, desc_enf, cod_tipo) "
+				+ "values (?, ?, ?, ?);";
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(sql);
+			statement.setString(1, enfermedad.getCodigo());
+			statement.setString(2, enfermedad.getNombreEnfermedad());
+			statement.setString(3, enfermedad.getDescripcionEnfermedad());
+			statement.setInt(4, codTipo);
+			
+			statement.executeUpdate();
+			statement.close();
+			realizado = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return realizado;
 	}
 	
 	/*NECESARIA MISAEL*/
@@ -455,7 +459,7 @@ public class Clinica {
 		
 		while(resul.next()) {
 			
-			medico = new Medico(cod, resul.getString("username"), "Contraseña", resul.getString("nombre"), resul.getString("apellido"),
+			medico = new Medico(cod, resul.getString("username"), "Contraseï¿½a", resul.getString("nombre"), resul.getString("apellido"),
 					resul.getString("telefono"),buscarEspecialidadByCodMedico(cod));
 			
 		}
