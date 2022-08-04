@@ -26,6 +26,7 @@ import javax.swing.table.DefaultTableModel;
 
 import logico.CitaMedica;
 import logico.Clinica;
+import logico.ConexionSQL;
 import logico.Consulta;
 import logico.Enfermedad;
 import logico.HistoriaClinica;
@@ -45,6 +46,7 @@ import javax.swing.ScrollPaneConstants;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.ImageIcon;
@@ -86,8 +88,9 @@ public class ConsultasVisual extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public ConsultasVisual(CitaMedica cita,Medico medico) {
+	public ConsultasVisual(CitaMedica cita,Medico medico) throws SQLException {
 		setModal(true);
 		setTitle("Consulta");
 		setResizable(false);
@@ -117,7 +120,12 @@ public class ConsultasVisual extends JDialog {
 						JOptionPane.showMessageDialog(null, "Favor colocar al menos un sintoma", "Error", JOptionPane.ERROR_MESSAGE);
 					}else {
 						panelSintomas.setVisible(false);
-						loadEnfermedades();
+						try {
+							loadEnfermedades();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 			});
@@ -412,38 +420,90 @@ public class ConsultasVisual extends JDialog {
 		}
 		loadVacunas();
 	}
-	private void loadEnfermedades() {
+	private void loadEnfermedades() throws SQLException {
 		
 		modelEnfermedades.setRowCount(0);
 		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
 		
+
+		String queryEnfCod = "select nombre_enf from enfermedad";
+		PreparedStatement stamentCodEnf = ConexionSQL.getInstance().getConexion().prepareStatement(queryEnfCod);
+		ResultSet res = stamentCodEnf.executeQuery();
 		
-				for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
+		String queryEnfNombre = "select nombre_enf from enfermedad";
+		PreparedStatement stamentNom = ConexionSQL.getInstance().getConexion().prepareStatement(queryEnfNombre);
+		ResultSet res1 = stamentNom.executeQuery();
+		
+		String queryTipoEnf = "select enfermedad.*, tipo_enfermedad.nombre_tipo from enfermedad, tipo_enfermedad "
+							+ "where enfermedad.cod_tipo = tipo_enfermedad.cod_tipo;";
+		
+		PreparedStatement stamentTipo = ConexionSQL.getInstance().getConexion().prepareStatement(queryTipoEnf);
+		ResultSet res2 = stamentTipo.executeQuery();
+		
+		while(res.next() && res1.next() && res2.next()) {
+			rowsEnfermedades[0]=res.getString("cod_enf");
+			rowsEnfermedades[1]=res1.getString("nombre_enf");
+			rowsEnfermedades[2]=res2.getString("nombre_tipo");
+			modelEnfermedades.addRow(rowsEnfermedades);
+		}
+		
+		stamentCodEnf.close();
+		stamentNom.close();
+		stamentTipo.close();
+		res.close();
+		res1.close();
+		res2.close();
+		
+		
+		/*			for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
 					rowsEnfermedades[0]=  Clinica.getInstance().getMisEnfermedades().get(i).getCodigo();
 					rowsEnfermedades[1]=  Clinica.getInstance().getMisEnfermedades().get(i).getNombreEnfermedad();
 					rowsEnfermedades[2]=  Clinica.getInstance().getMisEnfermedades().get(i).getTipoEnfermedad();
 					modelEnfermedades.addRow(rowsEnfermedades);
-				}
+				}*/
 		
 	}
 	
-	private void loadVacunas() {
-		
-		
-		
-		
-		
+	private void loadVacunas() throws SQLException {
 		
 		modelVacunas.setRowCount(0);
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
 		
+		
+		String queryVacCod = "select vacuna.cod_vacuna from vacuna";
+		PreparedStatement stamentCodVac = ConexionSQL.getInstance().getConexion().prepareStatement(queryVacCod);
+		ResultSet res = stamentCodVac.executeQuery();
+		
+		String queryVacNombre = "select vacuna.nombre_vacuna from vacuna";
+		PreparedStatement stamentNom = ConexionSQL.getInstance().getConexion().prepareStatement(queryVacNombre);
+		ResultSet res1 = stamentNom.executeQuery();
+		
+		String queryVacFab = "select vacuna.*,fabricante.nombre_fab from vacuna,fabricante where vacuna.cod_fab = fabricante.cod_fab;";
+		PreparedStatement stamentFab = ConexionSQL.getInstance().getConexion().prepareStatement(queryVacFab);
+		ResultSet res2 = stamentFab.executeQuery();
+		
+		while(res.next() && res1.next() && res2.next()) {
+			rowsVacunas[0]=res.getString("cod_vacuna");
+			rowsVacunas[1]=res1.getString("nombre_vacuna");
+			rowsVacunas[2]=res2.getString("nombre_fab");
+			modelVacunas.addRow(rowsVacunas);
+		}
+		
+		stamentCodVac.close();
+		stamentFab.close();
+		stamentNom.close();
+		res.close();
+		res1.close();
+		res2.close();
+				
+		/*
 			for (int i = 0; i < Clinica.getInstance().getMisVacunas().size(); i++) {
 				rowsVacunas[0]= Clinica.getInstance().getMisVacunas().get(i).getCodigo();
 				rowsVacunas[1]= Clinica.getInstance().getMisVacunas().get(i).getNombreVacuna();
 				rowsVacunas[2]= Clinica.getInstance().getMisVacunas().get(i).getFabricante();
-				modelVacunas.addRow(rowsVacunas);
+				modelVacunas.addRow(rowsVacunas);*/
 
 		
 		}
 	}
-}
+
