@@ -19,6 +19,7 @@ public class Clinica {
 	private ArrayList<Vacuna> misVacunas;
 	private static Clinica clinica;
 	private static Usuario loginUser; 
+	private String hashkey = "grupo2";
 	
 	private Clinica() {
 		this.misPacientes = new ArrayList<Paciente>();
@@ -343,15 +344,30 @@ public class Clinica {
 	
 	
 	/*NECESARIA NAOKI*/
-	public boolean agregarVacuna(Vacuna nuevaVacuna) {
-		boolean operacionCorrecta = false;
+	public boolean agregarVacuna(Vacuna nuevaVacuna, int codFab) throws SQLException {
+		boolean realizado = false;
+		PreparedStatement statement = null;
+		String sql = "insert into vacuna(cod_vacuna, nombre_vacuna, tipo_vacuna, forma_admin, cod_fab) "
+				+ "values (?, ?, ?, ?, ?);";
 		
 		if (datosVacunaValidos(nuevaVacuna)) {
-			misVacunas.add(nuevaVacuna);
-			operacionCorrecta = true;
+			try {
+				statement = ConexionSQL.getConexion().prepareStatement(sql);
+				statement.setString(1, nuevaVacuna.getCodigo());
+				statement.setString(2, nuevaVacuna.getNombreVacuna());
+				statement.setString(3, nuevaVacuna.getTipoVacuna());
+				statement.setString(4, nuevaVacuna.getFormaAdministracion());
+				statement.setInt(5, codFab);
+				
+				statement.executeUpdate();
+				statement.close();
+				realizado = true;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
-		return operacionCorrecta;
+		return realizado;
 	}
 	
 	private boolean datosVacunaValidos(Vacuna vacuna) {
