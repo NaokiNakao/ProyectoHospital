@@ -11,6 +11,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logico.Clinica;
+import logico.ConexionSQL;
 import logico.Consulta;
 import logico.Enfermedad;
 import logico.HistoriaClinica;
@@ -30,6 +31,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.Component;
 import javax.swing.Box;
 import javax.swing.JTextField;
@@ -115,8 +119,18 @@ public class EstadisticaEnfermedad extends JDialog {
 						btnEliminar.setEnabled(true);
 						
 						String cod = (String) modelEnfermedades.getValueAt(aux, 0);
-						selectedEnfermedad=Clinica.getInstance().buscarEnfermedadByCodigo(cod);
-						loadVacunas(selectedEnfermedad);
+						try {
+							selectedEnfermedad=Clinica.getInstance().buscarEnfermedadByCodigo(cod);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						try {
+							loadVacunas(selectedEnfermedad);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 							
 						float[] h = Clinica.getInstance().porcentajeEnfermedadPorGenero(selectedEnfermedad.getCodigo());
 							
@@ -327,20 +341,31 @@ public class EstadisticaEnfermedad extends JDialog {
 	}
 	
 	
-	private void loadVacunas(Enfermedad enfermedad) {
+	
+	
+	
+	private void loadVacunas(Enfermedad enfermedad) throws SQLException {
 		modelVacunas.setRowCount(0);
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
 		
-		ArrayList<Vacuna> misVacunas = null;
-		if(enfermedad != null) {
-			misVacunas =  Clinica.getInstance().vacunasParaEnfermedad(enfermedad.getCodigo());
-			
-			for (Vacuna vacuna : misVacunas) {
-				rowsVacunas[0]= vacuna.getCodigo();
-				rowsVacunas[1]=  vacuna.getNombreVacuna();
-				rowsVacunas[2]= vacuna.getFabricante();
-				modelVacunas.addRow(rowsVacunas);
-			}
+		
+		String query = "select vacuna.*,fabricante.nombre_fab  "
+				+ "from vacuna,fabricante,vacuna_proteccion_enfermedad,enfermedad "
+				+ "where vacuna.cod_fab = fabricante.cod_fab and enfermedad.cod_enf = vacuna_proteccion_enfermedad.cod_enf "
+				+ "and enfermedad.cod_enf = ? and vacuna.cod_vacuna = vacuna_proteccion_enfermedad.cod_vacuna ";
+		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+		stament.setString(1,enfermedad.getCodigo());
+		
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			rowsVacunas[0]= resul.getString("cod_vacuna");
+			rowsVacunas[1]=  resul.getString("nombre_vacuna");
+			rowsVacunas[2]= resul.getString("nombre_fab");
+			modelVacunas.addRow(rowsVacunas);
 		}
+		
+		stament.close();
+		resul.close();
 	}
 }

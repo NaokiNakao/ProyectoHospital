@@ -200,7 +200,7 @@ public class Clinica {
 	 * para cierta enfermedad dado su c�digo.
 	*/
 	
-	/*MUY NECESARIA MISAEL*/
+	/*MUY NECESARIA MISAEL */  /*SUSTUIDA EN CLASE VISUAL ESTADISTICAENF
 	public ArrayList<Vacuna> vacunasParaEnfermedad(String codigoEnfermedad) {//PREGUNTALE A LA PROF
 		ArrayList<Vacuna> vacunasDisponibles = new ArrayList<Vacuna>();
 		
@@ -213,7 +213,7 @@ public class Clinica {
 		}
 		
 		return vacunasDisponibles;
-	}
+	}*/
 	
 	
 	public Paciente buscarPaciente(String cedula) throws SQLException {//probar main
