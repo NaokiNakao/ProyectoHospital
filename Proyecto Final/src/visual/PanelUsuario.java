@@ -128,8 +128,14 @@ public class PanelUsuario extends JDialog {
 			btnUsuarios = new JButton("Usuarios");
 			btnUsuarios.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					ListadoUsuario listado = new ListadoUsuario();
-					listado.setVisible(true);
+					ListadoUsuario listado;
+					try {
+						listado = new ListadoUsuario();
+						listado.setVisible(true);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			});
 			btnUsuarios.setBounds(10, 155, 134, 25);

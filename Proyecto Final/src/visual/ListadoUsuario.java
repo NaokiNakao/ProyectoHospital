@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 
 import logico.Administrador;
 import logico.Clinica;
+import logico.ConexionSQL;
 import logico.Enfermedad;
 import logico.Medico;
 import logico.Usuario;
@@ -28,6 +29,9 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ListadoUsuario extends JDialog {
 
@@ -56,8 +60,9 @@ public class ListadoUsuario extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public ListadoUsuario() {
+	public ListadoUsuario() throws SQLException {
 		setModal(true);
 		setResizable(false);
 		setTitle("Listado de usuarios");
@@ -142,6 +147,23 @@ public class ListadoUsuario extends JDialog {
 		txtId.setColumns(10);
 		
 		JButton btnBuscar = new JButton("Buscar");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Usuario user = Clinica.getInstance().buscarUsuarioById(txtId.getText().toString());
+					
+					if(user.getId().contains("A")) {
+						cargarUsuarios(3,user);
+					}else if(user.getId().contains("M")) {
+						cargarUsuarios(4,user);
+					}
+					
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		btnBuscar.setBounds(175, 21, 89, 23);
 		panel.add(btnBuscar);
 		
@@ -149,7 +171,12 @@ public class ListadoUsuario extends JDialog {
 		cbxTipo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int selection = cbxTipo.getSelectedIndex();
-				cargarUsuarios(selection);
+				try {
+					cargarUsuarios(selection,null);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 		cbxTipo.setModel(new DefaultComboBoxModel(new String[] {"Todos", "Administradores", "M\u00E9dicos"}));
@@ -175,7 +202,12 @@ public class ListadoUsuario extends JDialog {
 					btnEliminar.setEnabled(true);
 					
 					String idUsuario = (String) table.getValueAt(fila,0);
-					selectedUser = Clinica.getInstance().buscarUsuarioById(idUsuario);
+					try {
+						selectedUser = Clinica.getInstance().buscarUsuarioById(idUsuario);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -186,49 +218,102 @@ public class ListadoUsuario extends JDialog {
 		table.setModel(model);
 		scrollPane.setViewportView(table);
 		
-		cargarUsuarios(0);
+		cargarUsuarios(0,null);
 	}
 	
-	public static void cargarUsuarios(int select) {
+	public static void cargarUsuarios(int select,Usuario user) throws SQLException {
 		model.setRowCount(0);
 		rows = new Object[model.getColumnCount()];
+		
+		String query = null;
+		PreparedStatement stament = null;
+		ResultSet resul = null;
 		
 		switch (select) 
 		{
 			case 0:
-				for (Usuario user : Clinica.getInstance().getMisUsuarios()) {
-					rows[0] = user.getId();
-					rows[1] = user.getNombre();
-					rows[2] = user.getApellido();
-					rows[3] = user.getTelefono();
+				
+					query = "select medico.cod_medico as cod,medico.nombre as nombre,medico.apellido as apellido ,medico.telefono as telefono "
+								+ "from  medico "
+								+ "union  "
+								+ "select administrador.cod_admin, administrador.nombre,administrador.apellido,administrador.telefono "
+								+ "from administrador";
+				
+				 stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+				 resul = stament.executeQuery();
+				
+				
+				while(resul.next()) {
+					rows[0] = resul.getString("cod");
+					rows[1] = resul.getString("nombre");
+					rows[2] = resul.getString("apellido");
+					rows[3] = resul.getString("telefono");
 					model.addRow(rows);
 				}
 				break;
 			
 			case 1:
-				for (Usuario user : Clinica.getInstance().getMisUsuarios()) {
-					if (user instanceof Administrador) {
-						rows[0] = user.getId();
-						rows[1] = user.getNombre();
-						rows[2] = user.getApellido();
-						rows[3] = user.getTelefono();
+				query = "select administrador.cod_admin,administrador.nombre,administrador.apellido,administrador.telefono from administrador";
+				 stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+				 resul = stament.executeQuery();
+				
+				while(resul.next()) {
+					if (resul.getString("cod_admin").contains("A")) {
+						rows[0] = resul.getString("cod_admin");
+						rows[1] = resul.getString("nombre");
+						rows[2] = resul.getString("apellido");
+						rows[3] = resul.getString("telefono");
 						model.addRow(rows);
 					}
 				}
+				
+				stament.close();
+				resul.close();
 				break;
 				
 			case 2:
-				for (Usuario user : Clinica.getInstance().getMisUsuarios()) {
-					if (user instanceof Medico) {
-						rows[0] = user.getId();
-						rows[1] = user.getNombre();
-						rows[2] = user.getApellido();
-						rows[3] = user.getTelefono();
+				
+				 query = "select medico.cod_medico,medico.nombre,medico.apellido,medico.telefono from medico";
+				 stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+				 resul = stament.executeQuery();
+				
+				while(resul.next()) {
+					if (resul.getString("cod_medico").contains("M")) {
+						rows[0] = resul.getString("cod_medico");
+						rows[1] = resul.getString("nombre");
+						rows[2] = resul.getString("apellido");
+						rows[3] = resul.getString("telefono");
 						model.addRow(rows);
 					}
 				}
-				break;
+				
+				stament.close();
+				resul.close();
+				break;	
+				
+			case 3 :
+				
+				rows[0] = user.getId();
+				rows[1] = user.getNombre();
+				rows[2] = user.getApellido();
+				rows[3] = user.getTelefono();
+				model.addRow(rows);
+			break;
+				
+				
+			case 4 :
+				
+				rows[0] = user.getId();
+				rows[1] = user.getNombre();
+				rows[2] = user.getApellido();
+				rows[3] = user.getTelefono();
+				model.addRow(rows);
+			
+			break;
+					
 		}
+		
+		
 		
 		btnModificar.setEnabled(false);
 		btnEliminar.setEnabled(false);
