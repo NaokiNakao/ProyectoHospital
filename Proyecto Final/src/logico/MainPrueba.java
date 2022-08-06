@@ -1,8 +1,12 @@
 package logico;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -44,7 +48,7 @@ public class MainPrueba {
 		
 		//Vacuna vac1 = new Vacuna("4", "4ta Vac", "1", null, "Inactivada", "Intramuscular");
 		
-		System.out.println(Clinica.getInstance().buscarEspecialidadByCod(4));
+		//System.out.println(Clinica.getInstance().buscarEspecialidadByCod(4));
 		
 		//System.out.println(Clinica.getInstance().buscarVacunaByCodigo("1").getFabricante());
 		
@@ -112,10 +116,24 @@ public class MainPrueba {
 		
 		
 		
-		String[] arreglo = new String();
+		//String[] arreglo = new String();
 		
+		/*int aux = 0;
+		String query = "select count(*) as cantidad "
+				+ "from cita_medica "
+				+ "where fecha_hora_cita = ? and cod_medico = ?;";
+		PreparedStatement statement = ConexionSQL.getConexion().prepareStatement(query);
+		statement.setString(1, "2022-09-01 14:00:00");
+		statement.setString(2, "M0003");
+		ResultSet cantidad = statement.executeQuery();
+		while(cantidad.next()) {
+			aux = cantidad.getInt("cantidad");
+		}
 		
+		System.out.println(aux);*/
 		
+		boolean disponible = Clinica.getInstance().medicoDisponible("2022-09-01 14:00:00", "M0002");
+		System.out.println(disponible);
 		
 		
 		

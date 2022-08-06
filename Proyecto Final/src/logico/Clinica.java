@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
@@ -731,20 +733,31 @@ public class Clinica {
 	*/
 
 	/*NECESARIA NAOKI*/
-	public boolean medicoDisponible(Date fechaHora, String codMedico) {
+	public boolean medicoDisponible(String fechaHoraBuscada, String codMedicoBuscado) {
 		boolean disponible = true;
-		String query = "select fecha_hora_cita "
+		String query = "select count(*) as cantidad "
 				+ "from cita_medica "
-				+ "where cod_medico = ?;";
+				+ "where fecha_hora_cita = ? and cod_medico = ?;";
 		PreparedStatement statement = null;
 		
 		try {
 			statement = ConexionSQL.getConexion().prepareStatement(query);
-			statement.setString(1, codMedico);
-			ResultSet fechaHoraCitas = statement.executeQuery();
+			statement.setString(1, fechaHoraBuscada);
+			statement.setString(2, codMedicoBuscado);
 			
+			ResultSet cantidadCitas = statement.executeQuery();
+			int n = 0;
 			
+			while (cantidadCitas.next()) {
+				n = cantidadCitas.getInt("cantidad");
+			}
 			
+			statement.close();
+			cantidadCitas.close();
+			
+			if (n > 0) {
+				disponible = false;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -850,9 +863,11 @@ public class Clinica {
 	
 	public void cargarPadecimiento(Paciente paciente) {
 		
-		
-		
-		
+	}
+	
+	private LocalDateTime formatoFechaHora(String fechaHora) {
+		String formato = "yyyy-mm-dd hh:mm:ss";
+		return LocalDateTime.parse(fechaHora, DateTimeFormatter.ofPattern(formato));
 	}
 	
 }
