@@ -223,16 +223,16 @@ public class Clinica {
 		Paciente paciente= null;
 		
 		String query = "select paciente.* from paciente where ced_paciente = ?";
-		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
-		stament.setString(1, cedula);
-		ResultSet result = stament.executeQuery();
+		PreparedStatement statement = ConexionSQL.getConexion().prepareStatement(query);
+		statement.setString(1, cedula);
+		ResultSet result = statement.executeQuery();
 		
 		while(result.next()) {
 		paciente = new Paciente(cedula, result.getString("nombre"), result.getString("genero"), result.getDate("fecha_nac"), 
 				result.getString("cod_ciudad"),result.getString("telefono"));
 		}
 		result.close();
-		stament.close();
+		statement.close();
 
 		return paciente;
 	}
@@ -264,16 +264,16 @@ public class Clinica {
 			query = "select * from administrador where cod_admin = ?";
 		}
 		
-		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
-		stament.setString(1, idUsuario);
-		ResultSet res = stament.executeQuery();
+		PreparedStatement statement = ConexionSQL.getConexion().prepareStatement(query);
+		statement.setString(1, idUsuario);
+		ResultSet res = statement.executeQuery();
 		
 		while(res.next()) {
 			
 			user = new Usuario(idUsuario, res.getString("username"),res.getString("encrypted_password") 
 				,res.getString("nombre"), res.getString("apellido"), res.getString("telefono"));	
 		}
-		stament.close();
+		statement.close();
 		res.close();
 		
 		return user;
@@ -287,13 +287,13 @@ public class Clinica {
 		String query1 = "select * from vacuna where cod_vacuna = ?";
 		String query3 = "select nombre_fab from fabricante,vacuna where vacuna.cod_vacuna = ? and fabricante.cod_fab = vacuna.cod_fab";
 		
-		PreparedStatement stament1 = ConexionSQL.getConexion().prepareStatement(query1);
-		stament1.setString(1, codigoVacuna);
-		ResultSet res = stament1.executeQuery();
+		PreparedStatement statement1 = ConexionSQL.getConexion().prepareStatement(query1);
+		statement1.setString(1, codigoVacuna);
+		ResultSet res = statement1.executeQuery();
 		
-		PreparedStatement stament2 = ConexionSQL.getConexion().prepareStatement(query3);
-		stament2.setString(1, codigoVacuna);
-		ResultSet res2 = stament2.executeQuery();
+		PreparedStatement statement2 = ConexionSQL.getConexion().prepareStatement(query3);
+		statement2.setString(1, codigoVacuna);
+		ResultSet res2 = statement2.executeQuery();
 		
 		while(res.next() && res2.next()) {
 			
@@ -660,34 +660,37 @@ public class Clinica {
 		
 	if(user.getId().contains("M")) {
 		String update = "UPDATE medico "
-				+ "SET apellido = ?, nombre= ? ,username = ? ,telefono = ? , ?"
+				+ "SET apellido = ?, nombre= ? ,username = ? ,telefono = ? , encrypted_password = encryptbypassphrase(?, ?) "
 				+ "WHERE medico.cod_medico = ?";
 		try {
-			PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(update);
-			stament.setString(1, user.getApellido());
-			stament.setString(2, user.getNombre());
-			stament.setString(3, user.getLogin());
-			stament.setString(4, user.getTelefono());
-			stament.setString(5, user.getPassword());
-			stament.setString(6, user.getId());
-			stament.executeUpdate();
+			PreparedStatement statement = ConexionSQL.getInstance().getConexion().prepareStatement(update);
+			statement.setString(1, user.getApellido());
+			statement.setString(2, user.getNombre());
+			statement.setString(3, user.getLogin());
+			statement.setString(4, user.getTelefono());
+			statement.setString(5, "grupo2");
+			statement.setString(6, user.getPassword());
+			statement.setString(7, user.getId());
+			statement.executeUpdate();
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		}else if(user.getId().contains("A")) {
 			String update = "UPDATE administrador "
-					+ "SET apellido = ?, nombre= ? ,username = ? ,telefono = ? , puesto_laboral = ?"
+					+ "SET apellido = ?, nombre= ? ,username = ? ,telefono = ? , puesto_laboral = ?, encrypted_password = encryptbypassphrase(?, ?) "
 					+ "WHERE administrador.cod_admin = ?";
 		try {
-			PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(update);
-			stament.setString(1, user.getApellido());
-			stament.setString(2, user.getNombre());
-			stament.setString(3, user.getLogin());
-			stament.setString(4, user.getTelefono());
-			stament.setString(5, texto);
-			stament.setString(6, user.getId());
-			stament.executeUpdate();
+			PreparedStatement statement = ConexionSQL.getInstance().getConexion().prepareStatement(update);
+			statement.setString(1, user.getApellido());
+			statement.setString(2, user.getNombre());
+			statement.setString(3, user.getLogin());
+			statement.setString(4, user.getTelefono());
+			statement.setString(5, texto);
+			statement.setString(6, "grupo2");
+			statement.setString(7, user.getPassword());
+			statement.setString(8, user.getId());
+			statement.executeUpdate();
 			
 		}catch (SQLException e1) {
 				// TODO Auto-generated catch block
@@ -703,9 +706,9 @@ public class Clinica {
 		int cod_especialidad = 0;
 		
 		String consulta = "select cod_especialidad from especialidad where nombre_especialidad = ?";
-		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(consulta);
-		stament.setString(1, nombre_especialidad);
-		ResultSet result = stament.executeQuery();
+		PreparedStatement statement = ConexionSQL.getConexion().prepareStatement(consulta);
+		statement.setString(1, nombre_especialidad);
+		ResultSet result = statement.executeQuery();
 		
 		
 		while (result.next()) {
@@ -713,7 +716,7 @@ public class Clinica {
 			cod_especialidad = result.getInt("cod_especialidad");
 		}
 		
-		stament.close();
+		statement.close();
 		result.close();
 		
 	return cod_especialidad;
@@ -724,16 +727,16 @@ public class Clinica {
 		String especialidad = null;
 		
 		String consulta = "select nombre_especialidad from especialidad where cod_especialidad = ?";
-		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(consulta);
-		stament.setInt(1, cod_especialidad);
+		PreparedStatement statement = ConexionSQL.getConexion().prepareStatement(consulta);
+		statement.setInt(1, cod_especialidad);
 		
-		ResultSet res = stament.executeQuery();
+		ResultSet res = statement.executeQuery();
 		
 		while(res.next()) {
 			especialidad = res.getString("nombre_especialidad");
 		}
 		
-		stament.close();
+		statement.close();
 		res.close();
 		
 		
@@ -747,10 +750,10 @@ public class Clinica {
 		String query = "select especialidad.* from especialidad,medico,medico_especialidad"
 				+ "where medico_especialidad.cod_medico = medico.cod_medico"
 				+ "and medico_especialidad.cod_especialidad = especialidad.cod_especialidad and medico.cod_medico = ?;";
-		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
-		stament.setString(1, cod);
+		PreparedStatement statement = ConexionSQL.getConexion().prepareStatement(query);
+		statement.setString(1, cod);
 		
-		ResultSet res = stament.executeQuery();
+		ResultSet res = statement.executeQuery();
 		
 		while(res.next()) {
 			especialidad = res.getString("nombre_especialidad");
@@ -792,10 +795,10 @@ public class Clinica {
 		String query = "select especialidad.* from especialidad,medico,medico_especialidad"
 				+ "where medico_especialidad.cod_medico = medico.cod_medico"
 				+ "and medico_especialidad.cod_especialidad = especialidad.cod_especialidad and medico.cod_medico = ?;";
-		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
-		stament.setString(1, cod);
+		PreparedStatement statement = ConexionSQL.getConexion().prepareStatement(query);
+		statement.setString(1, cod);
 		
-		ResultSet res = stament.executeQuery();
+		ResultSet res = statement.executeQuery();
 		
 		while(res.next()) {
 			especialidad = res.getString("cod_especialidad");
@@ -862,32 +865,33 @@ public class Clinica {
 	}
 
 	
-	public Usuario buscarUsuarioByUsername(String username) throws SQLException {
+	public Usuario buscarUsuarioByUsername(String username) {
 		Usuario user = null;
-		String query = "select *"
-				+ "from medico, administrador"
-				+ "where medico.username = ? or administrador.username = ?;";
+		String query = "select medico.cod_medico as cod, medico.nombre as nombre, medico.apellido as apellido, medico.username as username, medico.encrypted_password as password, medico.telefono as telefono "
+				+ "from medico "
+				+ "where medico.username = ?  "
+				+ "union "
+				+ "select administrador.cod_admin, administrador.nombre, administrador.apellido, administrador.username, administrador.encrypted_password, administrador.telefono "
+				+ "from administrador "
+				+ "where administrador.username = ? ";
+		PreparedStatement statement = null;
 		
-		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
-		ResultSet result = stament.executeQuery(query);
-		
-		if(result.getString(1).contains("M")) {
-		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(query);
+			statement.setString(1, username);
+			statement.setString(2, username);
+			ResultSet result = statement.executeQuery();
+			
 			while(result.next()) {
-			user = new Medico(result.getString("cod_medico"), username, result.getString("encrypted_password"), result.getString("nombre"), result.getString("apellido"), 
-				result.getString("telefono"));
+				user = new Usuario(result.getString("cod"), username, result.getString("password"), result.getString("nombre"), result.getString("apellido"), 
+					result.getString("telefono"));
 			}
 			
-		}else if(result.getString(1).contains("A")){
-			
-			while(result.next()) {
-			user = new Administrador(result.getString("cod_admin"), username, result.getString("encrypted_password"), result.getString("nombre"), result.getString("apellido"), 
-					result.getString("telefono"), buscarPuestoLaboralByCodAdmin(result.getString("cod_admin")));
-			}
+			statement.close();
+			result.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		
-		stament.close();
-		result.close();
 		
 		return user;
 	}

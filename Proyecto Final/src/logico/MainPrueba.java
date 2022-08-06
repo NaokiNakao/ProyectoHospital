@@ -131,9 +131,30 @@ public class MainPrueba {
 		
 		System.out.println(aux);*/
 		
-		boolean disponible = Clinica.getInstance().medicoDisponible("2022-09-01 14:00:00", "M0002");
-		System.out.println(disponible);
+		/*boolean disponible = Clinica.getInstance().medicoDisponible("2022-09-01 14:00:00", "M0002");
+		System.out.println(disponible);*/
 		
+		Usuario newUser = new Usuario("M0002", "mjp0002", "juanlopez", "Juan", "Lopez", "8492958843");
+		Clinica.getInstance().modificarUsuario(newUser, null);
+		
+		String query = "select convert(nvarchar(20), DECRYPTBYPASSPHRASE(?, encrypted_password)) as password "
+				+ "from medico "
+				+ "where cod_medico = ?";
+		PreparedStatement statement = ConexionSQL.getConexion().prepareStatement(query);
+		statement.setString(1, "grupo2");
+		statement.setString(2, "M0002");
+		ResultSet result = statement.executeQuery();
+		String password = null;
+		
+		while(result.next()) {
+			password = result.getString("password");
+		}
+		
+		statement.close();
+		result.close();
+		
+		System.out.println(password);
+
 		
 		
 		
