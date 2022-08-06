@@ -731,15 +731,22 @@ public class Clinica {
 	*/
 
 	/*NECESARIA NAOKI*/
-	public boolean medicoDisponible(Date fecha, String idMedico) {
+	public boolean medicoDisponible(Date fechaHora, String codMedico) {
 		boolean disponible = true;
-		int i = 0;
+		String query = "select fecha_hora_cita "
+				+ "from cita_medica "
+				+ "where cod_medico = ?;";
+		PreparedStatement statement = null;
 		
-		while (disponible && i < citasMedicas.size()) {
-			if (citasMedicas.get(i).getFechaCita().equals(fecha) && citasMedicas.get(i).getMedico().getId().equalsIgnoreCase(idMedico)) {
-				disponible = false;
-			}
-			i++;
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(query);
+			statement.setString(1, codMedico);
+			ResultSet fechaHoraCitas = statement.executeQuery();
+			
+			
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		return disponible;
