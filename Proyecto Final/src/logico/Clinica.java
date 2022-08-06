@@ -368,7 +368,7 @@ public class Clinica {
 		return realizado;
 	}
 	
-	/*NECESARIA MISAEL*/
+	/*NECESARIA MISAEL*/ 
 	public void modificarVacuna(Vacuna modificacion, int index) {
 		if (index != -1) {
 			misVacunas.set(index, modificacion);
@@ -563,30 +563,37 @@ public class Clinica {
 	}
 	
 	
-	public void insertarMedico(Medico med,String especialidad) throws SQLException { ///probar en el main
+	public void insertarUsuario(Usuario med,String especialidad) throws SQLException { ///probada
 		
-		String InsertConsul = "Insert Into medico (cod_medico,nombre,apellido,username,pass,telefono) Values (?,?,?,?,?,?)";
+		
+		String InsertConsul = null;
 		PreparedStatement consulta = null;
 		
+		if(med.getId().contains("M")) {
+		
+			 InsertConsul = "Insert Into medico (cod_medico,nombre,apellido,username,encrypted_password,telefono) Values (?,?,?,?,?,?)";
+
 		try {
 		consulta = ConexionSQL.getConexion().prepareStatement(InsertConsul);
-		consulta.setString(1,med.getId());
+		consulta.setBytes(1, med.getId().getBytes());
 		consulta.setString(2,med.getNombre());
 		consulta.setString(3,med.getApellido());
 		consulta.setString(4,med.getLogin());
-		consulta.setString(5,med.getPassword());
+		consulta.setBytes(5,med.getPassword().getBytes());
 		consulta.setString(6,med.getTelefono());
 		
 		consulta.executeUpdate();
 		} catch (SQLException e) {
 			
-			System.out.println("Fallo la consulta");
+			System.out.println("Fallo la consulta de insertar medico");
 			e.printStackTrace();
 		}finally {
 			
 			if(consulta != null)
 			consulta.close();
 		}
+		
+		if(buscarCodEspecialidadByNombre(especialidad)== 0) {
 		
 		String InsertConsul2 = "Insert Into especialidad (nombre_especialidad) Values (?)";
 		PreparedStatement consulta2 = null;
@@ -598,14 +605,14 @@ public class Clinica {
 		
 		} catch (SQLException e) {
 			
-			System.out.println("Fallo la consulta");
+			System.out.println("Fallo la consulta de insertar especialidad");
 			e.printStackTrace();
 		}finally {
 			
 			if(consulta2 != null)
 				consulta2.close();
+			}
 		}
-		
 		
 		String InsertConsul3 = "Insert Into medico_especialidad (cod_medico,cod_especialidad) Values (?,?)";
 		PreparedStatement consulta3 = null;
@@ -618,15 +625,78 @@ public class Clinica {
 		
 		} catch (SQLException e) {
 			
-			System.out.println("Fallo la consulta");
+			System.out.println("Fallo la consulta medico especialidad");
 			e.printStackTrace();
 		}finally {
 			
 			if(consulta3 != null)
 				consulta3.close();
-		}
+			
+			}
+		}else if (med.getId().contains("A")) {
+			 InsertConsul = "Insert Into administrador (cod_admin,puesto_laboral,nombre,apellido,username,encrypted_password,telefono)"
+						+ "values (?,?,?,?,?,?,?)";
+			 try {
+			 	consulta = ConexionSQL.getConexion().prepareStatement(InsertConsul);
+				consulta.setString(1,med.getId());
+				consulta.setString(2,especialidad);
+				consulta.setString(3,med.getNombre());
+				consulta.setString(4,med.getApellido());
+				consulta.setString(5,med.getLogin());
+				consulta.setBytes(6,med.getPassword().getBytes());
+				consulta.setString(7,med.getTelefono());
+			 
+				consulta.executeUpdate(); 
+			 }catch (SQLException e) {
+				 System.out.println("Fallo insertar admin");
+				 e.printStackTrace();
+			 	}
+			}
+			
 		
 	}
+	
+	public void modificarUsuario(Usuario user,String texto) {
+		
+	if(user.getId().contains("M")) {
+		String update = "UPDATE medico "
+				+ "SET apellido = ?, nombre= ? ,username = ? ,telefono = ? , ?"
+				+ "WHERE medico.cod_medico = ?";
+		try {
+			PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(update);
+			stament.setString(1, user.getApellido());
+			stament.setString(2, user.getNombre());
+			stament.setString(3, user.getLogin());
+			stament.setString(4, user.getTelefono());
+			stament.setString(5, user.getPassword());
+			stament.setString(6, user.getId());
+			stament.executeUpdate();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		}else if(user.getId().contains("A")) {
+			String update = "UPDATE administrador "
+					+ "SET apellido = ?, nombre= ? ,username = ? ,telefono = ? , puesto_laboral = ?"
+					+ "WHERE administrador.cod_admin = ?";
+		try {
+			PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(update);
+			stament.setString(1, user.getApellido());
+			stament.setString(2, user.getNombre());
+			stament.setString(3, user.getLogin());
+			stament.setString(4, user.getTelefono());
+			stament.setString(5, texto);
+			stament.setString(6, user.getId());
+			stament.executeUpdate();
+			
+		}catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		}
+	}
+	
 	
 	public int buscarCodEspecialidadByNombre(String nombre_especialidad) throws SQLException /*Probada main*/{
 	

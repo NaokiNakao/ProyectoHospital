@@ -311,40 +311,44 @@ public class RegistroUsuario extends JDialog {
 			 }else{
 
 						try {
-							if(Clinica.getInstance().buscarUsuarioById(txtLogin.getText().toString())!= null) {
-								JOptionPane.showMessageDialog(null, "Este usuario ya existe", "Error", JOptionPane.ERROR_MESSAGE);
-							}else { 
 							 if(rdbtnMedico.isSelected()) {
 								 if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
-									 Medico usu = new Medico( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
+									 Usuario usu = new Medico( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
 											 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText(),txtEspecialidad.getText().toString());
 									 
 									 
-									 
-									 
-					
-									 Clinica.getInstance().insertarMedico(usu,txtEspecialidad.getText().toString());
+									 Clinica.getInstance().insertarUsuario(usu,txtEspecialidad.getText().toString());
 									 limpiar();
 									 JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
-									 txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4)); 
+									 if(rdbtnMedico.isSelected()) {
+										 txtId.setText("M" + Clinica.getInstance().generadorCodigo(4)); 
+									 } else if (rdbtnAdmin.isSelected()) {
+										 txtId.setText("A" + Clinica.getInstance().generadorCodigo(4)); 
+									 }
 							 	}else{
 							 		JOptionPane.showMessageDialog(null, "Favor repetir las contraseï¿½as correctamente", "Error", JOptionPane.ERROR_MESSAGE);
-							 		}
+							 		} 
 								 }else if (rdbtnAdmin.isSelected()) {
 
 							 		if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
-										 Administrador usu = new Administrador( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
+										 Usuario usu = new Administrador( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
 												 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText(),txtCargoLaboral.getText().toString());
-										 Clinica.getInstance().InsertarAdmin(usu);
+										 Clinica.getInstance().insertarUsuario(usu,txtCargoLaboral.getText().toString());
 										 limpiar();
 										 JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
-										 txtId.setText("2322-" + Clinica.getInstance().generadorCodigo(4)); 
+										 
+										 if(rdbtnMedico.isSelected()) {
+											 txtId.setText("M" + Clinica.getInstance().generadorCodigo(4)); 
+										 } else if (rdbtnAdmin.isSelected()) {
+											 txtId.setText("A" + Clinica.getInstance().generadorCodigo(4)); 
+										 }
+										 
 								 	}else{
 								 		JOptionPane.showMessageDialog(null, "Favor repetir las contraseï¿½as correctamente", "Error", JOptionPane.ERROR_MESSAGE);
 							 		
 							 	}
 							 }
-							}
+							
 						} catch (HeadlessException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -384,68 +388,12 @@ public class RegistroUsuario extends JDialog {
 				if(espaciovacio()) {
 					JOptionPane.showMessageDialog(null, "Favor completar todos los espacios", "Error", JOptionPane.ERROR_MESSAGE);
 				}else {
-					user.setNombre(txtNombre.getText().toString());
-					user.setApellido(txtApellido.getText().toString());
-					user.setId(txtId.getText().toString());
-					user.setLogin(txtLogin.getText().toString());
-					user.setTelefono(txtTelefono.getText().toString());
 					
-					
-					/*if(user.getId().contains("M")) {
-						((Medico) user).setEspecialidad(txtEspecialidad.getText().toString());
-					}else */if(user.getId().contains("A")) {
-						((Administrador) user).setPuestoLaboral(txtCargoLaboral.getText().toString());
-					}
-					
-					
-					if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
-						user.setPassword(pfContrasenna.getText().toString());
-					}else {
-						JOptionPane.showMessageDialog(null, "Favor repetir las contraseñas correctamente", "Error", JOptionPane.ERROR_MESSAGE);
-						pfContrasenna.setText("");
-						pfRepetirContrasenna.setText("");
-					}
-					
-					
-					if(user.getId().contains("M")) {
-						String update = "UPDATE medico "
-									+ "SET apellido = ?, nombre= ? ,username = ? ,telefono = ? , ?"
-									+ "WHERE medico.cod_medico = ?";
-						try {
-							PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(update);
-							stament.setString(1, user.getApellido());
-							stament.setString(2, user.getNombre());
-							stament.setString(3, user.getLogin());
-							stament.setString(4, user.getTelefono());
-							stament.setString(5, user.getPassword());
-							stament.setString(6, user.getId());
-							stament.executeUpdate();
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-						
-						
-					}else if(user.getId().contains("A")) {
-						String update = "UPDATE administrador "
-								+ "SET apellido = ?, nombre= ? ,username = ? ,telefono = ? , puesto_laboral = ?"
-								+ "WHERE administrador.cod_admin = ?";
-					try {
-						PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(update);
-						stament.setString(1, user.getApellido());
-						stament.setString(2, user.getNombre());
-						stament.setString(3, user.getLogin());
-						stament.setString(4, user.getTelefono());
-						stament.setString(5, ((Administrador) user).getPuestoLaboral());
-						stament.setString(6, user.getId());
-						stament.executeUpdate();
-						
-					}catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+					 Usuario usu = new Medico( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
+							 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText(),txtEspecialidad.getText().toString());
+					 
+					 Clinica.getInstance().modificarUsuario(user,txtCargoLaboral.getText().toString());
 
-					}
 					
 					JOptionPane.showMessageDialog(null, "Usuario modificado correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
 					dispose();

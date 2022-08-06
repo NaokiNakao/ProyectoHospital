@@ -87,8 +87,14 @@ public class ListadoUsuario extends JDialog {
 				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
-						RegistroUsuario r = new RegistroUsuario(selectedUser);
-						r.setVisible(true);
+						RegistroUsuario r;
+						try {
+							r = new RegistroUsuario(selectedUser);
+							r.setVisible(true);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				});
 				btnModificar.setEnabled(false);
@@ -123,8 +129,15 @@ public class ListadoUsuario extends JDialog {
 					dispose();
 					
 					Usuario r = null;
-					RegistroUsuario registro = new RegistroUsuario(r);
-					registro.setVisible(true);
+					RegistroUsuario registro;
+					try {
+						registro = new RegistroUsuario(r);
+						registro.setVisible(true);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
 				}
 			});
 			btnNuevo.setBounds(177, 11, 89, 23);
