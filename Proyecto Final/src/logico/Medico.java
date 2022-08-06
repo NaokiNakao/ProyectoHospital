@@ -8,7 +8,7 @@ public class Medico extends Usuario {
 	private ArrayList<CitaMedica> misCitas;
 	private ArrayList<Consulta> misConsultas;
 
-	public Medico(String id, String login, String password, String nombre, String apellido, String telefono, String especialidad) {
+	public Medico(String id, String login, String password, String nombre, String apellido, String telefono) {
 		super(id, login, password, nombre, apellido, telefono);
 		//this.especialidad = especialidad;
 		misCitas = new ArrayList<CitaMedica>();

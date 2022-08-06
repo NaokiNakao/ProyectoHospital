@@ -875,7 +875,7 @@ public class Clinica {
 		
 			while(result.next()) {
 			user = new Medico(result.getString("cod_medico"), username, result.getString("encrypted_password"), result.getString("nombre"), result.getString("apellido"), 
-				result.getString("telefono"), buscarEspecialidadByCodMedico(result.getString("cod_medico")));
+				result.getString("telefono"));
 			}
 			
 		}else if(result.getString(1).contains("A")){
@@ -892,7 +892,7 @@ public class Clinica {
 		return user;
 	}
 	
-	public  String BuscarNombreProvinciaByCod(int cod) throws SQLException /*Probada Main*/ {
+	public String BuscarNombreProvinciaByCod(int cod) throws SQLException /*Probada Main*/ {
 		
 		String nombre_provincia = null;
 		
