@@ -697,7 +697,23 @@ public class Clinica {
 		String puestoLaboral = null;
 		String query = "select puesto_laboral"
 				+ "from administrador"
-				+ "where "
+				+ "where cod_admin = ?;";
+		PreparedStatement statement = null;
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(query);
+			statement.setString(1, cod);
+			ResultSet res = statement.executeQuery();
+			
+			while (res.next()) {
+				puestoLaboral = res.getString("puesto_laboral");
+			}
+			
+			statement.close();
+			res.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		return puestoLaboral;
 	}
