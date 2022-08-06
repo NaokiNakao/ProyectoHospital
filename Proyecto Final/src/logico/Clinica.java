@@ -270,7 +270,7 @@ public class Clinica {
 		
 		while(res.next()) {
 			
-			user = new Usuario(idUsuario, res.getString("username"),res.getString("password") 
+			user = new Usuario(idUsuario, res.getString("username"),res.getString("encrypted_password") 
 				,res.getString("nombre"), res.getString("apellido"), res.getString("telefono"));	
 		}
 		stament.close();
@@ -697,7 +697,7 @@ public class Clinica {
 		String puestoLaboral = null;
 		String query = "select puesto_laboral"
 				+ "from administrador"
-				+ ""
+				+ "where "
 		
 		return puestoLaboral;
 	}
