@@ -226,7 +226,12 @@ public class RegistroVacuna extends JDialog {
 		btnPasarDerecha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				vacuna.getProteccion().add(selectedEnfermedad);
-				cargarProteccion();
+				try {
+					cargarProteccion(vacuna);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				btnPasarDerecha.setEnabled(false);
 			}
 		});
@@ -240,7 +245,12 @@ public class RegistroVacuna extends JDialog {
 				int index = tableProteccion.getSelectedRow();
 				if (index != -1) {
 					vacuna.getProteccion().remove(index);
-					cargarProteccion();
+					try {
+						cargarProteccion(vacuna);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					btnPasarIzquierda.setEnabled(false);
 				}
 			}
@@ -331,9 +341,10 @@ public class RegistroVacuna extends JDialog {
 		
 		if (vacuna != null) {
 			cargarDatosCampos();
+			cargarProteccion(vacuna);
 		}
 		cargarEnfermedades();
-		cargarProteccion();
+		cargarProteccion(vacuna);
 	}
 	
 	private boolean espaciosVacios() {
@@ -383,17 +394,25 @@ public class RegistroVacuna extends JDialog {
 	
 	
 	
-	private void cargarProteccion() {
+	private void cargarProteccion(Vacuna vacuna) throws SQLException {
 		modelProteccion.setRowCount(0);
 		rowsProteccion = new Object[modelProteccion.getColumnCount()];
 		
-		try {
-			for (Enfermedad enfermedad : vacuna.getProteccion()) {
-				rowsProteccion[0] = enfermedad.getCodigo() + " : " + enfermedad.getNombreEnfermedad();
-				modelProteccion.addRow(rowsProteccion);
+		if(vacuna!= null) {
+		String queryTipoEnf = "select distinct enfermedad.* "
+				+ " from vacuna,vacuna_proteccion_enfermedad,enfermedad"
+				+ " where enfermedad.cod_enf = vacuna_proteccion_enfermedad.cod_enf "
+				+ " and vacuna.cod_vacuna = ? and vacuna.cod_vacuna = vacuna_proteccion_enfermedad.cod_vacuna";
+
+		PreparedStatement stamentTipo = ConexionSQL.getInstance().getConexion().prepareStatement(queryTipoEnf);
+		stamentTipo.setString(1, vacuna.getCodigo());
+		ResultSet res2 = stamentTipo.executeQuery();
+
+		while(res2.next()) {
+			rowsEnfermedades[0]=res2.getString("cod_enf") + " : " + res2.getString("nombre_enf");
+			modelEnfermedades.addRow(rowsEnfermedades);
+
 			}
-		} catch (NullPointerException e) {
-			// El objeto "vacuna" es nulo 
 		}
 	}
 	
