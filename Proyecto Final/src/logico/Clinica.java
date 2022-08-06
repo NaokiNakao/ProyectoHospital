@@ -216,7 +216,7 @@ public class Clinica {
 	}*/
 	
 	
-	public Paciente buscarPaciente(String cedula) throws SQLException {//probar main
+	public Paciente buscarPaciente(String cedula) throws SQLException {//probada en main
 		
 		Paciente paciente= null;
 		
@@ -225,9 +225,10 @@ public class Clinica {
 		stament.setString(1, cedula);
 		ResultSet result = stament.executeQuery();
 		
+		while(result.next()) {
 		paciente = new Paciente(cedula, result.getString("nombre"), result.getString("genero"), result.getDate("fecha_nac"), 
 				result.getString("cod_ciudad"),result.getString("telefono"));
-		
+		}
 		result.close();
 		stament.close();
 
@@ -353,7 +354,7 @@ public class Clinica {
 	
 	
 	/*NECESARIA NAOKI*/
-	public boolean agregarVacuna(Vacuna nuevaVacuna, int codFab) throws SQLException {
+	public boolean agregarVacuna(Vacuna nuevaVacuna, int codFab) throws SQLException { //probada main
 		boolean realizado = false;
 		PreparedStatement statement = null;
 		String sql = "insert into vacuna (cod_vacuna, nombre_vacuna, tipo_vacuna, forma_admin, cod_fab) "
@@ -385,7 +386,7 @@ public class Clinica {
 	}
 	
 	/*NECESARIA NAOKI*/
-	public boolean eliminarVacuna(String codVacuna) throws SQLException {
+	public boolean eliminarVacuna(String codVacuna) throws SQLException { //probada main
 		boolean realizado = false;
 		PreparedStatement statement = null;
 		String sql = "delete from vacuna "
@@ -640,7 +641,7 @@ public class Clinica {
 		
 	}
 	
-	public int buscarCodEspecialidadByNombre(String nombre_especialidad) throws SQLException /*Probado Main*/{
+	public int buscarCodEspecialidadByNombre(String nombre_especialidad) throws SQLException /*Probada main*/{
 	
 		int cod_especialidad = 0;
 		
@@ -661,11 +662,11 @@ public class Clinica {
 	return cod_especialidad;
 }
 
-	public String buscarEspecialidadByCod(int cod_especialidad) throws SQLException {
+	public String buscarEspecialidadByCod(int cod_especialidad) throws SQLException /*Probada main*/{
 		
 		String especialidad = null;
 		
-		String consulta = "select nombre_especialidad from especialidad where especialidad.cod_especialidad = ?";
+		String consulta = "select nombre_especialidad from especialidad where cod_especialidad = ?";
 		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(consulta);
 		stament.setInt(1, cod_especialidad);
 		
@@ -836,6 +837,14 @@ public class Clinica {
 	/*Misael*/
 	public void InsertarAdmin(Administrador usu) {
 		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	public void cargarPadecimiento(Paciente paciente) {
+		
+		
+		
 		
 	}
 	

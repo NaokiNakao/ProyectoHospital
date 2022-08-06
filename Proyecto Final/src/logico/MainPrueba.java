@@ -40,9 +40,13 @@ public class MainPrueba {
 		Clinica.getInstance().agregarVacuna(rv);
 		Clinica.getInstance().agregarVacuna(sinovac);*/
 		
-		//System.out.println(Clinica.getInstance().BuscarCodProvinciaByNombre("Duarte"));
+		//System.out.println(Clinica.getInstance().buscarPaciente("402-1886898-8").getNombre());
 		
-		System.out.println(Clinica.getInstance().buscarVacunaByCodigo("1").getFabricante());
+		//Vacuna vac1 = new Vacuna("4", "4ta Vac", "1", null, "Inactivada", "Intramuscular");
+		
+		System.out.println(Clinica.getInstance().buscarEspecialidadByCod(4));
+		
+		//System.out.println(Clinica.getInstance().buscarVacunaByCodigo("1").getFabricante());
 		
 		
 	/*	
@@ -103,6 +107,29 @@ public class MainPrueba {
 			
 			System.out.println(Clinica.getInstance().CargarMedicoDisponibles(f).get(i).getId());
 		}*/
+		
+		
+		
+		
+		
+		String[] arreglo = new String();
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	
 
 }}

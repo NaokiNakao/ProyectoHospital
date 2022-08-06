@@ -84,8 +84,9 @@ public class EstadisticaEnfermedad extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public EstadisticaEnfermedad(Usuario user) {
+	public EstadisticaEnfermedad(Usuario user) throws SQLException {
 		setModal(true);
 		setResizable(false);
 		setBounds(100, 100, 855, 550);
@@ -302,7 +303,12 @@ public class EstadisticaEnfermedad extends JDialog {
 						if (opcion == JOptionPane.YES_OPTION) {
 							Clinica.getInstance().getMisEnfermedades().remove(selectedEnfermedad);
 							JOptionPane.showMessageDialog(null, "Vacuna borrada", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
-							loadEnfermedades();
+							try {
+								loadEnfermedades();
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 						
 					}
@@ -328,21 +334,28 @@ public class EstadisticaEnfermedad extends JDialog {
 		loadEnfermedades();
 	}
 	
-	private void loadEnfermedades() {
+	private void loadEnfermedades() throws SQLException {
+		
 		modelEnfermedades.setRowCount(0);
 		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
-				
-		for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
-			rowsEnfermedades[0]=  Clinica.getInstance().getMisEnfermedades().get(i).getCodigo();
-			rowsEnfermedades[1]=  Clinica.getInstance().getMisEnfermedades().get(i).getNombreEnfermedad();
-			rowsEnfermedades[2]=  Clinica.getInstance().getMisEnfermedades().get(i).getTipoEnfermedad();
+
+		String queryTipoEnf = "select enfermedad.*, tipo_enfermedad.nombre_tipo from enfermedad, tipo_enfermedad "
+							+ "where enfermedad.cod_tipo = tipo_enfermedad.cod_tipo";
+		
+		PreparedStatement stamentTipo = ConexionSQL.getInstance().getConexion().prepareStatement(queryTipoEnf);
+		ResultSet res2 = stamentTipo.executeQuery();
+		
+		while( res2.next()) {
+			rowsEnfermedades[0]=res2.getString("cod_enf");
+			rowsEnfermedades[1]=res2.getString("nombre_enf");
+			rowsEnfermedades[2]=res2.getString("nombre_tipo");
 			modelEnfermedades.addRow(rowsEnfermedades);
 		}
+	
+		stamentTipo.close();
+		res2.close();
+		
 	}
-	
-	
-	
-	
 	
 	private void loadVacunas(Enfermedad enfermedad) throws SQLException {
 		modelVacunas.setRowCount(0);
@@ -353,6 +366,7 @@ public class EstadisticaEnfermedad extends JDialog {
 				+ "from vacuna,fabricante,vacuna_proteccion_enfermedad,enfermedad "
 				+ "where vacuna.cod_fab = fabricante.cod_fab and enfermedad.cod_enf = vacuna_proteccion_enfermedad.cod_enf "
 				+ "and enfermedad.cod_enf = ? and vacuna.cod_vacuna = vacuna_proteccion_enfermedad.cod_vacuna ";
+		
 		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
 		stament.setString(1,enfermedad.getCodigo());
 		

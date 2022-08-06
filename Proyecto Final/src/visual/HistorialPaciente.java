@@ -11,11 +11,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.Font;
+import java.awt.HeadlessException;
+
 import javax.swing.JRadioButton;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logico.Clinica;
+import logico.ConexionSQL;
 import logico.Consulta;
 import logico.Enfermedad;
 import logico.HistoriaClinica;
@@ -27,6 +30,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.awt.event.ActionEvent;
@@ -102,30 +108,50 @@ public class HistorialPaciente extends JDialog {
 				if(txtCedula.getText().equalsIgnoreCase("")) {
 					JOptionPane.showMessageDialog(null, "Favor completar todos los espacios", "Error", JOptionPane.ERROR_MESSAGE);
 				}else {
-						if(Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null) {
-							paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText().toString());
-							txtNombre.setText(paciente.getNombre());
-							txtTelefono.setText(paciente.getTelefono());
-						if(rdbtnEnfermedades.isSelected()) {	
-							loadEnfermedades(paciente);
-						}else if(rdbtnVacunas.isSelected()) {
-								loadVacunas(paciente);
-							}else if(rdbtnDatosDeConsultas.isSelected()) {
-								loadConsultas(paciente);
+						try {
+							if(Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null) {
+								paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText().toString());
+								txtNombre.setText(paciente.getNombre());
+								txtTelefono.setText(paciente.getTelefono());
+							if(rdbtnEnfermedades.isSelected()) {	
+								loadEnfermedades(paciente);
+							}else if(rdbtnVacunas.isSelected()) {
+									loadVacunas(paciente);
+								}else if(rdbtnDatosDeConsultas.isSelected()) {
+									loadConsultas(paciente);
+								}
+							
+							}else {
+								JOptionPane.showMessageDialog(null, "Este paciente no existe o la cedula esta incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
+								txtNombre.setText("");
+								txtTelefono.setText("");
+								txtCedula.setText("");
+								paciente = null;
 							}
-						
-						}else {
-							JOptionPane.showMessageDialog(null, "Este paciente no existe o la cedula esta incorrecta", "Error", JOptionPane.ERROR_MESSAGE);
-							txtNombre.setText("");
-							txtTelefono.setText("");
-							txtCedula.setText("");
-							paciente = null;
+						} catch (HeadlessException | SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
 						
 						if(paciente==null){
-							loadEnfermedades(paciente);
-							loadVacunas(paciente);
-							loadConsultas(paciente);
+							try {
+								loadEnfermedades(paciente);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							try {
+								loadVacunas(paciente);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							try {
+								loadConsultas(paciente);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
 					}
 				}
@@ -157,7 +183,12 @@ public class HistorialPaciente extends JDialog {
 						panelEnfermedades.setVisible(true);
 						panelDatosConsulta.setVisible(false);
 						panelVacunas.setVisible(false);
-						loadEnfermedades(paciente);
+						try {
+							loadEnfermedades(paciente);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 				}
 			});
 			rdbtnEnfermedades.setBounds(110, 15, 109, 23);
@@ -173,7 +204,12 @@ public class HistorialPaciente extends JDialog {
 					panelEnfermedades.setVisible(false);
 					panelDatosConsulta.setVisible(false);
 					panelVacunas.setVisible(true);
-					loadVacunas(paciente);
+					try {
+						loadVacunas(paciente);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 			rdbtnVacunas.setBounds(329, 15, 109, 23);
@@ -188,7 +224,12 @@ public class HistorialPaciente extends JDialog {
 					panelEnfermedades.setVisible(false);
 					panelDatosConsulta.setVisible(true);
 					panelVacunas.setVisible(false);
-					loadConsultas(paciente);
+					try {
+						loadConsultas(paciente);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
 				}
 			});
@@ -295,53 +336,88 @@ public class HistorialPaciente extends JDialog {
 		
 	}
 	
-	private void loadEnfermedades(Paciente paciente) {
+	private void loadEnfermedades(Paciente paciente) throws SQLException {
 		
 		modelEnfermedades.setRowCount(0);
 		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
+	
 		
-		if(paciente!= null) {
-				
-				for (int i = 0; i < paciente.getHistorial().getPadecimientos().size(); i++) {
-					rowsEnfermedades[0]= paciente.getHistorial().getPadecimientos().get(i).getCodigo();
-					rowsEnfermedades[1]= paciente.getHistorial().getPadecimientos().get(i).getNombreEnfermedad();
-					rowsEnfermedades[2]= paciente.getHistorial().getPadecimientos().get(i).getTipoEnfermedad();
-					modelEnfermedades.addRow(rowsEnfermedades);
-				}
+	if(paciente!= null) {
+		String query = "select enfermedad.cod_enf, enfermedad.nombre_enf,tipo_enfermedad.nombre_tipo from enfermedad,historia_clinica,enfermedad_contenida_historia,tipo_enfermedad "
+				+ " where historia_clinica.cod_historia = enfermedad_contenida_historia.cod_historia "
+				+ " and enfermedad_contenida_historia.cod_enf = enfermedad.cod_enf and enfermedad.cod_tipo = tipo_enfermedad.cod_tipo and historia_clinica.ced_paciente = ?";
+		
+		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+		stament.setString(1, paciente.getCedula());
+		
+		ResultSet res = stament.executeQuery();
+		
+		while(res.next()) {
+			rowsEnfermedades[0]= res.getString("cod_enf");
+			rowsEnfermedades[1]= res.getString("nombre_enf");
+			rowsEnfermedades[2]= res.getString("nombre_tipo");
+			modelEnfermedades.addRow(rowsEnfermedades);	
+		}
+		
+		stament.close();
+		res.close();
 		}
 		
 	}
 	
-	private void loadVacunas(Paciente paciente) {
+	private void loadVacunas(Paciente paciente) throws SQLException {
 		modelVacunas.setRowCount(0);
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
 		
 		if(paciente!= null) {
-			for (int i = 0; i < paciente.getHistorial().getMisVacunas().size(); i++) {
-				rowsVacunas[0]= paciente.getHistorial().getMisVacunas().get(i).getCodigo();
-				rowsVacunas[1]=  paciente.getHistorial().getMisVacunas().get(i).getNombreVacuna();
-				rowsVacunas[2]= paciente.getHistorial().getMisVacunas().get(i).getFabricante();
-				rowsVacunas[3]= paciente.getHistorial().getMisVacunas().get(i).getTipoVacuna();
+			String query = "select vacuna.*,fabricante.nombre_fab from vacuna,historia_clinica,vacuna_contenida_historia,fabricante "
+					+ "where historia_clinica.cod_historia = vacuna_contenida_historia.cod_historia and vacuna.cod_vacuna = vacuna_contenida_historia.cod_vacuna and vacuna.cod_fab = fabricante.cod_fab "
+					+ " and historia_clinica.ced_paciente = ?";
+			
+			PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+			stament.setString(1, paciente.getCedula());
+			
+			ResultSet res = stament.executeQuery();
+			
+			while(res.next()) {
+				rowsVacunas[0]= res.getString("cod_vacuna");
+				rowsVacunas[1]= res.getString("nombre_vacuna");
+				rowsVacunas[2]= res.getString("nombre_fab");
+				rowsVacunas[3]= res.getString("tipo_vacuna");
 				modelVacunas.addRow(rowsVacunas);
 			}
+			
+			stament.close();
+			res.close();
 		
 		}
 	}
 	
-	private void loadConsultas(Paciente paciente) {
+	private void loadConsultas(Paciente paciente) throws SQLException {
 
 		
 		modelConsultas.setRowCount(0);
 		rowsConsultas = new Object[modelConsultas.getColumnCount()];
 		
 		if(paciente!= null) {
-			for (int i = 0; i < paciente.getHistorial().getMisConsultas().size(); i++) {
-				rowsConsultas[0]=paciente.getHistorial().getMisVacunas().get(i).getCodigo();
-				//rowsConsultas[0] = paciente.getHistorial().getMisConsultas().get(i).getCodigo();
-				rowsConsultas[1] = paciente.getHistorial().getMisConsultas().get(i).getFechaConsulta();
-				rowsConsultas[2] = paciente.getHistorial().getMisConsultas().get(i).getMiMedico().getNombre();
-				modelConsultas.addRow(rowsConsultas);
+			String query = "select consulta.*,medico.nombre,medico.apellido "
+					+ "from consulta,historia_clinica,medico "
+					+ "where consulta.cod_historia = historia_clinica.cod_historia and consulta.cod_medico = medico.cod_medico "
+					+ "and historia_clinica.ced_paciente = ?";
+			
+			PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+			stament.setString(1, paciente.getCedula());
+			
+			ResultSet res = stament.executeQuery();
+			
+			while(res.next()) {
+				rowsConsultas[0]= res.getString("cod_consulta");
+				rowsConsultas[1] = res.getString("fecha_consulta");
+				rowsConsultas[2] = res.getString("nombre ") + res.getString("apellido") ;
+				
 			}
+			stament.close();
+			res.close();
 		}
 	}
 }

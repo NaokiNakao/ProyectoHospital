@@ -22,7 +22,7 @@ public class ConexionSQL {
 	        String Conurl = "jdbc:sqlserver://192.168.100.118:1433;" 
 	        				+ "database=Clinica;"
 	        				+ "user=mvasquez;"
-	        				+ "password=Eict@2022;"
+	        				+ "password=Misael0606;"
 	        				+ "loginTimeout=30;"
 	        				+ "encrypt=true;"
 	        				+ "trustServerCertificate=true;";

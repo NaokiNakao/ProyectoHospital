@@ -333,6 +333,9 @@ public class ConsultasVisual extends JDialog {
 							if(Clinica.getInstance().buscarPaciente(cita.getCedulaPersona())!= null) {
 								
 								Paciente p = Clinica.getInstance().buscarPaciente(cita.getCedulaPersona());
+								
+								if(p.getHistorial()!= null) {
+									
 								HistoriaClinica h = p.getHistorial();
 
 								
@@ -354,7 +357,7 @@ public class ConsultasVisual extends JDialog {
 								dispose();
 								PanelUsuario u = new PanelUsuario(medico);
 								u.setVisible(true);
-								
+								}
 							}else {
 								HistoriaClinica h = new HistoriaClinica("Historial-"+cita.getCedulaPersona());
 								
@@ -425,42 +428,22 @@ public class ConsultasVisual extends JDialog {
 		modelEnfermedades.setRowCount(0);
 		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
 		
-
-		String queryEnfCod = "select nombre_enf from enfermedad";
-		PreparedStatement stamentCodEnf = ConexionSQL.getInstance().getConexion().prepareStatement(queryEnfCod);
-		ResultSet res = stamentCodEnf.executeQuery();
-		
-		String queryEnfNombre = "select nombre_enf from enfermedad";
-		PreparedStatement stamentNom = ConexionSQL.getInstance().getConexion().prepareStatement(queryEnfNombre);
-		ResultSet res1 = stamentNom.executeQuery();
 		
 		String queryTipoEnf = "select enfermedad.*, tipo_enfermedad.nombre_tipo from enfermedad, tipo_enfermedad "
-							+ "where enfermedad.cod_tipo = tipo_enfermedad.cod_tipo;";
+							+ "where enfermedad.cod_tipo = tipo_enfermedad.cod_tipo";
 		
 		PreparedStatement stamentTipo = ConexionSQL.getInstance().getConexion().prepareStatement(queryTipoEnf);
 		ResultSet res2 = stamentTipo.executeQuery();
 		
-		while(res.next() && res1.next() && res2.next()) {
-			rowsEnfermedades[0]=res.getString("cod_enf");
-			rowsEnfermedades[1]=res1.getString("nombre_enf");
+		while(res2.next()) {
+			rowsEnfermedades[0]=res2.getString("cod_enf");
+			rowsEnfermedades[1]=res2.getString("nombre_enf");
 			rowsEnfermedades[2]=res2.getString("nombre_tipo");
 			modelEnfermedades.addRow(rowsEnfermedades);
 		}
 		
-		stamentCodEnf.close();
-		stamentNom.close();
 		stamentTipo.close();
-		res.close();
-		res1.close();
 		res2.close();
-		
-		
-		/*			for (int i = 0; i < Clinica.getInstance().getMisEnfermedades().size(); i++) {
-					rowsEnfermedades[0]=  Clinica.getInstance().getMisEnfermedades().get(i).getCodigo();
-					rowsEnfermedades[1]=  Clinica.getInstance().getMisEnfermedades().get(i).getNombreEnfermedad();
-					rowsEnfermedades[2]=  Clinica.getInstance().getMisEnfermedades().get(i).getTipoEnfermedad();
-					modelEnfermedades.addRow(rowsEnfermedades);
-				}*/
 		
 	}
 	
@@ -470,39 +453,20 @@ public class ConsultasVisual extends JDialog {
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
 		
 		
-		String queryVacCod = "select vacuna.cod_vacuna from vacuna";
-		PreparedStatement stamentCodVac = ConexionSQL.getInstance().getConexion().prepareStatement(queryVacCod);
-		ResultSet res = stamentCodVac.executeQuery();
-		
-		String queryVacNombre = "select vacuna.nombre_vacuna from vacuna";
-		PreparedStatement stamentNom = ConexionSQL.getInstance().getConexion().prepareStatement(queryVacNombre);
-		ResultSet res1 = stamentNom.executeQuery();
-		
-		String queryVacFab = "select vacuna.*,fabricante.nombre_fab from vacuna,fabricante where vacuna.cod_fab = fabricante.cod_fab;";
+		String queryVacFab = "select vacuna.*,fabricante.nombre_fab from vacuna,fabricante where vacuna.cod_fab = fabricante.cod_fab";
 		PreparedStatement stamentFab = ConexionSQL.getInstance().getConexion().prepareStatement(queryVacFab);
 		ResultSet res2 = stamentFab.executeQuery();
 		
-		while(res.next() && res1.next() && res2.next()) {
-			rowsVacunas[0]=res.getString("cod_vacuna");
-			rowsVacunas[1]=res1.getString("nombre_vacuna");
+		while( res2.next()) {
+			rowsVacunas[0]=res2.getString("cod_vacuna");
+			rowsVacunas[1]=res2.getString("nombre_vacuna");
 			rowsVacunas[2]=res2.getString("nombre_fab");
 			modelVacunas.addRow(rowsVacunas);
 		}
 		
-		stamentCodVac.close();
-		stamentFab.close();
-		stamentNom.close();
-		res.close();
-		res1.close();
-		res2.close();
-				
-		/*
-			for (int i = 0; i < Clinica.getInstance().getMisVacunas().size(); i++) {
-				rowsVacunas[0]= Clinica.getInstance().getMisVacunas().get(i).getCodigo();
-				rowsVacunas[1]= Clinica.getInstance().getMisVacunas().get(i).getNombreVacuna();
-				rowsVacunas[2]= Clinica.getInstance().getMisVacunas().get(i).getFabricante();
-				modelVacunas.addRow(rowsVacunas);*/
 
+		stamentFab.close();
+		res2.close();
 		
 		}
 	}

@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -112,40 +113,45 @@ public class RegistroCita extends JDialog {
 					JOptionPane.showMessageDialog(null, "Favor completar todas los campos", "Error", JOptionPane.ERROR_MESSAGE);
 	
 				}else {
-					if(Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null){
-						
-						
-						txtCedula.setEditable(false);
-						txtNombre.setEditable(false);
-						txtDireccion.setEditable(false);
-						txtTelefono.setEditable(false);
-						cbxSexoPersona.setEnabled(false);
-						spnNacimiento.setEnabled(false);
-						
-						paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText());
-						txtNombre.setText(paciente.getNombre());
-						txtDireccion.setText(paciente.getDireccion());
-						txtTelefono.setText(paciente.getTelefono());
-						
-						if(paciente.getGenero().equalsIgnoreCase("Masculino")) {
-								String sexo = "Masculino";
-								cbxSexoPersona.setSelectedItem(sexo);
-							}else {
-								String sexo = "Femenino";
-								cbxSexoPersona.setSelectedItem(sexo);
-							}
-						
-						spnNacimiento.setValue(paciente.getFechaNacimiento());
-						
-						
-					}else {
-						txtCedula.setEditable(true);
-						txtNombre.setEditable(true);
-						txtDireccion.setEditable(true);
-						txtTelefono.setEditable(true);
-						cbxSexoPersona.setEnabled(true);
-						spnNacimiento.setEnabled(true);
-						cbxSexoPersona.setSelectedItem(-1);
+					try {
+						if(Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null){
+							
+							
+							txtCedula.setEditable(false);
+							txtNombre.setEditable(false);
+							txtDireccion.setEditable(false);
+							txtTelefono.setEditable(false);
+							cbxSexoPersona.setEnabled(false);
+							spnNacimiento.setEnabled(false);
+							
+							paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText());
+							txtNombre.setText(paciente.getNombre());
+							txtDireccion.setText(paciente.getDireccion());
+							txtTelefono.setText(paciente.getTelefono());
+							
+							if(paciente.getGenero().equalsIgnoreCase("Masculino")) {
+									String sexo = "Masculino";
+									cbxSexoPersona.setSelectedItem(sexo);
+								}else {
+									String sexo = "Femenino";
+									cbxSexoPersona.setSelectedItem(sexo);
+								}
+							
+							spnNacimiento.setValue(paciente.getFechaNacimiento());
+							
+							
+						}else {
+							txtCedula.setEditable(true);
+							txtNombre.setEditable(true);
+							txtDireccion.setEditable(true);
+							txtTelefono.setEditable(true);
+							cbxSexoPersona.setEnabled(true);
+							spnNacimiento.setEnabled(true);
+							cbxSexoPersona.setSelectedItem(-1);
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
 				}
 				}
@@ -273,7 +279,12 @@ public class RegistroCita extends JDialog {
 					if(aux!=-1) {
 						
 						String cod = (String) modelMedicos.getValueAt(aux, 0);
-						selectedMedico=Clinica.getInstance().buscarMedicoByCodigo(cod);
+						try {
+							selectedMedico=Clinica.getInstance().buscarMedicoByCodigo(cod);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 			});
