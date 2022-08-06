@@ -171,7 +171,7 @@ public class RegistroVacuna extends JDialog {
 				int index = tableEnfermedades.getSelectedRow();
 				if (index != -1) {
 					String aux = (String) tableEnfermedades.getValueAt(index, 0);
-					String codigoEnfermedad = aux.substring(0, 8);
+					String codigoEnfermedad = aux.substring(0, 5);
 					try {
 						selectedEnfermedad = Clinica.getInstance().buscarEnfermedadByCodigo(codigoEnfermedad);
 					} catch (SQLException e) {
