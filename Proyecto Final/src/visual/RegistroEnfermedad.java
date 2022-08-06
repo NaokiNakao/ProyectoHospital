@@ -19,6 +19,7 @@ import logico.Enfermedad;
 import logico.Usuario;
 
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextPane;
 
@@ -176,8 +177,14 @@ public class RegistroEnfermedad extends JDialog {
 				btnSalir.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();
-						EstadisticaEnfermedad r = new EstadisticaEnfermedad(user);
-						r.setVisible(true);
+						EstadisticaEnfermedad r;
+						try {
+							r = new EstadisticaEnfermedad(user);
+							r.setVisible(true);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				});
 				btnSalir.setActionCommand("Cancel");

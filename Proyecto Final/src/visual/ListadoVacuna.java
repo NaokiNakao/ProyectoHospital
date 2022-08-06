@@ -11,6 +11,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logico.Clinica;
+import logico.ConexionSQL;
 import logico.Medico;
 import logico.Vacuna;
 
@@ -24,6 +25,9 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -53,8 +57,9 @@ public class ListadoVacuna extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public ListadoVacuna() {
+	public ListadoVacuna() throws SQLException {
 		selected = null;
 		setTitle("Vacunas");
 		setResizable(false);
@@ -83,15 +88,23 @@ public class ListadoVacuna extends JDialog {
 		JButton btnBuscar = new JButton("Buscar");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Vacuna vacuna = Clinica.getInstance().buscarVacunaByCodigo(txtCodigoVacuna.getText());
-				if (vacuna != null) {
-					RegistroVacuna frame = new RegistroVacuna(vacuna);
-					frame.setVisible(true);
-					txtCodigoVacuna.setText("");
+				Vacuna vacuna;
+				try {
+					vacuna = Clinica.getInstance().buscarVacunaByCodigo(txtCodigoVacuna.getText());
+					
+					if (vacuna != null) {
+						RegistroVacuna frame = new RegistroVacuna(vacuna);
+						frame.setVisible(true);
+						txtCodigoVacuna.setText("");
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "La vacuna no se encuentra registrada.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-				else {
-					JOptionPane.showMessageDialog(null, "La vacuna no se encuentra registrada.", "Error", JOptionPane.ERROR_MESSAGE);
-				}
+				
 			}
 		});
 		btnBuscar.setBounds(197, 16, 89, 23);
@@ -114,8 +127,13 @@ public class ListadoVacuna extends JDialog {
 				if (aux != -1) {
 					btnModificar.setEnabled(true);
 					btnEliminar.setEnabled(true);
-					String codigoVacuna = (String) table.getValueAt(0, aux);
-					selected = Clinica.getInstance().buscarVacunaByCodigo(codigoVacuna);
+					String codigoVacuna = (String) table.getValueAt(aux, 0);
+					try {
+						selected = Clinica.getInstance().buscarVacunaByCodigo(codigoVacuna);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		});
@@ -135,8 +153,15 @@ public class ListadoVacuna extends JDialog {
 				btnModificar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						if (selected != null) {
-							RegistroVacuna frame = new RegistroVacuna(selected);
-							frame.setVisible(true);
+							RegistroVacuna frame;
+							try {
+								frame = new RegistroVacuna(selected);
+								frame.setVisible(true);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
 						}
 					}
 				});
@@ -144,8 +169,14 @@ public class ListadoVacuna extends JDialog {
 				JButton btnNueva = new JButton("Nueva");
 				btnNueva.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						RegistroVacuna registro = new RegistroVacuna(null);
-						registro.setVisible(true);
+						RegistroVacuna registro;
+						try {
+							registro = new RegistroVacuna(null);
+							registro.setVisible(true);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				});
 				if (Clinica.getLoginUser() instanceof Medico) {
@@ -164,11 +195,17 @@ public class ListadoVacuna extends JDialog {
 					public void actionPerformed(ActionEvent e) {
 						int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro desea eliminar la vacuna?", "Confirmación", JOptionPane.WARNING_MESSAGE);
 						if (opcion == JOptionPane.YES_OPTION) {
-							int index = Clinica.getInstance().indexByCodigoVacuna(selected.getCodigo());
-							Clinica.getInstance().eliminarVacuna(index);
-							cargarVacunas();
-							btnModificar.setEnabled(false);
-							btnEliminar.setEnabled(false);
+							//int index = Clinica.getInstance().indexByCodigoVacuna(selected.getCodigo());
+							try {
+								Clinica.getInstance().eliminarVacuna(selected.getCodigo());
+								cargarVacunas();												
+								btnModificar.setEnabled(false);
+								btnEliminar.setEnabled(false);
+								//selected = null;
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							selected = null;
 						}
 					}
@@ -195,22 +232,30 @@ public class ListadoVacuna extends JDialog {
 		cargarVacunas();
 	}
 	
-	public static void cargarVacunas() {
+	public static void cargarVacunas() throws SQLException {
 		model.setRowCount(0);
 		rows = new Object[model.getColumnCount()];
 		
-		for (Vacuna vacuna : Clinica.getInstance().getMisVacunas()) {
-			rows[0] = vacuna.getCodigo();
-			rows[1] = vacuna.getNombreVacuna();
-			rows[2] = vacuna.getFormaAdministracion();
-			rows[3] = vacuna.getTipoVacuna();
-			rows[4] = vacuna.getFabricante();
+		String queryVacFab = "select vacuna.*,fabricante.nombre_fab from vacuna,fabricante where vacuna.cod_fab = fabricante.cod_fab";
+		PreparedStatement stamentFab = ConexionSQL.getInstance().getConexion().prepareStatement(queryVacFab);
+		ResultSet res2 = stamentFab.executeQuery();
+		
+		while( res2.next()) {
+			rows[0]=res2.getString("cod_vacuna");
+			rows[1]=res2.getString("nombre_vacuna");
+			rows[2]=res2.getString("forma_admin");
+			rows[3]=res2.getString("tipo_vacuna");
+			rows[4]=res2.getString("nombre_fab");
 			model.addRow(rows);
 		}
+
+		stamentFab.close();
+		res2.close();
 		
 		btnModificar.setEnabled(false);
 		btnEliminar.setEnabled(false);
 	}
+	
 	
 }
 

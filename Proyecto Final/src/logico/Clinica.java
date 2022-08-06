@@ -315,7 +315,7 @@ public class Clinica {
 	
 	
 	
-	/*NECESARIA MISAEL*/
+	/*NO ES NECESARIA*/
 	public int indexByCodigoVacuna(String codigoVacuna) {
 		int index = -1;
 		boolean encontrado = false;

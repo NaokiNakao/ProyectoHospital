@@ -32,6 +32,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 public class PanelUsuario extends JDialog {
 
@@ -93,8 +94,15 @@ public class PanelUsuario extends JDialog {
 			btnEnfermedades = new JButton("Enfermedades");
 			btnEnfermedades.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					EstadisticaEnfermedad frame = new EstadisticaEnfermedad(user);
-					frame.setVisible(true);
+					EstadisticaEnfermedad frame;
+					try {
+						frame = new EstadisticaEnfermedad(user);
+						frame.setVisible(true);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 				}
 			});
 			btnEnfermedades.setBounds(10, 47, 134, 25);
@@ -103,8 +111,15 @@ public class PanelUsuario extends JDialog {
 			btnVacunas = new JButton("Vacunas");
 			btnVacunas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ListadoVacuna listado = new ListadoVacuna();
-					listado.setVisible(true);
+					ListadoVacuna listado;
+					try {
+						listado = new ListadoVacuna();
+						listado.setVisible(true);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 				}
 			});
 			btnVacunas.setBounds(10, 83, 134, 25);
@@ -178,8 +193,14 @@ public class PanelUsuario extends JDialog {
 					}else {
 						dispose();
 						siguienteCita = med.getMisCitas().get(0);
-						ConsultasVisual rc =new ConsultasVisual(siguienteCita,(Medico) user);
-						rc.setVisible(true);
+						ConsultasVisual rc;
+						try {
+							rc = new ConsultasVisual(siguienteCita,(Medico) user);
+							rc.setVisible(true);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				}
 			});

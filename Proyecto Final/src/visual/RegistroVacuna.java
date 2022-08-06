@@ -2,6 +2,7 @@ package visual;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -9,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import logico.Clinica;
+import logico.ConexionSQL;
 import logico.Enfermedad;
 import logico.Vacuna;
 import javax.swing.border.TitledBorder;
@@ -25,6 +27,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.ListSelectionModel;
@@ -65,8 +70,9 @@ public class RegistroVacuna extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public RegistroVacuna(Vacuna vac) {
+	public RegistroVacuna(Vacuna vac) throws SQLException {
 		selectedEnfermedad = null;
 		selectedProteccion = null;
 		vacuna = vac;
@@ -91,7 +97,7 @@ public class RegistroVacuna extends JDialog {
 		
 		txtCodigo = new JTextField();
 		txtCodigo.setColumns(10);
-		txtCodigo.setBounds(66, 8, 121, 23);
+		txtCodigo.setBounds(66, 8, 155, 23);
 		if (vacuna == null) {
 			txtCodigo.setEditable(false);
 			String codigo;
@@ -140,7 +146,7 @@ public class RegistroVacuna extends JDialog {
 		contentPanel.add(cbxAdministracion);
 		
 		JLabel lblAdministracin = new JLabel("Administraci\u00F3n:");
-		lblAdministracin.setBounds(260, 91, 90, 14);
+		lblAdministracin.setBounds(267, 91, 83, 14);
 		contentPanel.add(lblAdministracin);
 		
 		JPanel panel = new JPanel();
@@ -166,7 +172,12 @@ public class RegistroVacuna extends JDialog {
 				if (index != -1) {
 					String aux = (String) tableEnfermedades.getValueAt(index, 0);
 					String codigoEnfermedad = aux.substring(0, 8);
-					selectedEnfermedad = Clinica.getInstance().buscarEnfermedadByCodigo(codigoEnfermedad);
+					try {
+						selectedEnfermedad = Clinica.getInstance().buscarEnfermedadByCodigo(codigoEnfermedad);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					btnPasarDerecha.setEnabled(true);
 				}
 			}
@@ -194,12 +205,17 @@ public class RegistroVacuna extends JDialog {
 				if (index != -1) {
 					String aux = (String) tableProteccion.getValueAt(index, 0);
 					String codigoProteccion = aux.substring(0, 8);
-					selectedProteccion = Clinica.getInstance().buscarEnfermedadByCodigo(codigoProteccion);
+					try {
+						selectedProteccion = Clinica.getInstance().buscarEnfermedadByCodigo(codigoProteccion);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					btnPasarIzquierda.setEnabled(true);
 				}
 			}
 		});
-		String headerProteccion[] = {"Protecci�n"};
+		String headerProteccion[] = {"Proteccion"};
 		modelProteccion = new DefaultTableModel();
 		modelProteccion.setColumnIdentifiers(headerProteccion);
 		tableProteccion.setModel(modelProteccion);
@@ -237,7 +253,7 @@ public class RegistroVacuna extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("");
+				JButton okButton = new JButton("Aceptar");
 				if (vacuna == null) {
 					okButton.setText("Agregar");
 				}
@@ -246,16 +262,36 @@ public class RegistroVacuna extends JDialog {
 				}
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						if (vacuna == null) {
+						if (vacuna == null){
+							
+							if(espaciosVacios()) {
+								JOptionPane.showMessageDialog(null, "Favor completar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+							}else {
 							ArrayList<Enfermedad> proteccion = new ArrayList<Enfermedad>();
 							Vacuna nuevaVacuna = new Vacuna(txtCodigo.getText(), txtNombre.getText(), txtFabricante.getText(), proteccion, cbxTipo.getSelectedItem().toString(), cbxAdministracion.getSelectedItem().toString());
-							if (Clinica.getInstance().agregarVacuna(nuevaVacuna)) {
-								JOptionPane.showMessageDialog(null, "La vacuna se ha agregado.", "Registro satisfactorio", JOptionPane.INFORMATION_MESSAGE);
-								limpiarCampos();
+							
+							if(txtFabricante.getText() != null) {
+								try {
+									insertIntoFabricantes(txtFabricante.getText());
+								} catch (SQLException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
 							}
-							else {
-								JOptionPane.showMessageDialog(null, "Datos no v�lidos.", "Error", JOptionPane.ERROR_MESSAGE);
+							
+							try {
+								if (Clinica.getInstance().agregarVacuna(nuevaVacuna,1)) {
+									JOptionPane.showMessageDialog(null, "La vacuna se ha agregado.", "Registro satisfactorio", JOptionPane.INFORMATION_MESSAGE);
+									limpiarCampos();
+								}
+								else {
+									JOptionPane.showMessageDialog(null, "Datos no validos.", "Error", JOptionPane.ERROR_MESSAGE);
+								}
+							} catch (HeadlessException | SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
+						}
 						}
 						else {
 							String codigoAux = vacuna.getCodigo();
@@ -265,11 +301,16 @@ public class RegistroVacuna extends JDialog {
 							vacuna.setFabricante(txtFabricante.getText());
 							vacuna.setTipoVacuna(cbxTipo.getSelectedItem().toString());
 							vacuna.setFormaAdministracion(cbxAdministracion.getSelectedItem().toString());
-							Clinica.getInstance().modificarVacuna(vacuna, indexAux);
+							//Clinica.getInstance.modificarVacuna(vacuna, indexAux);////////////////////////////////////////////////////////////////////
 							JOptionPane.showMessageDialog(null, "Datos modificados.", "Informaci�n", JOptionPane.INFORMATION_MESSAGE);
 							dispose();
 						}
-						ListadoVacuna.cargarVacunas();
+						try {
+							ListadoVacuna.cargarVacunas();
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -295,15 +336,52 @@ public class RegistroVacuna extends JDialog {
 		cargarProteccion();
 	}
 	
-	private void cargarEnfermedades() {
+	private boolean espaciosVacios() {
+		
+		boolean p = false;
+		
+		if(txtCodigo.getText().equalsIgnoreCase(" ") || txtFabricante.getText().equalsIgnoreCase(" ") || txtNombre.getText().equalsIgnoreCase(" ")) {
+			p = true;
+		}
+		
+		return p;
+	}
+	
+	private void insertIntoFabricantes(String nombre) throws SQLException {
+		
+		String query = "insert into fabricante values(?)";
+		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+		stament.setString(1, nombre);
+		
+		stament.executeUpdate();
+		
+		stament.close();
+		
+	}
+	
+	
+	private void cargarEnfermedades() throws SQLException {
 		modelEnfermedades.setRowCount(0);
 		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
 		
-		for (Enfermedad enfermedad : Clinica.getInstance().getMisEnfermedades()) {
-			rowsEnfermedades[0] = enfermedad.getCodigo() + " : " + enfermedad.getNombreEnfermedad();
+		String queryTipoEnf = "select enfermedad.*, tipo_enfermedad.nombre_tipo from enfermedad, tipo_enfermedad "
+							+ "where enfermedad.cod_tipo = tipo_enfermedad.cod_tipo";
+		
+		PreparedStatement stamentTipo = ConexionSQL.getInstance().getConexion().prepareStatement(queryTipoEnf);
+		ResultSet res2 = stamentTipo.executeQuery();
+		
+		while(res2.next()) {
+			rowsEnfermedades[0]=res2.getString("cod_enf") + " : " + res2.getString("nombre_enf");
 			modelEnfermedades.addRow(rowsEnfermedades);
+			
 		}
+		
+		
+		
 	}
+	
+	
+	
 	
 	private void cargarProteccion() {
 		modelProteccion.setRowCount(0);
