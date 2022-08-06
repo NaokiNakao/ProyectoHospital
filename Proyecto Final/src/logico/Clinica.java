@@ -563,7 +563,7 @@ public class Clinica {
 	}
 	
 	
-	public void insertarMedico(Medico med) throws SQLException { ///probar en el main
+	public void insertarMedico(Medico med,String especialidad) throws SQLException { ///probar en el main
 		
 		String InsertConsul = "Insert Into medico (cod_medico,nombre,apellido,username,pass,telefono) Values (?,?,?,?,?,?)";
 		PreparedStatement consulta = null;
@@ -578,9 +578,6 @@ public class Clinica {
 		consulta.setString(6,med.getTelefono());
 		
 		consulta.executeUpdate();
-		
-		
-		
 		} catch (SQLException e) {
 			
 			System.out.println("Fallo la consulta");
@@ -596,7 +593,7 @@ public class Clinica {
 		
 		try {
 			consulta2 = ConexionSQL.getConexion().prepareStatement(InsertConsul2);
-			consulta2.setString(1,med.getEspecialidad());
+			consulta2.setString(1,especialidad);
 			consulta2.executeUpdate();
 		
 		} catch (SQLException e) {
@@ -616,7 +613,7 @@ public class Clinica {
 		try {
 			consulta3 = ConexionSQL.getConexion().prepareStatement(InsertConsul3);
 			consulta3.setString(1,med.getId());
-			consulta3.setInt(2,buscarCodEspecialidadByNombre(med.getEspecialidad()));
+			consulta3.setInt(2,buscarCodEspecialidadByNombre(especialidad));
 			consulta3.executeUpdate();
 		
 		} catch (SQLException e) {
@@ -795,13 +792,13 @@ public class Clinica {
 	}
 
 	
-	public Usuario buscarUsuarioByUsername(String username) {
+	public Usuario buscarUsuarioByUsername(String username) throws SQLException {
 		Usuario user = null;
 		String query = "select *"
 				+ "from medico, administrador"
 				+ "where medico.username = ? or administrador.username = ?;";
 		
-		PreparedStatement stament = ConexionSQL.getConexion().createStatement();
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
 		ResultSet result = stament.executeQuery(query);
 		
 		if(result.getString(1).contains("M")) {
