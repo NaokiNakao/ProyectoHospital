@@ -135,6 +135,8 @@ public class MainPrueba {
 		boolean disponible = Clinica.getInstance().medicoDisponible("2022-09-01 14:00:00", "M0002");
 		System.out.println(disponible);
 		
+		Clinica.getInstance().
+		
 		
 		
 		

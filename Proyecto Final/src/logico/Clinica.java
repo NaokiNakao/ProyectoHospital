@@ -246,18 +246,6 @@ public class Clinica {
 	/*NECESARIA NAOKI*/
 	public boolean validacionCredenciales(String login, String password) {
 		boolean validacion = false;
-		/*Usuario user = null;
-		int i = 0;
-		
-		while (!validacion && i < misUsuarios.size()) {
-			user = misUsuarios.get(i);
-			if (user.getLogin().equals(login) && user.getPassword().equals(password)) {
-				loginUser = user;
-				validacion = true;
-			}
-			i++;
-		}*/
-		
 		
 		
 		return validacion;
@@ -685,8 +673,7 @@ public class Clinica {
 		return especialidad;
 	}
 	
-	
-	public String buscarEspecialidadByCodMedico(String cod) throws SQLException {
+	private String buscarEspecialidadByCodMedico(String cod) throws SQLException {
 		
 		String especialidad = null;
 		
@@ -704,6 +691,15 @@ public class Clinica {
 		
 		return especialidad;
 		
+	}
+	
+	private String buscarPuestoLaboralByCodAdmin(String cod) {
+		String puestoLaboral = null;
+		String query = "select puesto_laboral"
+				+ "from administrador"
+				+ ""
+		
+		return puestoLaboral;
 	}
 	
 	public String buscarEspecialidadCodByCodMedico(String cod) throws SQLException {
@@ -783,26 +779,27 @@ public class Clinica {
 	}
 
 	
-	public Usuario buscarUsuarioByLoginMed(String login) throws SQLException /*Probar Main*/{
-		
+	public Usuario buscarUsuarioByUsername(String username) {
 		Usuario user = null;
-
-		Statement stament = ConexionSQL.getConexion().createStatement();
-		String consulta = "select * from medico,administrador where medico.loggin = "+ login +" or administrador.loggin = "+ login;
-		ResultSet result = stament.executeQuery(consulta);
+		String query = "select *"
+				+ "from medico, administrador"
+				+ "where medico.username = ? or administrador.username = ?;";
+		
+		PreparedStatement stament = ConexionSQL.getConexion().createStatement();
+		ResultSet result = stament.executeQuery(query);
 		
 		if(result.getString(1).contains("M")) {
 		
 			while(result.next()) {
-			user= new Usuario(result.getString("cod_medico"), login, result.getString("passwordd"), result.getString("nombre"), result.getString("apellido"), 
-				result.getString("telefono"));
+			user = new Medico(result.getString("cod_medico"), username, result.getString("encrypted_password"), result.getString("nombre"), result.getString("apellido"), 
+				result.getString("telefono"), buscarEspecialidadByCodMedico(result.getString("cod_medico")));
 			}
 			
 		}else if(result.getString(1).contains("A")){
 			
 			while(result.next()) {
-			user= new Usuario(result.getString("cod_admin"), login, result.getString("passwordd"), result.getString("nombre"), result.getString("apellido"), 
-					result.getString("telefono"));
+			user = new Administrador(result.getString("cod_admin"), username, result.getString("encrypted_password"), result.getString("nombre"), result.getString("apellido"), 
+					result.getString("telefono"), buscarPuestoLaboralByCodAdmin(result.getString("cod_admin")));
 			}
 		}
 		
@@ -810,7 +807,6 @@ public class Clinica {
 		result.close();
 		
 		return user;
-		
 	}
 	
 	public  String BuscarNombreProvinciaByCod(int cod) throws SQLException /*Probada Main*/ {
