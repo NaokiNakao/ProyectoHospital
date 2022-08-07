@@ -418,7 +418,7 @@ public class Clinica {
 		boolean realizado = false;
 		PreparedStatement statement = null;
 		String sql = "delete from vacuna "
-				+ "where cod_vacuna = ?;";
+				+ "where cod_vacuna = ?";
 		
 		try {
 			statement = ConexionSQL.getConexion().prepareStatement(sql);
@@ -439,6 +439,10 @@ public class Clinica {
 		String query = "select cod_fab "
 				+ "from fabricante "
 				+ "where nombre_fab = ?";
+		PreparedStatement statement = null;
+		
+		statement = ConexionSQL.getConexion().prepareStatement(query);
+		statement.setString(1, nombreFab);
 		
 		return codVacuna;
 	}
@@ -813,9 +817,9 @@ public class Clinica {
 	
 	public String buscarPuestoLaboralByCodAdmin(String cod) {
 		String puestoLaboral = null;
-		String query = "select puesto_laboral"
-				+ "from administrador"
-				+ "where cod_admin = ?;";
+		String query = "select puesto_laboral "
+				+ "from administrador "
+				+ "where cod_admin = ?";
 		PreparedStatement statement = null;
 		
 		try {
@@ -867,7 +871,7 @@ public class Clinica {
 		boolean disponible = true;
 		String query = "select count(*) as cantidad "
 				+ "from cita_medica "
-				+ "where fecha_hora_cita = ? and cod_medico = ?;";
+				+ "where fecha_hora_cita = ? and cod_medico = ?";
 		PreparedStatement statement = null;
 		
 		try {
