@@ -93,9 +93,7 @@ public class ListadoVacuna extends JDialog {
 					vacuna = Clinica.getInstance().buscarVacunaByCodigo(txtCodigoVacuna.getText());
 					
 					if (vacuna != null) {
-						RegistroVacuna frame = new RegistroVacuna(vacuna);
-						frame.setVisible(true);
-						txtCodigoVacuna.setText("");
+						cargarVacunas(vacuna);
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "La vacuna no se encuentra registrada.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -198,7 +196,7 @@ public class ListadoVacuna extends JDialog {
 							//int index = Clinica.getInstance().indexByCodigoVacuna(selected.getCodigo());
 							try {
 								Clinica.getInstance().eliminarVacuna(selected.getCodigo());
-								cargarVacunas();												
+								cargarVacunas(null);												
 								btnModificar.setEnabled(false);
 								btnEliminar.setEnabled(false);
 								//selected = null;
@@ -229,13 +227,16 @@ public class ListadoVacuna extends JDialog {
 			}
 		}
 		
-		cargarVacunas();
+		cargarVacunas(null);
 	}
 	
-	public static void cargarVacunas() throws SQLException {
+	public static void cargarVacunas(Vacuna vacuna) throws SQLException {
 		model.setRowCount(0);
 		rows = new Object[model.getColumnCount()];
 		
+		
+		if(vacuna == null) {
+	
 		String queryVacFab = "select vacuna.*,fabricante.nombre_fab from vacuna,fabricante where vacuna.cod_fab = fabricante.cod_fab";
 		PreparedStatement stamentFab = ConexionSQL.getInstance().getConexion().prepareStatement(queryVacFab);
 		ResultSet res2 = stamentFab.executeQuery();
@@ -254,6 +255,35 @@ public class ListadoVacuna extends JDialog {
 		
 		btnModificar.setEnabled(false);
 		btnEliminar.setEnabled(false);
+	
+	}else if (vacuna != null) {
+		
+		String queryVacFab = "select vacuna.*,fabricante.nombre_fab from vacuna,fabricante where vacuna.cod_fab = fabricante.cod_fab and vacuna.cod_vacuna = ?";
+		PreparedStatement stamentFab = ConexionSQL.getInstance().getConexion().prepareStatement(queryVacFab);
+		stamentFab.setString(1, vacuna.getCodigo());
+		ResultSet res2 = stamentFab.executeQuery();
+		
+		while( res2.next()) {
+			rows[0]=res2.getString("cod_vacuna");
+			rows[1]=res2.getString("nombre_vacuna");
+			rows[2]=res2.getString("forma_admin");
+			rows[3]=res2.getString("tipo_vacuna");
+			rows[4]=res2.getString("nombre_fab");
+			model.addRow(rows);
+		}
+
+		stamentFab.close();
+		res2.close();
+		
+		btnModificar.setEnabled(false);
+		btnEliminar.setEnabled(false);
+		
+		
+		
+	}
+	
+	
+	
 	}
 	
 	

@@ -69,6 +69,7 @@ public class RegistroEnfermedad extends JDialog {
 		textPaneDescripcion.setBounds(30, 175, 419, 129);
 		if(enfermedad!=null) {
 			textPaneDescripcion.setText(enfermedad.getDescripcionEnfermedad().toString());
+			//cbxTipo.setSelectedItem(enfermedad.getTipoEnfermedad());
 		}
 		panel.add(textPaneDescripcion);
 		
@@ -113,7 +114,7 @@ public class RegistroEnfermedad extends JDialog {
 		panel.add(cbxTipo);
 		cbxTipo.setModel(new DefaultComboBoxModel(new String[] {"<< Seleccione >>", "Respiratoria", "Gastrointestinal", "Neurologica", "Muscular", "Sexual", "Cardiovascular"}));
 		
-		JLabel lblNewLabel_3 = new JLabel("Descripci\u00F3n:");
+		JLabel lblNewLabel_3 = new JLabel("Descripción:");
 		lblNewLabel_3.setBounds(10, 150, 79, 14);
 		panel.add(lblNewLabel_3);
 		{
@@ -136,7 +137,8 @@ public class RegistroEnfermedad extends JDialog {
 								JOptionPane.showMessageDialog(null, "Favor seleccionar un tipo.", "Error", JOptionPane.ERROR_MESSAGE);
 						}else {
 								enfermedad.setTipoEnfermedad(cbxTipo.getSelectedItem().toString());
-							
+								
+								Clinica.getInstance().modificarEnfermedad(enfermedad);
 								JOptionPane.showMessageDialog(null, "Modificacion Exitosa", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
 								dispose();
 								EstadisticaEnfermedad r;

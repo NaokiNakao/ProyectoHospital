@@ -301,7 +301,7 @@ public class EstadisticaEnfermedad extends JDialog {
 						
 						int opcion = JOptionPane.showConfirmDialog(null, "�Seguro desea eliminar la enfermedad?", "Confirmaci�n", JOptionPane.WARNING_MESSAGE);
 						if (opcion == JOptionPane.YES_OPTION) {
-							Clinica.getInstance().getMisEnfermedades().remove(selectedEnfermedad);
+							Clinica.getInstance().eliminarEnfermedad(selectedEnfermedad.getCodigo());
 							JOptionPane.showMessageDialog(null, "Vacuna borrada", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
 							try {
 								loadEnfermedades();
