@@ -506,6 +506,25 @@ public class Clinica {
 		return realizado;
 	}
 	
+	public boolean eliminarEnfermedad(String codEnf) {
+		boolean realizado = false;
+		String sql = "delete from enfermedad "
+				+ "where cod_enf = ?";
+		PreparedStatement statement = null;
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(sql);
+			statement.setString(1, codEnf);
+			statement.executeUpdate();
+			statement.close();
+			realizado = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return realizado;
+	}
+	
 	private int buscarCodEnfByNombreEnf(String tipoEnfermedad) {
 		int codEnf = 0;
 		String query = "select cod_tipo "
