@@ -412,8 +412,14 @@ public class ConsultasVisual extends JDialog {
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						dispose();	
-						PanelUsuario u = new PanelUsuario(medico);
-						u.setVisible(true);
+						PanelUsuario u;
+						try {
+							u = new PanelUsuario(medico);
+							u.setVisible(true);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 				});
 				cancelButton.setActionCommand("Cancel");

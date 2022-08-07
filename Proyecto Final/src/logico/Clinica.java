@@ -464,7 +464,7 @@ public class Clinica {
 		boolean realizado = false;
 		PreparedStatement statement = null;
 		String sql = "insert into enfermedad (cod_enf, nombre_enf, desc_enf, cod_tipo) "
-				+ "values (?, ?, ?, ?);";
+				+ "values (?, ?, ?, ?)";
 		
 		try {
 			statement = ConexionSQL.getConexion().prepareStatement(sql);
@@ -987,6 +987,47 @@ public class Clinica {
 		String formato = "yyyy-mm-dd hh:mm:ss";
 		return LocalDateTime.parse(fechaHora, DateTimeFormatter.ofPattern(formato));
 	}
+	
+	
+	public int buscarTipoEnfByNombre(String nombre) throws SQLException {
+		
+		int tipo = 0;
+		
+		String query = "select tipo_enfermedad.* "
+				+ "from tipo_enfermedad "
+				+ "inner join enfermedad "
+				+ "on tipo_enfermedad.cod_tipo = enfermedad.cod_tipo and enfermedad.nombre_enf = ?";
+		
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setString(1, nombre);
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			tipo = resul.getInt("cod_tipo");
+		}
+		
+		return tipo;
+		
+	}
+	
+	public int buscarCodTipoEnfByNombreTipo(String nombreTipo) throws SQLException {
+		
+		int cod_tipo = 0;
+		
+		String query = "select * from tipo_enfermedad where nombre_tipo = ?";
+		
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setString(1, nombreTipo);
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			cod_tipo = resul.getInt("cod_tipo");
+		}
+		
+		return cod_tipo;
+		
+	}
+	
 	
 }
 

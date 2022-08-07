@@ -139,8 +139,15 @@ public class RegistroEnfermedad extends JDialog {
 							
 								JOptionPane.showMessageDialog(null, "Modificacion Exitosa", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
 								dispose();
-								EstadisticaEnfermedad r = new EstadisticaEnfermedad(user);
-								r.setVisible(true);
+								EstadisticaEnfermedad r;
+								try {
+									r = new EstadisticaEnfermedad(user);
+									r.setVisible(true);
+								} catch (SQLException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+
 							}
 						}
 					}else {
@@ -155,7 +162,12 @@ public class RegistroEnfermedad extends JDialog {
 							String tipo = cbxTipo.getSelectedItem().toString();
 							String descripcion = textPaneDescripcion.getText();
 							Enfermedad enfer = new Enfermedad(codigo,nombre,tipo, descripcion);
-							Clinica.getInstance().insertarEnfermedad(enfer);
+							try {
+								Clinica.getInstance().insertarEnfermedad(enfer,Clinica.getInstance().buscarCodTipoEnfByNombreTipo(tipo));
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 							JOptionPane.showMessageDialog(null, "Registro Exitoso", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
 							limpiar();
 							txtCodigo.setText("E-" + Clinica.getInstance().generadorCodigo(5));

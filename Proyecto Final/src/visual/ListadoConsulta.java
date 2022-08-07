@@ -19,10 +19,15 @@ import javax.swing.UIManager;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 import logico.Clinica;
+import logico.ConexionSQL;
 import logico.Consulta;
+import logico.Paciente;
 
 public class ListadoConsulta extends JDialog {
 
@@ -48,8 +53,9 @@ public class ListadoConsulta extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public ListadoConsulta() {
+	public ListadoConsulta() throws SQLException {
 		setTitle("Listado de consultas");
 		setModal(true);
 		setResizable(false);
@@ -80,7 +86,7 @@ public class ListadoConsulta extends JDialog {
 		{
 			tableconsulta = new JTable();
 			tableconsulta.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			String[] heardersconsultas = {"Codigo","Fecha de consulta","Paciente","Enfermedad","Medico"};
+			String[] heardersconsultas = {"Codigo","Fecha de consulta","Paciente","Diagnostico","Medico"};
 			modelconsulta = new DefaultTableModel();
 			tableconsulta.setModel(modelconsulta);
 			modelconsulta.setColumnIdentifiers(heardersconsultas);
@@ -104,22 +110,43 @@ public class ListadoConsulta extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-		loadConsultas();
+		loadConsultas1();
 	}
-	private void loadConsultas()
-	{
-		modelconsulta.setRowCount(0);
-		rowsconsulta = new Object[modelconsulta.getColumnCount()];
+
+private void loadConsultas1() throws SQLException {
+
 		
-		for (int i = 0; i < Clinica.getInstance().getCitasMedicas().size(); i++) {
-			rowsconsulta[0] = Clinica.getInstance().getCitasMedicas().get(i).getCodigo();
-			rowsconsulta[1] = Clinica.getInstance().getCitasMedicas().get(i).getFechaCita();
-			rowsconsulta[2] = Clinica.getInstance().getCitasMedicas().get(i).getNombrePersona();
-			rowsconsulta[3] = Clinica.getInstance().getCitasMedicas().get(i).getMedico().getNombre()+" "+Clinica.getInstance().getCitasMedicas().get(i).getMedico().getApellido();
-			modelconsulta.addRow(rowsconsulta);
-		}
+	modelconsulta.setRowCount(0);
+	rowsconsulta = new Object[modelconsulta.getColumnCount()];
+		
+			String query = "select consulta.*,medico.nombre as nombre_doctor ,medico.apellido as apellido_doctor, paciente.* "
+					+ "					from consulta,historia_clinica,medico, paciente "
+					+ "					where consulta.cod_historia = historia_clinica.cod_historia and consulta.cod_medico = medico.cod_medico "
+					+ "					and historia_clinica.ced_paciente = paciente.ced_paciente ";
+			
+			PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+			
+			ResultSet res = stament.executeQuery();
+			
+			while(res.next()) {
+				
+				rowsconsulta[0]= res.getString("cod_consulta");
+				rowsconsulta[1] = res.getString("fecha_consulta");
+				rowsconsulta[2] = res.getString("nombre")+" "+res.getString("apellido");
+				rowsconsulta[3] = res.getString("diagnostico") ;
+				rowsconsulta[4] = res.getString("nombre_doctor") +" "+res.getString("apellido_doctor") ;
+				modelconsulta.addRow(rowsconsulta);
+				
+			}
+			stament.close();
+			res.close();
 		
 	}
+	
+	
+	
+	
+	
 }
 
 

@@ -161,7 +161,6 @@ public class MainPrueba {
 		
 		//System.out.println(Clinica.getInstance().buscarCodVacunaByNombreFab("Moderna"));
 		
-		Vacuna covidPfizer = new Vacuna("V-39201", "COVID-19 Moderna", "Moderna", null, "ARN", "Intramuscular");
-		Clinica.getInstance().agregarVacuna(covidPfizer);
+		System.out.println(Clinica.getInstance().buscarCodTipoEnfByNombreTipo("Sexual"));
 
 }}
