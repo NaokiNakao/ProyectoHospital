@@ -7,16 +7,16 @@ import java.util.Date;
 public class Consulta {
 
 	private String codigo;
-	private LocalDateTime fechaConsulta;
+	private String fechaConsulta;
 	private String sintomas;
 	private String diagnostico;
 	private Enfermedad enfermedad;
 	private Medico miMedico;
 	private Vacuna misVacunas;
 	private String receta;
-	private LocalDateTime fechaT;
+	private String fechaT;
 	
-	public Consulta(String codigo, LocalDateTime fechaConsulta, String sintomas, String diagnostico, Medico miMedico,String receta, LocalDateTime fechaT) {
+	public Consulta(String codigo, String fechaConsulta, String sintomas, String diagnostico, Medico miMedico,String receta, String fechaT) {
 		this.codigo = codigo;
 		this.fechaConsulta = fechaConsulta;
 		this.sintomas = sintomas;
@@ -30,7 +30,7 @@ public class Consulta {
 		return codigo;
 	}
 
-	public LocalDateTime getFechaConsulta() {
+	public String getFechaConsulta() {
 		return fechaConsulta;
 	}
 
@@ -54,7 +54,7 @@ public class Consulta {
 		this.codigo = codigo;
 	}
 
-	public void setFechaConsulta(LocalDateTime fechaConsulta) {
+	public void setFechaConsulta(String fechaConsulta) {
 		this.fechaConsulta = fechaConsulta;
 	}
 
@@ -90,11 +90,11 @@ public class Consulta {
 		this.receta = receta;
 	}
 
-	public LocalDateTime getFechaT() {
+	public String getFechaT() {
 		return fechaT;
 	}
 
-	public void setFechaT(LocalDateTime fechaT) {
+	public void setFechaT(String fechaT) {
 		this.fechaT = fechaT;
 	}
 
