@@ -56,8 +56,9 @@ public class PanelUsuario extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @throws SQLException 
 	 */
-	public PanelUsuario(Usuario user) {
+	public PanelUsuario(Usuario user) throws SQLException {
 		setResizable(false);
 		setModal(true);
 		setBounds(100, 100, 743, 470);
@@ -84,8 +85,15 @@ public class PanelUsuario extends JDialog {
 			btnPacientes = new JButton("Pacientes");
 			btnPacientes.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					ListadoPaciente listado = new ListadoPaciente(user);
-					listado.setVisible(true);
+					ListadoPaciente listado;
+					try {
+						listado = new ListadoPaciente(user);
+						listado.setVisible(true);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				}
 			});
 			btnPacientes.setBounds(10, 11, 134, 25);
@@ -247,7 +255,7 @@ public class PanelUsuario extends JDialog {
 			txtTipo.setText(((Administrador) user).getPuestoLaboral());
 		}
 		else if (user instanceof Medico) {
-			txtTipo.setText(((Medico) user).getEspecialidad());
+			txtTipo.setText(Clinica.getInstance().buscarEspecialidadCodByCodMedico(user.getId()));
 		}
 		
 		panelAgenda = new JPanel();

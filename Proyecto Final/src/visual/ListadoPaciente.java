@@ -14,7 +14,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import logico.Clinica;
+import logico.ConexionSQL;
 import logico.Medico;
+import logico.Paciente;
 import logico.Usuario;
 import logico.CitaMedica;
 
@@ -27,6 +29,9 @@ import javax.swing.SpinnerDateModel;
 import java.util.Date;
 import java.util.Calendar;
 import java.awt.event.ActionListener;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.ScrollPaneConstants;
 
@@ -58,7 +63,7 @@ public class ListadoPaciente extends JDialog {
 	/*
 	 * Create the dialog.
 	 */
-	public ListadoPaciente(Usuario user) {
+	public ListadoPaciente(Usuario user) throws SQLException {
 		if(user instanceof Medico)
 		{
 			med = (Medico) user;
@@ -109,39 +114,56 @@ public class ListadoPaciente extends JDialog {
 		}
 		loadPacientes();
 	}
-	private void loadPacientes()
-	{
+	private void loadPacientes() throws SQLException{
 		modelpac.setRowCount(0);
 		rowpac = new Object[modelpac.getColumnCount()];
-		if(med != null)
-		{
-			for (int i = 0; i < Clinica.getInstance().getCitasMedicas().size(); i++) {
-				CitaMedica citaAct = Clinica.getInstance().getCitasMedicas().get(i);
-				if(citaAct.getMedico().getId().equalsIgnoreCase(med.getId()))
-				{
-					rowpac[0] = citaAct.getCedulaPersona();
-					rowpac[1] = citaAct.getNombrePersona();
-					rowpac[2] = citaAct.getGeneroPersona();
-					rowpac[3] = citaAct.getFechaNacimientoPersona();
-					rowpac[4] = citaAct.getDireccionPersona();
-					rowpac[5] = citaAct.getTelefono();
+		
+		if(med != null){
+			
+		String query = "select  paciente.*,ciudad.nombre_ciudad,provincia.nombre_provincia "
+				+ "from paciente,ciudad,provincia, cita_medica "
+				+ "where cita_medica.cod_medico = ? and paciente.cod_ciudad = ciudad.cod_ciudad "
+				+ "and ciudad.cod_provincia = provincia.cod_provincia and cita_medica.ced_paciente = paciente.ced_paciente";
+		
+		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+		stament.setString(1, med.getId());
+		
+		ResultSet resul = stament.executeQuery();
+		
+		
+		while(resul.next()) {
+			
+				rowpac[0] = resul.getString("ced_paciente");
+				rowpac[1] =resul.getString("nombre");
+				rowpac[2] = resul.getString("genero");
+				rowpac[3] = resul.getDate("fecha_nac");
+				rowpac[4] = resul.getString("nombre_ciudad")+", "+resul.getString("nombre_provincia");
+				rowpac[5] = resul.getString("telefono");
+
 					modelpac.addRow(rowpac);
 				}
 			}
-		}
-		else
-		{
-			for (int i = 0; i < Clinica.getInstance().getCitasMedicas().size(); i++) {
-				CitaMedica citaAct = Clinica.getInstance().getCitasMedicas().get(i);
-				rowpac[0] = citaAct.getCedulaPersona();
-				rowpac[1] = citaAct.getNombrePersona();
-				rowpac[2] = citaAct.getGeneroPersona();
-				rowpac[3] = citaAct.getFechaNacimientoPersona();
-				rowpac[4] = citaAct.getDireccionPersona();
-				rowpac[5] = citaAct.getTelefono();
-				modelpac.addRow(rowpac);
-			}
-		}
+		else{
+			
+			String query = "select  paciente.*,ciudad.nombre_ciudad,provincia.nombre_provincia "
+					+ "from paciente,ciudad,provincia, cita_medica "
+					+ "where paciente.cod_ciudad = ciudad.cod_ciudad and ciudad.cod_provincia = provincia.cod_provincia and cita_medica.ced_paciente = paciente.ced_paciente";
+			PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+			ResultSet resul = stament.executeQuery();
+			
+			
+			while(resul.next()) {
+			
+						rowpac[0] = resul.getString("ced_paciente");
+						rowpac[1] =resul.getString("nombre");
+						rowpac[2] = resul.getString("genero");
+						rowpac[3] = resul.getDate("fecha_nac");
+						rowpac[4] = resul.getString("nombre_ciudad")+", "+resul.getString("nombre_provincia");
+						rowpac[5] = resul.getString("telefono");
+
+						modelpac.addRow(rowpac);
+					}
+				}
 	}
 }
 

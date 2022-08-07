@@ -258,7 +258,7 @@ public class RegistroUsuario extends JDialog {
 		txtEspecialidad = new JTextField();
 		txtEspecialidad.setBounds(155, 25, 208, 20);
 		if(user!=null && user.getId().contains("M")) {
-			txtEspecialidad.setText( Clinica.getInstance().buscarEspecialidadCodByCodMedico(user.getId()) );
+			txtEspecialidad.setText( Clinica.getInstance().buscarEspecialidadCodByCodMedico(user.getId()));
 		}
 		panelMedico.add(txtEspecialidad);
 		txtEspecialidad.setColumns(10);
@@ -314,7 +314,7 @@ public class RegistroUsuario extends JDialog {
 							 if(rdbtnMedico.isSelected()) {
 								 if(pfContrasenna.getText().equalsIgnoreCase(pfRepetirContrasenna.getText())) {
 									 Usuario usu = new Medico( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
-											 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText(),txtEspecialidad.getText().toString());
+											 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText());
 									 
 									 
 									 Clinica.getInstance().insertarUsuario(usu,txtEspecialidad.getText().toString());
@@ -390,7 +390,7 @@ public class RegistroUsuario extends JDialog {
 				}else {
 					
 					 Usuario usu = new Medico( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
-							 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText(),txtEspecialidad.getText().toString());
+							 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText());
 					 
 					 Clinica.getInstance().modificarUsuario(user,txtCargoLaboral.getText().toString());
 
