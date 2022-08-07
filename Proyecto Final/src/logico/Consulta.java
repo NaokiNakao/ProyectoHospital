@@ -1,21 +1,22 @@
 package logico;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
 public class Consulta {
 
 	private String codigo;
-	private Date fechaConsulta;
+	private LocalDateTime fechaConsulta;
 	private String sintomas;
 	private String diagnostico;
 	private Enfermedad enfermedad;
 	private Medico miMedico;
 	private Vacuna misVacunas;
 	private String receta;
-	private Date fechaT;
+	private LocalDateTime fechaT;
 	
-	public Consulta(String codigo, Date fechaConsulta, String sintomas, String diagnostico, Medico miMedico,String receta, Date fechaT) {
+	public Consulta(String codigo, LocalDateTime fechaConsulta, String sintomas, String diagnostico, Medico miMedico,String receta, LocalDateTime fechaT) {
 		this.codigo = codigo;
 		this.fechaConsulta = fechaConsulta;
 		this.sintomas = sintomas;
@@ -29,7 +30,7 @@ public class Consulta {
 		return codigo;
 	}
 
-	public Date getFechaConsulta() {
+	public LocalDateTime getFechaConsulta() {
 		return fechaConsulta;
 	}
 
@@ -53,7 +54,7 @@ public class Consulta {
 		this.codigo = codigo;
 	}
 
-	public void setFechaConsulta(Date fechaConsulta) {
+	public void setFechaConsulta(LocalDateTime fechaConsulta) {
 		this.fechaConsulta = fechaConsulta;
 	}
 
@@ -89,11 +90,11 @@ public class Consulta {
 		this.receta = receta;
 	}
 
-	public Date getFechaT() {
+	public LocalDateTime getFechaT() {
 		return fechaT;
 	}
 
-	public void setFechaT(Date fechaT) {
+	public void setFechaT(LocalDateTime fechaT) {
 		this.fechaT = fechaT;
 	}
 

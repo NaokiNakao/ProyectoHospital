@@ -68,10 +68,10 @@ public class PanelUsuario extends JDialog {
 		setModal(true);
 		setBounds(100, 100, 743, 470);
 		setLocationRelativeTo(null);
-		if (user instanceof Administrador) {
+		if (user.getId().contains("A") && user!= null) {
 			setTitle("Administrador");
 		}
-		else if (user instanceof Medico) {
+		else if (user.getId().contains("M") && user!= null) {
 			setTitle("Medico");
 			//loadAgenda(user);
 		}
@@ -152,14 +152,14 @@ public class PanelUsuario extends JDialog {
 				}
 			});
 			btnUsuarios.setBounds(10, 155, 134, 25);
-			if (user instanceof Medico) {
+			if (user.getId().contains("M") && user!= null) {
 				btnUsuarios.setVisible(false);
 			}
 			panelMenu.add(btnUsuarios);
 			
 			btnConsulta = new JButton("Sgte Consulta");
 			btnConsulta.setBounds(10, 155, 134, 25);
-			if (user instanceof Administrador) {
+			if (user.getId().contains("A") && user!= null) {
 				btnConsulta.setVisible(false);
 			}
 			panelMenu.add(btnConsulta);
@@ -173,7 +173,7 @@ public class PanelUsuario extends JDialog {
 				}
 			});
 			btnNuevaCitas.setBounds(10, 120, 134, 25);
-			if (user instanceof Medico) {
+			if (user.getId().contains("M") && user!= null ) {
 				btnNuevaCitas.setVisible(false);
 			}
 			panelMenu.add(btnNuevaCitas);
@@ -202,7 +202,7 @@ public class PanelUsuario extends JDialog {
 				}
 			});
 			btnNewButton.setBounds(10, 194, 134, 23);
-			if (user instanceof Administrador) {
+			if (user.getId().contains("A") && user!= null ) {
 				btnNewButton.setVisible(false);
 			}
 			panelMenu.add(btnConsulta);
@@ -211,7 +211,7 @@ public class PanelUsuario extends JDialog {
 			btnConsulta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					Medico med = (Medico) user;	
+					 Medico med = new Medico(user.getId(), user.getLogin(), user.getPassword(), user.getNombre(), user.getApellido(), user.getApellido());
 					
 					try {
 						if(CitasPendientes(med)==0) {			
@@ -221,7 +221,7 @@ public class PanelUsuario extends JDialog {
 							siguienteCita = siguienteCita(med);
 							ConsultasVisual rc;
 							try {
-								rc = new ConsultasVisual(siguienteCita,(Medico) user);
+								rc = new ConsultasVisual(siguienteCita, med);
 								rc.setVisible(true);
 							} catch (SQLException e1) {
 								// TODO Auto-generated catch block
@@ -238,10 +238,10 @@ public class PanelUsuario extends JDialog {
 		
 		lblHolder = new JLabel("");
 		String imgPath = null;
-		if (user instanceof Administrador) {
+		if (user.getId().contains("A") && user!= null) {
 			imgPath = "/pictures/admin.png";
 		}
-		else if (user instanceof Medico) {
+		else if (user.getId().contains("A") && user!= null ) {
 			imgPath = "/pictures/medicoperfil.png";
 		}
 		//lblHolder.setIcon(new ImageIcon(PanelUsuario.class.getResource(imgPath)));
@@ -254,10 +254,10 @@ public class PanelUsuario extends JDialog {
 		txtNombre.setBounds(10, 249, 190, 23);
 		contentPanel.add(txtNombre);
 		txtNombre.setColumns(10);
-		if (user instanceof Administrador) {
+		if (user.getId().contains("A") && user!= null ) {
 			txtNombre.setText(user.getNombre() + " " + user.getApellido());
 		}
-		else if (user instanceof Medico) {
+		else if (user.getId().contains("M") && user!= null ) {
 			txtNombre.setText("Dr. " + user.getNombre() + " " + user.getApellido());
 		}
 		
@@ -267,17 +267,17 @@ public class PanelUsuario extends JDialog {
 		txtTipo.setBounds(10, 283, 190, 23);
 		contentPanel.add(txtTipo);
 		txtTipo.setColumns(10);
-		if (user instanceof Administrador) {
+		if (user.getId().contains("A") && user!= null ) {
 			txtTipo.setText(((Administrador) user).getPuestoLaboral());
 		}
-		else if (user instanceof Medico) {
+		else if (user.getId().contains("M") && user!= null) {
 			txtTipo.setText(Clinica.getInstance().buscarEspecialidadCodByCodMedico(user.getId()));
 		}
 		
 		panelAgenda = new JPanel();
 		panelAgenda.setBorder(new TitledBorder(null, "Agenda", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelAgenda.setBounds(220, 11, 324, 352);
-		if (user instanceof Administrador) {
+		if (user.getId().contains("A") && user!= null) {
 			panelAgenda.setVisible(false);
 		}
 		contentPanel.add(panelAgenda);
@@ -303,6 +303,8 @@ public class PanelUsuario extends JDialog {
 				JButton cancelButton = new JButton("Salir");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
+						InicioSesion r = new InicioSesion();
+						r.setVisible(true);
 						dispose();
 					}
 				});
@@ -311,7 +313,7 @@ public class PanelUsuario extends JDialog {
 			}
 		}
 		
-		if (user instanceof Medico) {
+		if (user.getId().contains("M") && user!= null) {
 			loadAgenda(user);
 		}
 	}

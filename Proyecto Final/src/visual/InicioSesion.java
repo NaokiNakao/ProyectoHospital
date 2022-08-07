@@ -14,8 +14,10 @@ import javax.swing.ImageIcon;
 import javax.swing.border.TitledBorder;
 
 import logico.Clinica;
+import logico.Usuario;
 
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 
@@ -88,9 +90,20 @@ public class InicioSesion extends JDialog {
 		btnEntrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (Clinica.getInstance().validacionCredenciales(txtCodigoUsuario.getText(), pfPassword.getText())) {
-					PanelUsuario frame = new PanelUsuario(Clinica.getLoginUser());
-					dispose();
-					frame.setVisible(true);
+					
+					Usuario user = Clinica.getInstance().buscarUsuarioByUsername(txtCodigoUsuario.getText());
+					
+					PanelUsuario frame;
+					try {
+						frame = new PanelUsuario(user);
+						frame.setVisible(true);
+						dispose();
+						
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "Error en las credenciales.", "Error", JOptionPane.ERROR_MESSAGE);

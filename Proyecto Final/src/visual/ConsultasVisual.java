@@ -36,6 +36,7 @@ import logico.Vacuna;
 
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.UIManager;
 import java.awt.Color;
@@ -48,6 +49,7 @@ import java.awt.event.MouseEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import javax.swing.ImageIcon;
 
@@ -149,7 +151,7 @@ public class ConsultasVisual extends JDialog {
 			panelPaciente.setLayout(null);
 			
 			txtPaciente = new JTextField();
-			txtPaciente.setText(cita.getNombrePersona());
+			txtPaciente.setText(cita.getPaciente().getNombre());
 			txtPaciente.setEditable(false);
 			txtPaciente.setBounds(10, 342, 204, 20);
 			panelPaciente.add(txtPaciente);
@@ -330,18 +332,20 @@ public class ConsultasVisual extends JDialog {
 						
 						
 						try {
-							if(Clinica.getInstance().buscarPaciente(cita.getCedulaPersona())!= null) {
+							if(Clinica.getInstance().buscarPaciente(cita.getPaciente().getCedula())!= null) {
 								
-								Paciente p = Clinica.getInstance().buscarPaciente(cita.getCedulaPersona());
+								Paciente p = Clinica.getInstance().buscarPaciente(cita.getPaciente().getCedula());
 								
 								if(p.getHistorial()!= null) {
 									
 								HistoriaClinica h = p.getHistorial();
 
 								
-								Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(), textPaneDiagnostico.getText().toString(),
-										medico, textPaneReceta.getText().toString(),cita.getFechaN());
+								Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(),
+										textPaneDiagnostico.getText().toString(),
+										medico, textPaneReceta.getText().toString(),cita.getFechaCita());
 								
+							
 								if(selectedEnfermedad!=null) {
 									n.setEnfermedad(selectedEnfermedad);
 									h.getPadecimientos().add(selectedEnfermedad);
@@ -359,15 +363,15 @@ public class ConsultasVisual extends JDialog {
 								u.setVisible(true);
 								}
 							}else {
-								HistoriaClinica h = new HistoriaClinica("Historial-"+cita.getCedulaPersona());
+								HistoriaClinica h = new HistoriaClinica("Historial-"+cita.getPaciente().getCedula());
 								
-								Paciente p = new Paciente(cita.getCedulaPersona(), cita.getNombrePersona(), cita.getGeneroPersona(), cita.getFechaNacimientoPersona(), 
-											cita.getDireccionPersona(), cita.getTelefono());
+								Paciente p = new Paciente(cita.getPaciente().getCedula(), cita.getPaciente().getNombre(), cita.getPaciente().getGenero(), cita.getPaciente().getFechaNacimiento(), 
+										cita.getPaciente().getDireccion(), cita.getPaciente().getTelefono());
 								
 								p.setHistorial(h);
 								
 								Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(), textPaneDiagnostico.getText().toString(),
-										medico, textPaneReceta.getText().toString(),cita.getFechaN());
+										medico, textPaneReceta.getText().toString(),cita.getFechaCita());
 								
 								if(selectedEnfermedad!=null) {
 									n.setEnfermedad(selectedEnfermedad);
