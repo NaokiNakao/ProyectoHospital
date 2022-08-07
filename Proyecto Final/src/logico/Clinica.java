@@ -494,7 +494,7 @@ public class Clinica {
 			statement = ConexionSQL.getConexion().prepareStatement(sql);
 			statement.setString(1, updatedEnfermedad.getNombreEnfermedad());
 			statement.setString(2, updatedEnfermedad.getDescripcionEnfermedad());
-			statement.setInt(3, buscarTipoEnfByNombre(updatedEnfermedad.getTipoEnfermedad()));
+			statement.setInt(3, buscarCodTipoEnfByNombreTipo(updatedEnfermedad.getTipoEnfermedad()));
 			statement.setString(4, updatedEnfermedad.getCodigo());
 			statement.executeUpdate();
 			statement.close();
@@ -559,9 +559,9 @@ public class Clinica {
 		try {
 			statement = ConexionSQL.getConexion().prepareStatement(sql);
 			statement.setString(1, cita.getCodigo());
-			statement.setDate(2, (java.sql.Date) cita.getFechaCita());
+			statement.setString(2, cita.getFechaCita().toString());
 			statement.setString(3, cita.getMedico().getId());
-			statement.setString(4, cita.getCedulaPersona());
+			statement.setString(4, cita.getPaciente().getCedula());
 			
 			statement.executeUpdate();
 			statement.close();
@@ -631,14 +631,6 @@ public class Clinica {
 		medico.getMisConsultas().add(c);
 		medico.getMisCitas().remove(cita);
 		b.getMisConsultas().add(c);
-		
-	}
-	
-	/*NECESARIA NAOKI*/
-	public void insertarCita(CitaMedica cita, Medico medico) {
-		
-		citasMedicas.add(cita);
-		medico.getMisCitas().add(cita);
 		
 	}
 	
