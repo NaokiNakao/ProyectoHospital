@@ -133,7 +133,7 @@ public class Clinica {
 	/*NECESITA SQL NAOKI*/
 	public int casosEnfermedadTotal(String codEnf) {
 		int total = 0;
-		String query = "select count(*) casos "
+		String query = "select count(*) as casos "
 				+ "from enfermedad_contenida_historia "
 				+ "where cod_enf = ?";
 		PreparedStatement statement = null;
@@ -166,13 +166,6 @@ public class Clinica {
 	public int casosEnfermedadPorFecha(String codEnf, Date fecha) {
 		int total = 0;
 		
-		for (Paciente paciente : misPacientes) {
-			for (Consulta consulta : paciente.getHistorial().getMisConsultas()) {
-				if (consulta.getEnfermedad().getCodigo().equalsIgnoreCase(codigoEnfermedad) && consulta.getFechaT().compareTo(fecha) == 0) {
-					total++;
-				}
-			}
-		}
 		
 		return total;
 	}
