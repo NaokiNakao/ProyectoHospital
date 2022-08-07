@@ -155,7 +155,7 @@ public class MainPrueba {
 		
 		System.out.println(password);*/
 		
-		System.out.println(Clinica.getInstance().validacionCredenciales("mjl0002", "jualopez"));
+		System.out.println(Clinica.getInstance().validacionCredenciales("apt0001", "paolatorres"));
 
 		
 		
