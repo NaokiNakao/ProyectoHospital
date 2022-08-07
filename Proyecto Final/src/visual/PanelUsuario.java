@@ -183,14 +183,9 @@ public class PanelUsuario extends JDialog {
 			btnMisConsultas = new JButton("Mis Consultas");
 			btnMisConsultas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ListadoConsulta t;
-					try {
-						t = new ListadoConsulta();
+					DatosConsultas t;
+						t = new DatosConsultas();
 						t.setVisible(true);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
 				}
 			});
 			btnMisConsultas.setBounds(10, 121, 134, 23);

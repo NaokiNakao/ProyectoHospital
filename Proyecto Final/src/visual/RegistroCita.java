@@ -2,6 +2,7 @@ package visual;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -12,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 
 import logico.CitaMedica;
 import logico.Clinica;
+import logico.ConexionSQL;
 import logico.Medico;
 import logico.Paciente;
 import logico.Usuario;
@@ -28,6 +30,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -244,18 +248,28 @@ public class RegistroCita extends JDialog {
 					Date dateAux = (Date) spnFechaCita.getValue();
 					Date fechaActual = new Date();
 					
-					if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), dateAux)) {
-						JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
-						
-					}else {
-						if(dateAux.compareTo(fechaActual) < 0) {
-							JOptionPane.showMessageDialog(null, "Favor introducir una fecha valida.", "Error", JOptionPane.ERROR_MESSAGE);	
+					try {
+						if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), dateAux.toString()) != null) {
+							JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
+							
 						}else {
-							Date dateAux2 = (Date) spnFechaCita.getValue();
-							SimpleDateFormat de = new SimpleDateFormat("MM/DD/YYY HH:mm");
-							fecha = de.format(dateAux2);
-							loadMedicos(dateAux2);
-							}
+							if(dateAux.compareTo(fechaActual) < 0) {
+								JOptionPane.showMessageDialog(null, "Favor introducir una fecha valida.", "Error", JOptionPane.ERROR_MESSAGE);	
+							}else {
+								String dateAux2 = (String) spnFechaCita.getValue();
+								SimpleDateFormat de = new SimpleDateFormat("MM/DD/YYY HH:mm");
+								fecha = de.format(dateAux2);
+								try {
+									loadMedicos(dateAux2);
+								} catch (SQLException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+								}
+						}
+					} catch (HeadlessException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
 									
 				}
@@ -331,46 +345,51 @@ public class RegistroCita extends JDialog {
 						
 						Date fechaNacimiento = (Date) spnNacimiento.getValue();
 						
-					if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), fechaCita)) {
-						JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
-					}else {
-						
-							if(espaciosVacios()) {
-								JOptionPane.showMessageDialog(null, "Favor completar todos los datos requeridos.", "Error", JOptionPane.ERROR_MESSAGE);
-							}else {
-								
-								if(fechaCita.compareTo(fechaActual) < 0) {
-									JOptionPane.showMessageDialog(null, "Favor introducir una fecha valida.", "Error", JOptionPane.ERROR_MESSAGE);
+					try {
+						if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), fechaCita.toString()) != null) {
+							JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
+						}else {
+							
+								if(espaciosVacios()) {
+									JOptionPane.showMessageDialog(null, "Favor completar todos los datos requeridos.", "Error", JOptionPane.ERROR_MESSAGE);
 								}else {
-								
-									if(fechaNacimiento.compareTo(fechaActual) > 0 ) {
-										JOptionPane.showMessageDialog(null, "Favor introducir una fecha de nacimiento valida.", "Error", JOptionPane.ERROR_MESSAGE);
+									
+									if(fechaCita.compareTo(fechaActual) < 0) {
+										JOptionPane.showMessageDialog(null, "Favor introducir una fecha valida.", "Error", JOptionPane.ERROR_MESSAGE);
 									}else {
-										
-										if(selectedMedico == null) {
-											JOptionPane.showMessageDialog(null, "Favor seleccionar un medico.", "Error", JOptionPane.ERROR_MESSAGE);
+									
+										if(fechaNacimiento.compareTo(fechaActual) > 0 ) {
+											JOptionPane.showMessageDialog(null, "Favor introducir una fecha de nacimiento valida.", "Error", JOptionPane.ERROR_MESSAGE);
 										}else {
-											CitaMedica cita;
-											try {
-												cita = new CitaMedica(txtCodigoCita.getText().toString(),Clinica.getInstance().formatoFechaHora(fechaCita.toString()),
-														selectedMedico, Clinica.getInstance().buscarPaciente(txtCedula.getText().toString()), "pendiente");
-												
-												Clinica.getInstance().insertarCita(cita);
-												JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
-												vacearEspacios();
 											
-											} catch (SQLException e1) {
-												// TODO Auto-generated catch block
-												e1.printStackTrace();
+											if(selectedMedico == null) {
+												JOptionPane.showMessageDialog(null, "Favor seleccionar un medico.", "Error", JOptionPane.ERROR_MESSAGE);
+											}else {
+												CitaMedica cita;
+												try {
+													cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita.toString(),
+															selectedMedico, Clinica.getInstance().buscarPaciente(txtCedula.getText().toString()), "pendiente");
+													
+													Clinica.getInstance().insertarCita(cita);
+													JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
+													vacearEspacios();
+												
+												} catch (SQLException e1) {
+													// TODO Auto-generated catch block
+													e1.printStackTrace();
+												}
+																
+												
 											}
-															
 											
 										}
-										
 									}
 								}
 							}
-						}
+					} catch (HeadlessException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					}
 				});
 				okButton.setActionCommand("OK");
@@ -394,19 +413,27 @@ public class RegistroCita extends JDialog {
 	}
 	
 
-	private void loadMedicos(Date fecha) {
-		
-		ArrayList<Medico> medicosDisp = new ArrayList<>();
-		medicosDisp = Clinica.getInstance().CargarMedicoDisponibles(fecha);
+	private void loadMedicos(String fecha) throws SQLException {
 		
 		modelMedicos.setRowCount(0);
 		rowsMedicos = new Object[modelMedicos.getColumnCount()];
 		
-		for (int i = 0; i < medicosDisp.size(); i++) {
-			rowsMedicos[0]= medicosDisp.get(i).getId();
-			rowsMedicos[1]= medicosDisp.get(i).getNombre()+" "+medicosDisp.get(i).getApellido();
-			rowsMedicos[2] = medicosDisp.get(i).getEspecialidad();
-			modelMedicos.addRow(rowsMedicos);
+		String query = "select medico.*, especialidad.* from especialidad,medico,medico_especialidad "
+				+ "where medico_especialidad.cod_medico = medico.cod_medico "
+				+ "and medico_especialidad.cod_especialidad = especialidad.cod_especialidad";
+		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			
+			if(Clinica.getInstance().medicoDisponible(fecha, resul.getString("cod_medico"))) {
+				rowsMedicos[0]= resul.getString("cod_medico");
+				rowsMedicos[1]= resul.getString("nombre")+" "+resul.getString("apellido");
+				rowsMedicos[2] = resul.getString("nombre_especialidad");
+				modelMedicos.addRow(rowsMedicos);
+			}
+			
+			
 		}
 		
 	}

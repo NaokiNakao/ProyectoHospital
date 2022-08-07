@@ -628,7 +628,7 @@ public class Clinica {
 			ResultSet result = statement.executeQuery();
 			
 			while(result.next()) {
-				cita = new CitaMedica(result.getString("cod_cita"), formatoFechaHora(result.getString("fecha_cita")), 
+				cita = new CitaMedica(result.getString("cod_cita"), result.getString("fecha_cita"), 
 						(Medico) buscarUsuarioById(result.getString("cod_medico")), buscarPaciente(result.getString("ced_paciente")),
 						result.getString("estado"));
 			}
@@ -676,16 +676,25 @@ public class Clinica {
 	}
 	
 	/*NECESARIA MISAEL*/
-	public boolean citaByCedula(String cedula, Date fecha) {
-		boolean bandera = false;
+	public CitaMedica citaByCedula(String cedula, String fecha) throws SQLException {
+		CitaMedica cita = null;
 		
-		for (CitaMedica citaMedica : citasMedicas) {
-			if(citaMedica.getCedulaPersona().equalsIgnoreCase(cedula) && citaMedica.getFechaCita().equals(fecha)) {
-				bandera = true;
-			}
+		String query = "select * from cita_medica where ced_paciente = ? and fecha_hora_cita = ?";
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setString(1, cedula);
+		stament.setString(2, fecha);
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			
+			cita = new CitaMedica(resul.getString("cod_cita"), fecha, buscarMedicoByCodigo(resul.getString("cod_medico")),
+					buscarPaciente(cedula), "pendiente");
 		}
 		
-		return bandera;
+		stament.close();
+		resul.close();
+		
+		return cita;
 	}
 	
 	
@@ -928,7 +937,7 @@ public class Clinica {
 		ResultSet res = statement.executeQuery();
 		
 		while(res.next()) {
-			especialidad = res.getString("cod_especialidad");
+			especialidad = res.getString("nombre_especialidad");
 		}
 		
 		return especialidad;
@@ -973,24 +982,6 @@ public class Clinica {
 		
 		return disponible;
 	}
-	
-	/*NECESARIA MISAEL*/
-	public ArrayList<Medico> CargarMedicoDisponibles(Date fecha) {
-		
-		ArrayList<Medico> medicosDisp = new ArrayList<>();
-		
-		for (Usuario user : misUsuarios) {
-			
-			if(user instanceof Medico) {
-				if(medicoDisponible(fecha, user.getId())) {
-					medicosDisp.add((Medico) user);
-				}
-			}
-		}
-		
-		return medicosDisp; 
-	}
-
 	
 	public Usuario buscarUsuarioByUsername(String username) {
 		Usuario user = null;
@@ -1064,12 +1055,6 @@ public class Clinica {
 
 	}
 	
-	/*Misael*/
-	public void InsertarAdmin(Administrador usu) {
-		// TODO Auto-generated method stub
-		
-	}
-	
 	
 	public void cargarPadecimiento(Paciente paciente) {
 		
@@ -1098,6 +1083,9 @@ public class Clinica {
 			tipo = resul.getInt("cod_tipo");
 		}
 		
+		stament.close();
+		resul.close();
+		
 		return tipo;
 		
 	}
@@ -1116,8 +1104,47 @@ public class Clinica {
 			cod_tipo = resul.getInt("cod_tipo");
 		}
 		
+		stament.close();
+		resul.close();
+		
 		return cod_tipo;
 		
+	}
+	
+	public Consulta buscarConsultaByCod(String cod) throws SQLException {
+		
+		Consulta consul = null;
+		
+		String query = "select * from consulta where cod_consulta = ?";
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			
+			consul = new Consulta(cod, resul.getString("fecha_consulta"), resul.getString("sintomas"), resul.getString("diagnostico")
+					, buscarMedicoByCodigo(resul.getString("cod_medico")), resul.getString("receta"), resul.getString("fecha_consulta"));
+		}
+		return consul;
+	}
+	
+	public Paciente buscarPacienteByCodHistorial(String cod_historia) throws SQLException {
+		
+		Paciente p = null;
+		
+		String query = "select * from historia_clinica where cod_historia = ?";
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setString(1, cod_historia);
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			p = buscarPaciente(resul.getString("ced_paciente"));
+		}
+		
+		
+		stament.close();
+		resul.close();
+		
+		return p;
 	}
 	
 	
