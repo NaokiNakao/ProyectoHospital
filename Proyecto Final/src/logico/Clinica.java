@@ -382,11 +382,11 @@ public class Clinica {
 	
 	
 	/*NECESARIA NAOKI*/
-	public boolean agregarVacuna(Vacuna nuevaVacuna, int codFab) throws SQLException { //probada main
+	public boolean agregarVacuna(Vacuna nuevaVacuna) { //probada main
 		boolean realizado = false;
 		PreparedStatement statement = null;
 		String sql = "insert into vacuna (cod_vacuna, nombre_vacuna, tipo_vacuna, forma_admin, cod_fab) "
-				+ "values (?, ?, ?, ?, ?);";
+				+ "values (?, ?, ?, ?, ?)";
 		
 		try {
 			statement = ConexionSQL.getConexion().prepareStatement(sql);
@@ -394,7 +394,7 @@ public class Clinica {
 			statement.setString(2, nuevaVacuna.getNombreVacuna());
 			statement.setString(3, nuevaVacuna.getTipoVacuna());
 			statement.setString(4, nuevaVacuna.getFormaAdministracion());
-			statement.setInt(5, codFab);
+			statement.setString(5, nuevaVacuna.getFabricante());
 			
 			statement.executeUpdate();
 			statement.close();
@@ -434,29 +434,13 @@ public class Clinica {
 		return realizado;
 	}
 	
-	public String buscarNombreFabByCodFab(int codFab) {
-		String nombreFabricante = null;
-		String query = "select nombre_fab "
+	public int buscarCodVacunaByNombreFab(String nombreFab) {
+		int codVacuna;
+		String query = "select cod_fab "
 				+ "from fabricante "
-				+ "where cod_fab = ?";
-		PreparedStatement statement = null;
+				+ "where nombre_fab = ?";
 		
-		try {
-			statement = ConexionSQL.getConexion().prepareStatement(query);
-			statement.setInt(1, codFab);
-			ResultSet result = statement.executeQuery();
-			
-			while(result.next()) {
-				nombreFabricante = result.getString("nombre_fab");
-			}
-			
-			statement.close();
-			result.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return nombreFabricante;
+		return codVacuna;
 	}
 	
 	////////////////////Utils (Enfermedad) ////////////////////

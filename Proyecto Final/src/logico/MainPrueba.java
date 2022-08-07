@@ -159,6 +159,9 @@ public class MainPrueba {
 		
 		//System.out.println(Clinica.getInstance().buscarUsuarioByUsername("apt0001").getNombre());
 		
-		System.out.println(Clinica.getInstance().buscarNombreFabByCodFab(2));
+		//System.out.println(Clinica.getInstance().buscarNombreFabByCodFab(2));
+		
+		Vacuna covidPfizer = new Vacuna("V-39201", "COVID-19 Pfizer", Clinica.getInstance().buscarNombreFabByCodFab(2), null, "ARN", "Intramuscular");
+		Clinica.getInstance().agregarVacuna(covidPfizer);
 
 }}
