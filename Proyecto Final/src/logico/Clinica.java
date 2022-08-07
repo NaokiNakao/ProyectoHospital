@@ -407,8 +407,26 @@ public class Clinica {
 	}
 	
 	/*NECESARIA MISAEL*/ 
-	public boolean modificarVacuna(Vacuna modificacion) {
+	public boolean modificarVacuna(Vacuna updatedVacuna) {
 		boolean actualizado = false;
+		String sql = "update vacuna "
+				+ "set nombre_vacuna = ?, tipo_vacuna = ?, forma_admin = ?, cod_fab = ? "
+				+ "where cod_vacuna = ?";
+		PreparedStatement statement = null;
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(sql);
+			statement.setString(1, updatedVacuna.getNombreVacuna());
+			statement.setString(2, updatedVacuna.getTipoVacuna());
+			statement.setString(3, updatedVacuna.getFormaAdministracion());
+			statement.setInt(4, buscarCodFabByNombreFab(updatedVacuna.getFabricante()));
+			statement.setString(5, updatedVacuna.getCodigo());
+			statement.executeUpdate();
+			statement.close();
+			actualizado = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		return actualizado;
 	}
