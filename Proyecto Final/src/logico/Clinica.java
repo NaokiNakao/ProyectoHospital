@@ -131,15 +131,27 @@ public class Clinica {
 	*/
 	
 	/*NECESITA SQL NAOKI*/
-	public int casosEnfermedadTotal(String codigoEnfermedad) {
+	public int casosEnfermedadTotal(String codEnf) {
 		int total = 0;
+		String query = "select count(*) as casos "
+				+ "from enfermedad_contenida_historia "
+				+ "where cod_enf = ?";
+		PreparedStatement statement = null;
 		
-		for (Paciente paciente : misPacientes) {
-			for (Enfermedad enfermedad : paciente.getHistorial().getPadecimientos()) {
-				if (enfermedad.getCodigo().equalsIgnoreCase(codigoEnfermedad)) {
-					total++;
-				}
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(query);
+			statement.setString(1, codEnf);
+			ResultSet result = statement.executeQuery();
+			
+			while (result.next()) {
+				total = result.getInt("casos");
 			}
+			
+			statement.close();
+			result.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		return total;
@@ -151,15 +163,30 @@ public class Clinica {
 	*/
 	
 	/*NECESITA SQL MISAEL*/
-	public int casosEnfermedadPorFecha(String codigoEnfermedad, Date fecha) {
+	public int casosEnfermedadPorFecha(String codEnf, Date fecha) {
 		int total = 0;
+		String query = "select count(*) as casos "
+				+ "from enfermedad_diagnosticada_consulta "
+				+ "where cod_enf = ? and cod_consulta in "
+				+ "		(select cod_consulta "
+				+ "		from consulta "
+				+ "		where fecha_consulta = ?)";
+		PreparedStatement statement = null;
 		
-		for (Paciente paciente : misPacientes) {
-			for (Consulta consulta : paciente.getHistorial().getMisConsultas()) {
-				if (consulta.getEnfermedad().getCodigo().equalsIgnoreCase(codigoEnfermedad) && consulta.getFechaT().compareTo(fecha) == 0) {
-					total++;
-				}
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(query);
+			statement.setString(1, codEnf);
+			statement.setDate(2, (java.sql.Date) fecha);
+			ResultSet result = statement.executeQuery();
+			
+			while(result.next()) {
+				total = result.getInt("casos");
 			}
+			
+			statement.close();
+			result.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		return total;
