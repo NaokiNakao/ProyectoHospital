@@ -244,7 +244,7 @@ public class PanelUsuario extends JDialog {
 		else if (user instanceof Medico) {
 			imgPath = "/pictures/medicoperfil.png";
 		}
-		lblHolder.setIcon(new ImageIcon(PanelUsuario.class.getResource(imgPath)));
+		//lblHolder.setIcon(new ImageIcon(PanelUsuario.class.getResource(imgPath)));
 		lblHolder.setBounds(10, 24, 190, 213);
 		contentPanel.add(lblHolder);
 		
