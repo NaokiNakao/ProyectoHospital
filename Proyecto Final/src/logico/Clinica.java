@@ -165,7 +165,29 @@ public class Clinica {
 	/*NECESITA SQL MISAEL*/
 	public int casosEnfermedadPorFecha(String codEnf, Date fecha) {
 		int total = 0;
+		String query = "select count(*) as casos "
+				+ "from enfermedad_diagnosticada_consulta "
+				+ "where cod_enf = ? and cod_consulta in "
+				+ "		(select cod_consulta "
+				+ "		from consulta "
+				+ "		where fecha_consulta = ?)";
+		PreparedStatement statement = null;
 		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(query);
+			statement.setString(1, codEnf);
+			statement.setDate(2, (java.sql.Date) fecha);
+			ResultSet result = statement.executeQuery();
+			
+			while(result.next()) {
+				total = result.getInt("casos");
+			}
+			
+			statement.close();
+			result.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		return total;
 	}
