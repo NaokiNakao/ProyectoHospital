@@ -285,6 +285,21 @@ public class RegistroVacuna extends JDialog {
 				}
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
+						
+						
+						if(okButton.getText().toString().equalsIgnoreCase("Modificar")) {
+							
+							Vacuna vex = new Vacuna(txtCodigo.getText(), txtNombre.getText(), txtFabricante.getText(), null,
+									cbxTipo.getSelectedItem().toString(), cbxAdministracion.getSelectedItem().toString());
+							
+							if(Clinica.getInstance().modificarVacuna(vex)) {
+								JOptionPane.showMessageDialog(null, "Datos modificados.", "Información", JOptionPane.INFORMATION_MESSAGE);
+								dispose();
+							}
+							
+						}
+						
+						
 						if (vacuna == null){
 							
 							if(espaciosVacios()) {
@@ -317,18 +332,6 @@ public class RegistroVacuna extends JDialog {
 								e.printStackTrace();
 							}
 						}
-						}
-						else {
-							String codigoAux = vacuna.getCodigo();
-						//	int indexAux = Clinica.getInstance().indexByCodigoVacuna(codigoAux);
-							vacuna.setCodigo(txtCodigo.getText());
-							vacuna.setNombreVacuna(txtNombre.getText());
-							vacuna.setFabricante(txtFabricante.getText());
-							vacuna.setTipoVacuna(cbxTipo.getSelectedItem().toString());
-							vacuna.setFormaAdministracion(cbxAdministracion.getSelectedItem().toString());
-							//Clinica.getInstance.modificarVacuna(vacuna, indexAux);////////////////////////////////////////////////////////////////////
-							JOptionPane.showMessageDialog(null, "Datos modificados.", "Informaciï¿½n", JOptionPane.INFORMATION_MESSAGE);
-							dispose();
 						}
 						try {
 							ListadoVacuna.cargarVacunas(null);

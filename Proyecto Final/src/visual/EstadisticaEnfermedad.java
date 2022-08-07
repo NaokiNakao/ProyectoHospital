@@ -133,7 +133,7 @@ public class EstadisticaEnfermedad extends JDialog {
 							e1.printStackTrace();
 						}
 							
-						float[] h = Clinica.getInstance().porcentajeEnfermedadPorGenero(selectedEnfermedad.getCodigo());
+						float[] h = Clinica.getInstance().casosEnfermedadPorGenero(selectedEnfermedad.getCodigo());
 							
 						txtCasosHombres.setText(String.valueOf(h[0])+"%");
 						txtCasosMujeres.setText(String.valueOf(h[1])+"%");

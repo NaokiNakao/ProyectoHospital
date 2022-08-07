@@ -272,7 +272,7 @@ public class RegistroUsuario extends JDialog {
 		txtEspecialidad = new JTextField();
 		txtEspecialidad.setBounds(155, 25, 208, 20);
 		if(user!=null && user.getId().contains("M")) {
-			txtEspecialidad.setText( Clinica.getInstance().buscarEspecialidadCodByCodMedico(user.getId()));
+			txtEspecialidad.setText( Clinica.getInstance().buscarEspecialidadByCodMedico(user.getId()));
 		}
 		panelMedico.add(txtEspecialidad);
 		txtEspecialidad.setColumns(10);

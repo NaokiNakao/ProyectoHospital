@@ -11,9 +11,12 @@ import javax.swing.border.EmptyBorder;
 import logico.Administrador;
 import logico.CitaMedica;
 import logico.Clinica;
+import logico.ConexionSQL;
 import logico.Medico;
 import logico.Usuario;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
@@ -32,6 +35,8 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PanelUsuario extends JDialog {
@@ -176,8 +181,14 @@ public class PanelUsuario extends JDialog {
 			btnMisConsultas = new JButton("Mis Consultas");
 			btnMisConsultas.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					ListadoConsulta t = new ListadoConsulta();
-					t.setVisible(true);
+					ListadoConsulta t;
+					try {
+						t = new ListadoConsulta();
+						t.setVisible(true);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			});
 			btnMisConsultas.setBounds(10, 121, 134, 23);
@@ -202,19 +213,24 @@ public class PanelUsuario extends JDialog {
 					
 					Medico med = (Medico) user;	
 					
-					if(med.getMisCitas().size() == 0) {			
-						JOptionPane.showMessageDialog(null, "Hasta ahora no tiene ninguna cita pendiente", "Error", JOptionPane.ERROR_MESSAGE);
-					}else {
-						dispose();
-						siguienteCita = med.getMisCitas().get(0);
-						ConsultasVisual rc;
-						try {
-							rc = new ConsultasVisual(siguienteCita,(Medico) user);
-							rc.setVisible(true);
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+					try {
+						if(CitasPendientes(med)==0) {			
+							JOptionPane.showMessageDialog(null, "Hasta ahora no tiene ninguna cita pendiente", "Error", JOptionPane.ERROR_MESSAGE);
+						}else {
+							dispose();
+							siguienteCita = siguienteCita(med);
+							ConsultasVisual rc;
+							try {
+								rc = new ConsultasVisual(siguienteCita,(Medico) user);
+								rc.setVisible(true);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
 						}
+					} catch (HeadlessException | SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
 					}
 				}
 			});
@@ -300,15 +316,77 @@ public class PanelUsuario extends JDialog {
 		}
 	}
 	
-	private void loadAgenda(Usuario medico) {
+	private void loadAgenda(Usuario medico) throws SQLException {
 		modelAgenda.setRowCount(0);
 		rowsAgenda = new Object[modelAgenda.getColumnCount()];
 				
-		for (int i = 0; i <((Medico) medico).getMisCitas().size(); i++) {
-			rowsAgenda[0]=  ((Medico) medico).getMisCitas().get(i).getCodigo();
-			rowsAgenda[1]=  ((Medico) medico).getMisCitas().get(i).getNombrePersona();
-			rowsAgenda[2]=  ((Medico) medico).getMisCitas().get(i).getFechaN();
+		String query = "select cita_medica.*,paciente.nombre,paciente.apellido from cita_medica,paciente "
+				+ "where "
+				+ " cod_medico = ? and estado = ? and "
+				+ "cita_medica.ced_paciente = paciente.ced_paciente order by fecha_hora_cita";
+		
+		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareCall(query);
+		stament.setString(1, medico.getId());
+		stament.setString(2, "Pendiente");
+		
+		ResultSet resul = stament.executeQuery();
+		
+		while (resul.next()){
+			rowsAgenda[0]=  resul.getString("cod_cita");
+			rowsAgenda[1]=  resul.getString("nombre")+" "+ resul.getString("apellido");
+			rowsAgenda[2]=  resul.getDate("fecha_hora_cita");
 			modelAgenda.addRow(rowsAgenda);
 		}
 	}
+	
+	
+	public int CitasPendientes(Medico med) throws SQLException {
+		
+		int citas = 0;
+		
+		String query = "select medico.nombre+' '+medico.apellido as medico,count(cita_medica.estado) as citas_pendientes from cita_medica,medico "
+				+ "where estado = 'pendiente' and medico.cod_medico = cita_medica.cod_medico "
+				+ "and medico.cod_medico = ? "
+				+ "group by medico.nombre,medico.apellido";
+		
+		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+		stament.setString(1, med.getId());
+		ResultSet resul =stament.executeQuery();
+		
+		while(resul.next()) {
+			
+			citas = resul.getInt("citas_pendientes");
+		}
+		return citas;
+	}
+	
+	public CitaMedica siguienteCita(Medico med) throws SQLException {
+		
+		CitaMedica sgtCita = null;
+		
+		
+		String query = "select TOP 1 cita_medica.*,paciente.nombre,paciente.apellido from cita_medica,paciente "
+				+ "where "
+				+ " cod_medico = ? and estado = ? and "
+				+ "cita_medica.ced_paciente = paciente.ced_paciente order by fecha_hora_cita";
+		
+		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareCall(query);
+		stament.setString(1, med.getId());
+		stament.setString(2, "Pendiente");
+		
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			
+			sgtCita = new CitaMedica(resul.getString("cod_cita"),
+					Clinica.getInstance().formatoFechaHora(resul.getString("fecha_hora_cita")), med, 
+					Clinica.getInstance().buscarPaciente(resul.getString("ced_paciente")),resul.getString("estado"));
+		}
+		
+		
+		return sgtCita;
+		
+	}
+	
+	
 }

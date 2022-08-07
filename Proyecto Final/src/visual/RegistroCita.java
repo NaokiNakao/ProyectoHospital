@@ -31,6 +31,7 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
@@ -349,12 +350,21 @@ public class RegistroCita extends JDialog {
 										if(selectedMedico == null) {
 											JOptionPane.showMessageDialog(null, "Favor seleccionar un medico.", "Error", JOptionPane.ERROR_MESSAGE);
 										}else {
-											CitaMedica cita = new CitaMedica(txtCodigoCita.getText().toString(), fechaCita, txtNombre.getText().toString(), txtTelefono.getText().toString(), selectedMedico, txtCedula.getText().toString(), String.valueOf((cbxSexoPersona.getSelectedItem())),
-														fechaNacimiento,txtDireccion.getText().toString(),date1);
+											CitaMedica cita;
+											try {
+												cita = new CitaMedica(txtCodigoCita.getText().toString(),Clinica.getInstance().formatoFechaHora(fechaCita.toString()),
+														selectedMedico, Clinica.getInstance().buscarPaciente(txtCedula.getText().toString()), "pendiente");
+												
+												Clinica.getInstance().insertarCita(cita);
+												JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
+												vacearEspacios();
+											
+											} catch (SQLException e1) {
+												// TODO Auto-generated catch block
+												e1.printStackTrace();
+											}
 															
-											Clinica.getInstance().insertarCita(cita,selectedMedico);
-											JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
-											vacearEspacios();
+											
 										}
 										
 									}
@@ -380,7 +390,7 @@ public class RegistroCita extends JDialog {
 		}
 		
 		// Genera codigo para la cita
-		txtCodigoCita.setText("CT-"+Clinica.getInstance().generadorCodigo(8));
+		txtCodigoCita.setText("CT-"+Clinica.getInstance().generadorCodigo(4));
 	}
 	
 
