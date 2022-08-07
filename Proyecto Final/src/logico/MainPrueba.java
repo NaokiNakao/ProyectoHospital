@@ -163,4 +163,5 @@ public class MainPrueba {
 		
 		System.out.println(Clinica.getInstance().buscarCodTipoEnfByNombreTipo("Sexual"));
 
+
 }}

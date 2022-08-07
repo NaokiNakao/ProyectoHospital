@@ -483,6 +483,54 @@ public class Clinica {
 		return realizado;
 	}
 	
+	public boolean modificarEnfermedad(Enfermedad updatedEnfermedad) {
+		boolean realizado = false;
+		String sql = "update enfermedad "
+				+ "set nombre_enf = ?, desc_enf = ?, cod_tipo = ? "
+				+ "where cod_enf = ?";
+		PreparedStatement statement = null;
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(sql);
+			statement.setString(1, updatedEnfermedad.getNombreEnfermedad());
+			statement.setString(2, updatedEnfermedad.getDescripcionEnfermedad());
+			statement.setInt(3, buscarCodEnfByNombreEnf(updatedEnfermedad.getTipoEnfermedad()));
+			statement.setString(4, updatedEnfermedad.getCodigo());
+			statement.executeUpdate();
+			statement.close();
+			realizado = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return realizado;
+	}
+	
+	private int buscarCodEnfByNombreEnf(String tipoEnfermedad) {
+		int codEnf = 0;
+		String query = "select cod_tipo "
+				+ "from tipo_enfermedad "
+				+ "where tipo_enfermedad = ?";
+		PreparedStatement statement = null;
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(query);
+			statement.setString(1, tipoEnfermedad);
+			ResultSet result = statement.executeQuery();
+			
+			while (result.next()) {
+				codEnf = result.getInt("cod_tipo");
+			}
+			
+			statement.close();
+			result.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return codEnf;
+	}
+
 	/*NECESARIA MISAEL*/
 	public Medico buscarMedicoByCodigo(String cod) throws SQLException {
 		Medico medico = null;
