@@ -341,46 +341,6 @@ public class Clinica {
 		return vacuna;
 	}
 	
-	
-	
-	/*NO ES NECESARIA*/
-	public int indexByCodigoVacuna(String codigoVacuna) {
-		int index = -1;
-		boolean encontrado = false;
-		int i = 0;
-		
-		while (!encontrado && i < misVacunas.size()) {
-			if (misVacunas.get(i).getCodigo().equalsIgnoreCase(codigoVacuna)) {
-				index = i;
-				encontrado = true;
-			}
-			i++;
-		}
-		
-		return index;
-	}
-	
-	
-	/*NO NECESARIA*/
-	public boolean codigoVacunaValido(String codigoVacuna) {
-		boolean validacion = true;
-		int i = 0;
-		
-		if (codigoVacuna.length() != 8) {
-			validacion = false;
-		}
-		
-		while (validacion && i < misVacunas.size()) {
-			if (misVacunas.get(i).getCodigo().equalsIgnoreCase(codigoVacuna)) {
-				validacion = false;
-			}
-			i++;
-		}
-		
-		return validacion;
-	}
-	
-	
 	/*NECESARIA NAOKI*/
 	public boolean agregarVacuna(Vacuna nuevaVacuna) { //probada main
 		boolean realizado = false;
@@ -441,7 +401,6 @@ public class Clinica {
 		try {
 			statement = ConexionSQL.getConexion().prepareStatement(sql);
 			statement.setString(1, codVacuna);
-			
 			statement.executeUpdate();
 			statement.close();
 			realizado = true;
@@ -575,16 +534,10 @@ public class Clinica {
 	/*NECESARIA MISAEL*/
 	public CitaMedica buscarCitaMedicaByCod(String cod) {
 		CitaMedica cita = null;
-		boolean encontrada = false;
-		int i = 0;
-		
-		while (!encontrada && i < misUsuarios.size()) {
-			if (citasMedicas.get(i).getCodigo().equalsIgnoreCase(cod)) {
-				cita = citasMedicas.get(i);
-				encontrada = true;
-			}
-			i++;
-		}
+		String query = "select * "
+				+ "from cita_medica "
+				+ "where cod_cita = ?";
+		PreparedStatement statement = null;
 		
 		return cita;
 	}
