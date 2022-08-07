@@ -494,7 +494,7 @@ public class Clinica {
 			statement = ConexionSQL.getConexion().prepareStatement(sql);
 			statement.setString(1, updatedEnfermedad.getNombreEnfermedad());
 			statement.setString(2, updatedEnfermedad.getDescripcionEnfermedad());
-			statement.setInt(3, buscarCodEnfByNombreEnf(updatedEnfermedad.getTipoEnfermedad()));
+			statement.setInt(3, buscarTipoEnfByNombre(updatedEnfermedad.getTipoEnfermedad()));
 			statement.setString(4, updatedEnfermedad.getCodigo());
 			statement.executeUpdate();
 			statement.close();
@@ -523,31 +523,6 @@ public class Clinica {
 		}
 		
 		return realizado;
-	}
-	
-	private int buscarCodEnfByNombreEnf(String tipoEnfermedad) {
-		int codEnf = 0;
-		String query = "select cod_tipo "
-				+ "from tipo_enfermedad "
-				+ "where tipo_enfermedad = ?";
-		PreparedStatement statement = null;
-		
-		try {
-			statement = ConexionSQL.getConexion().prepareStatement(query);
-			statement.setString(1, tipoEnfermedad);
-			ResultSet result = statement.executeQuery();
-			
-			while (result.next()) {
-				codEnf = result.getInt("cod_tipo");
-			}
-			
-			statement.close();
-			result.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		return codEnf;
 	}
 
 	/*NECESARIA MISAEL*/
@@ -605,6 +580,23 @@ public class Clinica {
 				+ "from cita_medica "
 				+ "where cod_cita = ?";
 		PreparedStatement statement = null;
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(query);
+			statement.setString(1, cod);
+			ResultSet result = statement.executeQuery();
+			
+			while(result.next()) {
+				cita = new CitaMedica(result.getString("cod_cita"), formatoFechaHora(result.getString("fecha_cita")), 
+						(Medico) buscarUsuarioById(result.getString("cod_medico")), buscarPaciente(result.getString("ced_paciente")),
+						result.getString("estado"));
+			}
+			
+			statement.close();
+			result.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		return cita;
 	}

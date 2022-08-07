@@ -9,6 +9,7 @@ public class CitaMedica {
 	private LocalDateTime fechaCita;
 	private Medico medico;
 	private Paciente paciente;
+	private String estado;
 	//private String nombrePersona;
 	//private String telefono;
 	//private String cedulaPersona;
@@ -19,11 +20,12 @@ public class CitaMedica {
 	//private Date fechaN;
 	
 	
-	public CitaMedica(String codigo, LocalDateTime fechaCita, Medico medico, Paciente paciente) {
+	public CitaMedica(String codigo, LocalDateTime fechaCita, Medico medico, Paciente paciente, String estado) {
 		this.codigo = codigo;
 		this.fechaCita = fechaCita;
 		this.medico = medico;
 		this.paciente = paciente;
+		this.estado = estado;
 		//this.nombrePersona = nombrePersona;
 		//this.telefono = telefono;
 		//this.cedulaPersona = cedulaPersona;
@@ -48,6 +50,10 @@ public class CitaMedica {
 	public Paciente getPaciente() {
 		return paciente;
 	}
+	
+	public String getEstado() {
+		return estado;
+	}
 
 	/*
 	 * public String getNombrePersona() { return nombrePersona; }
@@ -71,6 +77,10 @@ public class CitaMedica {
 	
 	public void setPaciente(Paciente paciente) {
 		this.paciente = paciente;
+	}
+	
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 	/*
