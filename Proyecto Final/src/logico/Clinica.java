@@ -255,7 +255,8 @@ public class Clinica {
 				query = "select convert(nvarchar(20), DECRYPTBYPASSPHRASE(?, encrypted_password)) as password "
 						+ "from medico "
 						+ "where cod_medico = ?";
-			} else if(codUsuario.contains("A")) {
+			} 
+			else if(codUsuario.contains("A")) {
 				query = "select convert(nvarchar(20), DECRYPTBYPASSPHRASE(?, encrypted_password)) as password "
 						+ "from administrador "
 						+ "where cod_admin = ?";
@@ -431,6 +432,31 @@ public class Clinica {
 		}
 		
 		return realizado;
+	}
+	
+	public String buscarNombreFabByCodFab(int codFab) {
+		String nombreFabricante = null;
+		String query = "select nombre_fab "
+				+ "from fabricante "
+				+ "where cod_fab = ?";
+		PreparedStatement statement = null;
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(query);
+			statement.setInt(1, codFab);
+			ResultSet result = statement.executeQuery();
+			
+			while(result.next()) {
+				nombreFabricante = result.getString("nombre_fab");
+			}
+			
+			statement.close();
+			result.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return nombreFabricante;
 	}
 	
 	////////////////////Utils (Enfermedad) ////////////////////
@@ -694,46 +720,47 @@ public class Clinica {
 	}
 	
 	public void modificarUsuario(Usuario user,String texto) {
+		PreparedStatement statement = null;
 		
-	if(user.getId().contains("M")) {
-		String update = "UPDATE medico "
-				+ "SET apellido = ?, nombre= ? ,username = ? ,telefono = ? , encrypted_password = encryptbypassphrase(?, ?) "
-				+ "WHERE medico.cod_medico = ?";
-		try {
-			PreparedStatement statement = ConexionSQL.getInstance().getConexion().prepareStatement(update);
-			statement.setString(1, user.getApellido());
-			statement.setString(2, user.getNombre());
-			statement.setString(3, user.getLogin());
-			statement.setString(4, user.getTelefono());
-			statement.setString(5, hashkey);
-			statement.setString(6, user.getPassword());
-			statement.setString(7, user.getId());
-			statement.executeUpdate();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		}else if(user.getId().contains("A")) {
-			String update = "UPDATE administrador "
-					+ "SET apellido = ?, nombre= ? ,username = ? ,telefono = ? , puesto_laboral = ?, encrypted_password = encryptbypassphrase(?, ?) "
-					+ "WHERE administrador.cod_admin = ?";
-		try {
-			PreparedStatement statement = ConexionSQL.getInstance().getConexion().prepareStatement(update);
-			statement.setString(1, user.getApellido());
-			statement.setString(2, user.getNombre());
-			statement.setString(3, user.getLogin());
-			statement.setString(4, user.getTelefono());
-			statement.setString(5, texto);
-			statement.setString(6, hashkey);
-			statement.setString(7, user.getPassword());
-			statement.setString(8, user.getId());
-			statement.executeUpdate();
+		if(user.getId().contains("M")) {
+			String update = "UPDATE medico "
+					+ "SET apellido = ?, nombre= ? , username = ?, telefono = ?, encrypted_password = encryptbypassphrase(?, ?) "
+					+ "WHERE medico.cod_medico = ?";
 			
-		}catch (SQLException e1) {
-				// TODO Auto-generated catch block
+			try {
+				statement = ConexionSQL.getInstance().getConexion().prepareStatement(update);
+				statement.setString(1, user.getApellido());
+				statement.setString(2, user.getNombre());
+				statement.setString(3, user.getLogin());
+				statement.setString(4, user.getTelefono());
+				statement.setString(5, hashkey);
+				statement.setString(6, user.getPassword());
+				statement.setString(7, user.getId());
+				statement.executeUpdate();
+			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-
+		}
+		else if(user.getId().contains("A")) {
+			String update = "UPDATE administrador "
+					+ "SET apellido = ?, nombre= ?, username = ?, telefono = ?, puesto_laboral = ?, encrypted_password = encryptbypassphrase(?, ?) "
+					+ "WHERE administrador.cod_admin = ?";
+			
+			try {
+				statement = ConexionSQL.getInstance().getConexion().prepareStatement(update);
+				statement.setString(1, user.getApellido());
+				statement.setString(2, user.getNombre());
+				statement.setString(3, user.getLogin());
+				statement.setString(4, user.getTelefono());
+				statement.setString(5, texto);
+				statement.setString(6, hashkey);
+				statement.setString(7, user.getPassword());
+				statement.setString(8, user.getId());
+				statement.executeUpdate();
+			}catch (SQLException e1) {
+					e1.printStackTrace();
+			}
+		
 		}
 	}
 	
