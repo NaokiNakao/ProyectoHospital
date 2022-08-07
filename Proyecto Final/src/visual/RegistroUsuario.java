@@ -194,6 +194,12 @@ public class RegistroUsuario extends JDialog {
 		panelRdbtns.setLayout(null);
 		
 		rdbtnMedico = new JRadioButton("Medico\r\n");
+		
+		if(user != null && user.getId().contains("A")) {
+			rdbtnMedico.setVisible(false);
+		}
+		
+		
 		rdbtnMedico.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelMedico.setVisible(true);
@@ -221,6 +227,14 @@ public class RegistroUsuario extends JDialog {
 		panelRdbtns.add(rdbtnMedico);
 		
 		rdbtnAdmin = new JRadioButton("Administrador");
+		
+		if(user != null && user.getId().contains("M")) {
+			
+			rdbtnAdmin.setEnabled(false);
+			rdbtnAdmin.setSelected(false);
+			rdbtnMedico.setSelected(true);
+		}
+		
 		rdbtnAdmin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelAdmins.setVisible(true);
@@ -277,9 +291,9 @@ public class RegistroUsuario extends JDialog {
 		txtCargoLaboral.setColumns(10);
 		txtCargoLaboral.setBounds(155, 25, 208, 20);
 		
-		if(user!=null && user instanceof Administrador) {
+		if(user!=null && user.getId().contains("A")) {
 			
-			txtCargoLaboral.setText(  ((Administrador) user).getPuestoLaboral().toString()  );
+			txtCargoLaboral.setText( Clinica.getInstance().buscarPuestoLaboralByCodAdmin(user.getId()));
 		}
 		panelAdmins.add(txtCargoLaboral);
 		JPanel buttonPane = new JPanel();
@@ -388,23 +402,45 @@ public class RegistroUsuario extends JDialog {
 				if(espaciovacio()) {
 					JOptionPane.showMessageDialog(null, "Favor completar todos los espacios", "Error", JOptionPane.ERROR_MESSAGE);
 				}else {
-					
+
+					if(user != null && user.getId().contains("M")) {
+						
 					 Usuario usu = new Medico( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
 							 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText());
 					 
-					 Clinica.getInstance().modificarUsuario(user,txtCargoLaboral.getText().toString());
+					 Clinica.getInstance().modificarUsuario(usu,txtEspecialidad.getText().toString());
 
-					
-					JOptionPane.showMessageDialog(null, "Usuario modificado correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
-					dispose();
-					ListadoUsuario r;
-					try {
-						r = new ListadoUsuario();
-						r.setVisible(true);
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					 JOptionPane.showMessageDialog(null, "Usuario modificado correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
+						dispose();
+						ListadoUsuario r;
+						try {
+							r = new ListadoUsuario();
+							r.setVisible(true);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					  					 					
+
+					}else if(user != null && user.getId().contains("A")) {
+						Usuario usu = new Medico( txtId.getText(),txtLogin.getText(),pfContrasenna.getText(),
+								 txtNombre.getText(),txtApellido.getText(),txtTelefono.getText());
+						 
+						 Clinica.getInstance().modificarUsuario(usu,txtCargoLaboral.getText().toString());
+						 
+						 
+						 JOptionPane.showMessageDialog(null, "Usuario modificado correctamente", "Exito", JOptionPane.INFORMATION_MESSAGE);
+							dispose();
+							ListadoUsuario r;
+							try {
+								r = new ListadoUsuario();
+								r.setVisible(true);
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+ 					}
+								
 				}
 				
 			}

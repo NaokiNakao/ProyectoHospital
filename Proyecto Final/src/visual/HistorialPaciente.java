@@ -297,7 +297,7 @@ public class HistorialPaciente extends JDialog {
 			panelDatosConsulta.add(scrollPaneConsultas, BorderLayout.CENTER);
 			
 			tableDatosConsulta = new JTable();
-			String [] heardersConsultas = {"Codigo","Fecha","Doctor"};
+			String [] heardersConsultas = {"Codigo","Fecha","Doctor","Diagnostico"};
 			modelConsultas = new DefaultTableModel();
 			tableDatosConsulta.setModel(modelConsultas);
 			modelConsultas.setColumnIdentifiers(heardersConsultas);
@@ -355,7 +355,7 @@ public class HistorialPaciente extends JDialog {
 		while(res.next()) {
 			rowsEnfermedades[0]= res.getString("cod_enf");
 			rowsEnfermedades[1]= res.getString("nombre_enf");
-			rowsEnfermedades[2]= res.getString("nombre_tipo");
+			rowsEnfermedades[2]= res.getString("nombre_tipo");	
 			modelEnfermedades.addRow(rowsEnfermedades);	
 		}
 		
@@ -371,7 +371,8 @@ public class HistorialPaciente extends JDialog {
 		
 		if(paciente!= null) {
 			String query = "select vacuna.*,fabricante.nombre_fab from vacuna,historia_clinica,vacuna_contenida_historia,fabricante "
-					+ "where historia_clinica.cod_historia = vacuna_contenida_historia.cod_historia and vacuna.cod_vacuna = vacuna_contenida_historia.cod_vacuna and vacuna.cod_fab = fabricante.cod_fab "
+					+ "where historia_clinica.cod_historia = vacuna_contenida_historia.cod_historia "
+					+ "and vacuna.cod_vacuna = vacuna_contenida_historia.cod_vacuna and vacuna.cod_fab = fabricante.cod_fab "
 					+ " and historia_clinica.ced_paciente = ?";
 			
 			PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
@@ -413,7 +414,9 @@ public class HistorialPaciente extends JDialog {
 			while(res.next()) {
 				rowsConsultas[0]= res.getString("cod_consulta");
 				rowsConsultas[1] = res.getString("fecha_consulta");
-				rowsConsultas[2] = res.getString("nombre ") + res.getString("apellido") ;
+				rowsConsultas[2] = res.getString("nombre") +" "+res.getString("apellido") ;
+				rowsConsultas[3]= res.getString("diagnostico");
+				modelConsultas.addRow(rowsConsultas);
 				
 			}
 			stament.close();

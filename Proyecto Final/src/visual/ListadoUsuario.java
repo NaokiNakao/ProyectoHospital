@@ -105,9 +105,18 @@ public class ListadoUsuario extends JDialog {
 				btnEliminar = new JButton("Eliminar");
 				btnEliminar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+					
+					int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro desea eliminar la vacuna?", "Confirmación", JOptionPane.WARNING_MESSAGE);
+					if (opcion == JOptionPane.YES_OPTION) {
 						eliminarUsuario();
+						try {
+							cargarUsuarios(0,null);
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
-				});
+					}});
 				btnEliminar.setEnabled(false);
 				btnEliminar.setBounds(375, 11, 89, 23);
 				buttonpane.add(btnEliminar);
@@ -331,16 +340,40 @@ public class ListadoUsuario extends JDialog {
 		btnModificar.setEnabled(false);
 		btnEliminar.setEnabled(false);
 	}
-	private void eliminarUsuario()
-	{
-		int fila = table.getSelectedRow();
-		if(fila >= 0)
-		{
-			model.removeRow(fila);
-			Clinica.getInstance().getMisUsuarios().remove(fila);
+	
+	
+	public void eliminarUsuario(){
+			PreparedStatement statement = null;
+			String sql = null;
+			String sql2= null;
 			
+		if(selectedUser.getId().contains("M")) {
+			sql = "delete medico from medico "
+					+ "where cod_medico = ?";
+			
+			sql2 = "delete medico_especialidad from medico_especialidad "
+					+ "where cod_medico = ?";
+			
+		}else if (selectedUser.getId().contains("A")) {
+			sql = "delete administrador from administrador "
+					+ "where cod_admin = ?";
 		}
-	}
+		
+			try {
+				statement = ConexionSQL.getConexion().prepareStatement(sql);
+				statement.setString(1, selectedUser.getId());
+				
+				statement.executeUpdate();
+				statement.close();
+				
+				statement = ConexionSQL.getConexion().prepareStatement(sql2);
+				statement.executeUpdate();
+				statement.close();
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	
      
 }
