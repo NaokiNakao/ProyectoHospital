@@ -394,7 +394,7 @@ public class Clinica {
 			statement.setString(2, nuevaVacuna.getNombreVacuna());
 			statement.setString(3, nuevaVacuna.getTipoVacuna());
 			statement.setString(4, nuevaVacuna.getFormaAdministracion());
-			statement.setString(5, nuevaVacuna.getFabricante());
+			statement.setInt(5, Clinica.getInstance().buscarCodFabByNombreFab(nuevaVacuna.getFabricante()));
 			
 			statement.executeUpdate();
 			statement.close();
@@ -407,10 +407,10 @@ public class Clinica {
 	}
 	
 	/*NECESARIA MISAEL*/ 
-	public void modificarVacuna(Vacuna modificacion, int index) {
-		if (index != -1) {
-			misVacunas.set(index, modificacion);
-		}
+	public boolean modificarVacuna(Vacuna modificacion) {
+		boolean actualizado = false;
+		
+		return actualizado;
 	}
 	
 	/*NECESARIA NAOKI*/
@@ -434,15 +434,27 @@ public class Clinica {
 		return realizado;
 	}
 	
-	public int buscarCodVacunaByNombreFab(String nombreFab) {
-		int codVacuna;
+	public int buscarCodFabByNombreFab(String nombreFab) {
+		int codVacuna = 0;
 		String query = "select cod_fab "
 				+ "from fabricante "
 				+ "where nombre_fab = ?";
 		PreparedStatement statement = null;
 		
-		statement = ConexionSQL.getConexion().prepareStatement(query);
-		statement.setString(1, nombreFab);
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(query);
+			statement.setString(1, nombreFab);
+			ResultSet result = statement.executeQuery();
+			
+			while(result.next()) {
+				codVacuna = result.getInt("cod_fab");
+			}
+			
+			statement.close();
+			result.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 		return codVacuna;
 	}
