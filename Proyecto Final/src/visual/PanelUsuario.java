@@ -38,6 +38,8 @@ import java.awt.event.MouseEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class PanelUsuario extends JDialog {
 
@@ -381,10 +383,9 @@ public class PanelUsuario extends JDialog {
 		while(resul.next()) {
 			
 			sgtCita = new CitaMedica(resul.getString("cod_cita"),
-					Clinica.getInstance().formatoFechaHora(resul.getString("fecha_hora_cita")), med, 
+					resul.getString("fecha_hora_cita"), med, 
 					Clinica.getInstance().buscarPaciente(resul.getString("ced_paciente")),resul.getString("estado"));
 		}
-		
 		
 		return sgtCita;
 		
