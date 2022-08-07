@@ -791,7 +791,7 @@ public class Clinica {
 		return especialidad;
 	}
 	
-	private String buscarEspecialidadByCodMedico(String cod) throws SQLException {
+	public String buscarEspecialidadByCodMedico(String cod) throws SQLException {
 		
 		String especialidad = null;
 		
