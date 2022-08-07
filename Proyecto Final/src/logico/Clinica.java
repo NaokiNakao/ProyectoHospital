@@ -811,7 +811,7 @@ public class Clinica {
 		
 	}
 	
-	private String buscarPuestoLaboralByCodAdmin(String cod) {
+	public String buscarPuestoLaboralByCodAdmin(String cod) {
 		String puestoLaboral = null;
 		String query = "select puesto_laboral"
 				+ "from administrador"
