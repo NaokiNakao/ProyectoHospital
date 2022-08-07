@@ -1,11 +1,12 @@
 package logico;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class CitaMedica {
 
 	private String codigo;
-	private Date fechaCita;
+	private LocalDateTime fechaCita;
 	private Medico medico;
 	private Paciente paciente;
 	//private String nombrePersona;
@@ -18,7 +19,7 @@ public class CitaMedica {
 	//private Date fechaN;
 	
 	
-	public CitaMedica(String codigo, Date fechaCita, Medico medico, Paciente paciente) {
+	public CitaMedica(String codigo, LocalDateTime fechaCita, Medico medico, Paciente paciente) {
 		this.codigo = codigo;
 		this.fechaCita = fechaCita;
 		this.medico = medico;
@@ -36,7 +37,7 @@ public class CitaMedica {
 		return codigo;
 	}
 
-	public Date getFechaCita() {
+	public LocalDateTime getFechaCita() {
 		return fechaCita;
 	}
 	
@@ -60,7 +61,7 @@ public class CitaMedica {
 		this.codigo = codigo;
 	}
 
-	public void setFechaCita(Date fechaCita) {
+	public void setFechaCita(LocalDateTime fechaCita) {
 		this.fechaCita = fechaCita;
 	}
 	
