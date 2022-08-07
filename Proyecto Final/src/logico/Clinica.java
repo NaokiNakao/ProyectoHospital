@@ -829,9 +829,9 @@ public class Clinica {
 		
 		String especialidad = null;
 		
-		String query = "select especialidad.* from especialidad,medico,medico_especialidad"
-				+ "where medico_especialidad.cod_medico = medico.cod_medico"
-				+ "and medico_especialidad.cod_especialidad = especialidad.cod_especialidad and medico.cod_medico = ?;";
+		String query = "select especialidad.* from especialidad,medico,medico_especialidad "
+				+ "where medico_especialidad.cod_medico = medico.cod_medico "
+				+ "and medico_especialidad.cod_especialidad = especialidad.cod_especialidad and medico.cod_medico = ?";
 		PreparedStatement statement = ConexionSQL.getConexion().prepareStatement(query);
 		statement.setString(1, cod);
 		
