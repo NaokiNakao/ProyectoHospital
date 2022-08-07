@@ -163,5 +163,5 @@ public class MainPrueba {
 		
 		System.out.println(Clinica.getInstance().buscarTipoEnfByNombre("Parkinson"));
 
-
+		System.out.println();
 }}
