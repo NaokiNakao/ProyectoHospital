@@ -244,9 +244,37 @@ public class Clinica {
 	
 	
 	/*NECESARIA NAOKI*/
-	public boolean validacionCredenciales(String login, String password) {
+	public boolean validacionCredenciales(String login, String inputPassword) {
 		boolean validacion = false;
+		String codUsuario = buscarUsuarioByUsername(login).getId();
 		
+		if(codUsuario != null) {
+			String query = "select convert(nvarchar(20), DECRYPTBYPASSPHRASE(?, encrypted_password)) as password "
+					+ "from medico "
+					+ "where cod_medico = ?";
+			PreparedStatement statement = null;
+			
+			try {
+				statement = ConexionSQL.getConexion().prepareStatement(query);
+				statement.setString(1, hashkey);
+				statement.setString(2, codUsuario);
+				ResultSet result = statement.executeQuery();
+				String decryptedPassword = null;
+				
+				while(result.next()) {
+					decryptedPassword = result.getString("password");
+				}
+				
+				if(inputPassword.equals(decryptedPassword)) {
+					validacion = true;
+				}
+				
+				statement.close();
+				result.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		return validacion;
 	}
@@ -456,7 +484,7 @@ public class Clinica {
 		while(resul.next()) {
 			
 			medico = new Medico(cod, resul.getString("username"), "Contrase�a", resul.getString("nombre"), resul.getString("apellido"),
-					resul.getString("telefono"),buscarEspecialidadByCodMedico(cod));
+					resul.getString("telefono"));
 			
 		}
 		consul.close();
@@ -668,7 +696,7 @@ public class Clinica {
 			statement.setString(2, user.getNombre());
 			statement.setString(3, user.getLogin());
 			statement.setString(4, user.getTelefono());
-			statement.setString(5, "grupo2");
+			statement.setString(5, hashkey);
 			statement.setString(6, user.getPassword());
 			statement.setString(7, user.getId());
 			statement.executeUpdate();
@@ -687,7 +715,7 @@ public class Clinica {
 			statement.setString(3, user.getLogin());
 			statement.setString(4, user.getTelefono());
 			statement.setString(5, texto);
-			statement.setString(6, "grupo2");
+			statement.setString(6, hashkey);
 			statement.setString(7, user.getPassword());
 			statement.setString(8, user.getId());
 			statement.executeUpdate();

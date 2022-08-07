@@ -134,10 +134,10 @@ public class MainPrueba {
 		/*boolean disponible = Clinica.getInstance().medicoDisponible("2022-09-01 14:00:00", "M0002");
 		System.out.println(disponible);*/
 		
-		Usuario newUser = new Usuario("M0002", "mjp0002", "juanlopez", "Juan", "Lopez", "8492958843");
-		Clinica.getInstance().modificarUsuario(newUser, null);
+		//Usuario newUser = new Usuario("M0002", "mjl0002", "juanlopez", "Juan", "Lopez", "8492958843");
+		//Clinica.getInstance().modificarUsuario(newUser, null);
 		
-		String query = "select convert(nvarchar(20), DECRYPTBYPASSPHRASE(?, encrypted_password)) as password "
+		/*String query = "select convert(nvarchar(20), DECRYPTBYPASSPHRASE(?, encrypted_password)) as password "
 				+ "from medico "
 				+ "where cod_medico = ?";
 		PreparedStatement statement = ConexionSQL.getConexion().prepareStatement(query);
@@ -153,7 +153,9 @@ public class MainPrueba {
 		statement.close();
 		result.close();
 		
-		System.out.println(password);
+		System.out.println(password);*/
+		
+		System.out.println(Clinica.getInstance().validacionCredenciales("mjl0002", "jualopez"));
 
 		
 		
