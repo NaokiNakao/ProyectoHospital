@@ -161,7 +161,9 @@ public class MainPrueba {
 		
 		//System.out.println(Clinica.getInstance().buscarCodVacunaByNombreFab("Moderna"));
 		
-		System.out.println(Clinica.getInstance().buscarCodTipoEnfByNombreTipo("Sexual"));
+		//System.out.println(Clinica.getInstance().buscarCodTipoEnfByNombreTipo("Sexual"));
+		
+		System.out.println(Clinica.getInstance().casosEnfermedadPorGenero("Enf-6")[0]);
 
 
 }}

@@ -200,25 +200,39 @@ public class Clinica {
 	*/
 	
 	/*NECETIA SQL NAOKI  TAAA FEEAAAA*/
-	public float[] porcentajeEnfermedadPorGenero(String codigoEnfermedad) {
+	public float[] casosEnfermedadPorGenero(String codEnf) {
 		float[] tasa = new float[2];
+		String query = "select count(*) as casos "
+				+ "from enfermedad_contenida_historia, historia_clinica, paciente "
+				+ "where enfermedad_contenida_historia.cod_enf = ? and enfermedad_contenida_historia.cod_historia = historia_clinica.cod_historia "
+				+ "and historia_clinica.ced_paciente = paciente.ced_paciente and paciente.genero = ?";
+		PreparedStatement statementM, statementF = null;
 		
-		for (Paciente paciente : misPacientes) {
-			for (Enfermedad enfermedad : paciente.getHistorial().getPadecimientos()) {
-				if (enfermedad.getCodigo().equalsIgnoreCase(codigoEnfermedad)) {
-					if (paciente.getGenero().equalsIgnoreCase("Masculino")) {
-						tasa[0]++;
-					}
-					else if (paciente.getGenero().equalsIgnoreCase("Femenino")) {
-						tasa[1]++;
-					}
-				}
+		try {
+			statementM = ConexionSQL.getConexion().prepareStatement(query);
+			statementF = ConexionSQL.getConexion().prepareStatement(query);
+			
+			statementM.setString(1, codEnf);
+			statementM.setString(2, "M");
+			ResultSet resultM = statementM.executeQuery();
+			
+			statementF.setString(1, codEnf);
+			statementF.setString(2, "F");
+			ResultSet resultF = statementF.executeQuery();
+			
+			int casosTotales = casosEnfermedadTotal(codEnf);
+			
+			while(resultM.next() && resultF.next()) {
+				tasa[0] = resultM.getInt("casos") * 100 / casosTotales;
+				tasa[1] = resultF.getInt("casos") * 100 / casosTotales;
 			}
-		}
-		
-		int casosTotales = casosEnfermedadTotal(codigoEnfermedad);
-		for (int i = 0; i < 2; i++) {
-			tasa[i] = tasa[i] * 100 / casosTotales;
+			
+			statementM.close();
+			statementF.close();
+			resultM.close();
+			resultF.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		return tasa;
