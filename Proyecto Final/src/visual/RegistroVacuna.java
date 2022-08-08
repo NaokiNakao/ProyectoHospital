@@ -54,6 +54,7 @@ public class RegistroVacuna extends JDialog {
 	private JButton btnPasarIzquierda;
 	private static Vacuna vacuna;
 	private JComboBox cbxAdministracion;
+	private JButton okButton;
 
 	/**
 	 * Launch the application.
@@ -173,8 +174,14 @@ public class RegistroVacuna extends JDialog {
 					vacuna = new Vacuna(txtCodigo.getText().toString(), txtNombre.getText().toString(), txtFabricante.getText().toString(),
 							null, cbxTipo.getSelectedItem().toString(), cbxAdministracion.getSelectedItem().toString());
 					
-					
-					Clinica.getInstance().agregarVacuna(vacuna);
+				try {
+					if((Clinica.getInstance().buscarVacunaByCodigo(txtCodigo.getText().toString())) == null) {
+						Clinica.getInstance().agregarVacuna(vacuna);
+					}
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
 					try {
 						cargarProteccion(vacuna);
 					} catch (SQLException e1) {
@@ -276,7 +283,7 @@ public class RegistroVacuna extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("Aceptar");
+				okButton = new JButton("Aceptar");
 				if (vacuna == null) {
 					okButton.setText("Agregar");
 				}
@@ -297,6 +304,9 @@ public class RegistroVacuna extends JDialog {
 								dispose();
 							}
 							
+						}else if (okButton.getText().toString().equalsIgnoreCase("agregar")){
+							JOptionPane.showMessageDialog(null, "Vacuna agregada correctamente", "Información", JOptionPane.INFORMATION_MESSAGE);
+							dispose();
 						}
 						
 						
@@ -327,7 +337,7 @@ public class RegistroVacuna extends JDialog {
 								else {
 									JOptionPane.showMessageDialog(null, "Datos no validos.", "Error", JOptionPane.ERROR_MESSAGE);
 								}
-							} catch (HeadlessException e) {
+							} catch (HeadlessException | SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
@@ -349,7 +359,21 @@ public class RegistroVacuna extends JDialog {
 				JButton cancelButton = new JButton("Cerrar");
 				cancelButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						dispose();
+						
+						try {
+							if(okButton.getText().toString().equalsIgnoreCase("agregar") && 
+									Clinica.getInstance().buscarVacunaByCodigo(txtCodigo.getText().toString())!= null) {
+								
+								if(Clinica.getInstance().eliminarVacuna(txtCodigo.getText().toString())) {
+									dispose();
+						
+								}
+							}
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
 					}
 				});
 				cancelButton.setActionCommand("Cancel");

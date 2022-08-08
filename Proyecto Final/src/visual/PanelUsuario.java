@@ -208,10 +208,13 @@ public class PanelUsuario extends JDialog {
 			btnConsulta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					 Medico med = new Medico(user.getId(), user.getLogin(), user.getPassword(), user.getNombre(),
-							 user.getApellido(), user.getTelefono(),((Medico)user).getEspecialidad());
-					
+					 Medico med;
 					try {
+						med = new Medico(user.getId(), user.getLogin(), user.getPassword(), user.getNombre(),
+								 user.getApellido(), user.getTelefono(),Clinica.getInstance().buscarEspecialidadByCodMedico(user.getId()));
+				
+					 
+
 						if(CitasPendientes(med)==0) {			
 							JOptionPane.showMessageDialog(null, "Hasta ahora no tiene ninguna cita pendiente", "Error", JOptionPane.ERROR_MESSAGE);
 						}else {
@@ -266,8 +269,9 @@ public class PanelUsuario extends JDialog {
 		contentPanel.add(txtTipo);
 		txtTipo.setColumns(10);
 		if (user.getId().contains("A") && user!= null ) {
-			txtTipo.setText(((Administrador) user).getPuestoLaboral());
+			txtTipo.setText(Clinica.getInstance().buscarPuestoLaboralByCodAdmin(user.getId()));
 		}
+		
 		else if (user.getId().contains("M") && user!= null) {
 			txtTipo.setText(Clinica.getInstance().buscarEspecialidadByCodMedico(user.getId()));
 		}

@@ -383,11 +383,14 @@ public class Clinica {
 	}
 	
 	/*NECESARIA NAOKI*/
-	public boolean agregarVacuna(Vacuna nuevaVacuna) { //probada main
+	public boolean agregarVacuna(Vacuna nuevaVacuna) throws SQLException { //probada main
 		boolean realizado = false;
 		PreparedStatement statement = null;
 		String sql = "insert into vacuna (cod_vacuna, nombre_vacuna, tipo_vacuna, forma_admin, cod_fab) "
 				+ "values (?, ?, ?, ?, ?)";
+		
+		
+	if(buscarCodFabByNombreFab(nuevaVacuna.getFabricante())> 0) {
 		
 		try {
 			statement = ConexionSQL.getConexion().prepareStatement(sql);
@@ -400,12 +403,53 @@ public class Clinica {
 			statement.executeUpdate();
 			statement.close();
 			realizado = true;
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			}
+		}else {
+			insertarFabricante(nuevaVacuna.getFabricante());
+			
+			try {
+				statement = ConexionSQL.getConexion().prepareStatement(sql);
+				statement.setString(1, nuevaVacuna.getCodigo());
+				statement.setString(2, nuevaVacuna.getNombreVacuna());
+				statement.setString(3, nuevaVacuna.getTipoVacuna());
+				statement.setString(4, nuevaVacuna.getFormaAdministracion());
+				statement.setInt(5, Clinica.getInstance().buscarCodFabByNombreFab(nuevaVacuna.getFabricante()));
+				
+				statement.executeUpdate();
+				statement.close();
+				realizado = true;
+			} catch (SQLException e) {
+				e.printStackTrace();
+				}
 		}
 		
 		return realizado;
+	}	
+	
+	public boolean insertarFabricante(String nombre) throws SQLException {
+		
+		boolean realizado = true;
+		
+		String queryFab = "Insert into fabricante (nombre_fab) values(?)";
+		PreparedStatement stament2 = ConexionSQL.getConexion().prepareStatement(queryFab);
+		stament2.setString(1, nombre);
+		
+		int resul = stament2.executeUpdate();
+		
+		if(resul<=0) {
+			realizado= false;
+		}
+		
+		
+		return realizado;
+		
 	}
+	
+	
+	
 	
 	/*NECESARIA MISAEL*/ 
 	public boolean modificarVacuna(Vacuna updatedVacuna) {

@@ -145,7 +145,7 @@ public class ListadoPaciente extends JDialog {
 			}
 		else{
 			
-			String query = "select  paciente.*,ciudad.nombre_ciudad,provincia.nombre_provincia "
+			String query = "select distinct  paciente.*,ciudad.nombre_ciudad,provincia.nombre_provincia "
 					+ "from paciente,ciudad,provincia, cita_medica "
 					+ "where paciente.cod_ciudad = ciudad.cod_ciudad and ciudad.cod_provincia = provincia.cod_provincia and cita_medica.ced_paciente = paciente.ced_paciente";
 			PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
