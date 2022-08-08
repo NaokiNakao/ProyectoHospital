@@ -343,7 +343,7 @@ public class ConsultasVisual extends JDialog {
 								
 								Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(),
 										textPaneDiagnostico.getText().toString(),
-										medico, textPaneReceta.getText().toString(),cita.getFechaCita());
+										medico,cita.getFechaCita());
 								
 							
 								if(selectedEnfermedad!=null) {
@@ -356,12 +356,13 @@ public class ConsultasVisual extends JDialog {
 									h.getMisVacunas().add(selectedVacuna);
 								}
 								
-								Clinica.getInstance().insertarConsultaV2(n, medico, cita, p, h);
+								if(Clinica.getInstance().insertarConsultaV2(n, medico, cita, p, h)) {
 								JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
 								dispose();
 								PanelUsuario u = new PanelUsuario(medico);
 								u.setVisible(true);
 								}
+							}
 							}else {
 								HistoriaClinica h = new HistoriaClinica("Historial-"+cita.getPaciente().getCedula());
 								
@@ -371,7 +372,7 @@ public class ConsultasVisual extends JDialog {
 								p.setHistorial(h);
 								
 								Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(), textPaneDiagnostico.getText().toString(),
-										medico, textPaneReceta.getText().toString(),cita.getFechaCita());
+										medico,cita.getFechaCita());
 								
 								if(selectedEnfermedad!=null) {
 									n.setEnfermedad(selectedEnfermedad);
@@ -385,7 +386,6 @@ public class ConsultasVisual extends JDialog {
 								
 								
 								Clinica.getInstance().insertarConsulta(n, medico, cita, p, h);
-								//dispose();
 								JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
 								dispose();
 								
@@ -482,5 +482,10 @@ public class ConsultasVisual extends JDialog {
 		res2.close();
 		
 		}
+		
 	}
+
+	
+	
+	
 

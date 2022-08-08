@@ -365,21 +365,40 @@ public class RegistroCita extends JDialog {
 											
 											if(selectedMedico == null) {
 												JOptionPane.showMessageDialog(null, "Favor seleccionar un medico.", "Error", JOptionPane.ERROR_MESSAGE);
-											}else {
+											}else if(selectedMedico != null && Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null) {
 												CitaMedica cita;
 												try {
 													cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita,
 															selectedMedico, Clinica.getInstance().buscarPaciente(txtCedula.getText().toString()), "pendiente");
 													
-													Clinica.getInstance().insertarCita(cita);
-													JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
-													vacearEspacios();
-												
+													if(Clinica.getInstance().insertarCita(cita)) {
+														JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
+														vacearEspacios();
+													}
 												} catch (SQLException e1) {
 													// TODO Auto-generated catch block
 													e1.printStackTrace();
 												}
-																
+											}else if (selectedMedico != null && Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())== null) {
+												
+												Paciente paciente = null;
+												
+												if(cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("Masculino")) {
+													 paciente = new Paciente(txtCedula.getText().toString(), txtNombre.getText().toString(),
+															"M", (Date) spnNacimiento.getValue(), txtDireccion.getText().toString(), txtTelefono.getText().toString());
+												}else if (cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("Femenino")) {
+													 paciente = new Paciente(txtCedula.getText().toString(), txtNombre.getText().toString(),
+															"F", (Date) spnNacimiento.getValue(), txtDireccion.getText().toString(), txtTelefono.getText().toString());
+												
+												}
+												
+												CitaMedica	cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita,
+														selectedMedico, paciente, "pendiente");
+												
+												if(Clinica.getInstance().insertarCita(cita)) {
+													JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
+													vacearEspacios();
+												}
 												
 											}
 											

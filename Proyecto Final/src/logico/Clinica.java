@@ -667,12 +667,124 @@ public class Clinica {
 	}
 	
 	/*REVISION*/
-	public void insertarConsultaV2(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) {
-		misConsultas.add(c);
-		medico.getMisConsultas().add(c);
-		medico.getMisCitas().remove(cita);
-		b.getMisConsultas().add(c);
+	public boolean insertarConsultaV2(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) throws SQLException {
 		
+		boolean bandera = true;
+		PreparedStatement stamentConsul =null;
+		
+		String queryConsul = "insert into consulta (cod_consulta,fecha_consulta,diagnostico,cod_medico,cod_historia,sintomas) "
+				+ "values(?,?,?,?,?,?) ";
+	try {	
+		 stamentConsul = ConexionSQL.getConexion().prepareStatement(queryConsul);
+		stamentConsul.setString(1, c.getCodigo());
+		stamentConsul.setDate(2, (java.sql.Date) c.getFechaConsulta());
+		stamentConsul.setString(3, c.getDiagnostico());
+		stamentConsul.setString(4, medico.getId());
+		stamentConsul.setString(5, b.getCodigo());
+		stamentConsul.setString(6, c.getSintomas());
+		
+		int resulConsul = stamentConsul.executeUpdate();
+		
+	}catch (SQLException e) {
+			bandera = false;
+			System.out.println("Fallo al insertar la consulta");
+			e.printStackTrace();
+		}finally {
+			stamentConsul.close();
+		}
+	
+	
+	PreparedStatement stamentEnfDig = null;
+	
+	if(c.getEnfermedad() != null) {
+		
+		String queryEnfDiagnosticada = 	"insert into enfermedad_diagnosticada_consulta (cod_enf,cod_consulta)"
+				+ " values(?,?)";
+		
+		try {	
+		stamentEnfDig = ConexionSQL.getConexion().prepareStatement(queryEnfDiagnosticada);
+		stamentEnfDig.setString(1, c.getEnfermedad().getCodigo());
+		stamentEnfDig.setString(2, c.getCodigo());
+		
+		int resulEnfDiag= stamentEnfDig.executeUpdate();
+		
+		}catch (SQLException e) {
+			bandera = false;
+			System.out.println("Fallo al insertar la enfermedad en enfermedad diagnosticada");
+			e.printStackTrace();
+		}finally {
+			stamentEnfDig.close();
+		}
+		
+		PreparedStatement stamentEnfH = null;
+		
+		try {
+		String queryEnfHistoria = "insert into enfermedad_contenida_historia (cod_enf,cod_historia) values(?,?)";
+		 stamentEnfH = ConexionSQL.getConexion().prepareStatement(queryEnfHistoria);
+		stamentEnfH.setString(1, c.getEnfermedad().getCodigo());
+		stamentEnfH.setString(2,b.getCodigo());
+		
+		int resulEnfH = stamentEnfH.executeUpdate();
+		
+		}catch (SQLException e) {
+			bandera = false;
+			System.out.println("Fallo al insertar la enfermedad en historia");
+			e.printStackTrace();
+		}finally {
+			stamentEnfH.close();
+		}
+		
+	}
+	
+	if(c.getMisVacunas() != null) {
+		PreparedStatement StamentVac = null;
+		
+		String vac = "insert into vacuna_contenida_historia (cod_vacuna,cod_historia) values (?,?)";
+		 StamentVac = ConexionSQL.getConexion().prepareStatement(vac);
+		StamentVac.setString(1, c.getMisVacunas().getCodigo());
+		StamentVac.setString(2, b.getCodigo());
+		
+		try {
+			
+		int resulVac = StamentVac.executeUpdate();
+		
+		}catch (SQLException e) {
+			bandera = false;
+			System.out.println("Fallo al insertar la vacuna historia");
+			e.printStackTrace();
+		}finally {
+			StamentVac.close();
+		}
+		
+	}
+	
+	
+	PreparedStatement stamentcambio = null;
+	
+	try {
+		
+		
+	String updateCita = "update cita_medica "
+			+ "set estado = 'completada' "
+			+ "where cod_cita = ?";
+	
+	 stamentcambio = ConexionSQL.getConexion().prepareStatement(updateCita);
+	stamentcambio.setString(1, cita.getCodigo());
+	
+	int resulCambio = stamentcambio.executeUpdate();
+	
+	stamentcambio.close();
+	
+	}catch (SQLException e) {
+		bandera = false;
+		System.out.println("Fallo al cambiar estado cita");
+		e.printStackTrace();
+	}finally {
+		stamentcambio.close();
+	}
+	
+	
+	return bandera;
 	}
 	
 	/*NECESARIA MISAEL*/
@@ -1101,8 +1213,8 @@ public class Clinica {
 		
 		while(resul.next()) {
 			
-			consul = new Consulta(cod, resul.getString("fecha_consulta"), resul.getString("sintomas"), resul.getString("diagnostico")
-					, buscarMedicoByCodigo(resul.getString("cod_medico")), resul.getString("fecha_consulta"));
+			consul = new Consulta(cod, resul.getDate("fecha_consulta"), resul.getString("sintomas"), resul.getString("diagnostico")
+					, buscarMedicoByCodigo(resul.getString("cod_medico")), resul.getDate("fecha_consulta"))
 		}
 		return consul;
 	}
