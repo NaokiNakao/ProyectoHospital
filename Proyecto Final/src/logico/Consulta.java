@@ -16,13 +16,13 @@ public class Consulta {
 	private String receta;
 	private String fechaT;
 	
-	public Consulta(String codigo, String fechaConsulta, String sintomas, String diagnostico, Medico miMedico,String receta, String fechaT) {
+	public Consulta(String codigo, String fechaConsulta, String sintomas, String diagnostico, Medico miMedico, String fechaT) {
 		this.codigo = codigo;
 		this.fechaConsulta = fechaConsulta;
 		this.sintomas = sintomas;
 		this.diagnostico = diagnostico;
 		this.miMedico = miMedico;
-		this.receta = receta;
+		//this.receta = receta;
 		this.fechaT = fechaT;
 	}
 

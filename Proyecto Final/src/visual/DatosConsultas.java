@@ -11,6 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -34,9 +35,9 @@ public class DatosConsultas extends JDialog {
 	private JTextField txtCodConsulta;
 	private JTextField txtDatosPaciente;
 	private JTextField txtDatosMedico;
-	private JTextField textDiagnostico;
+	private JTextField txtDiagnostico;
 	private JTable tableEnfs;
-	private JTextField textField;
+	private JTextField txtSintomas;
 	private JTable tableVacunas;
 	
 	private DefaultTableModel modelVacuna;
@@ -81,32 +82,32 @@ public class DatosConsultas extends JDialog {
 		panel.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Codigo Consulta:");
-		lblNewLabel.setBounds(10, 16, 104, 14);
+		lblNewLabel.setBounds(10, 13, 104, 14);
 		panel.add(lblNewLabel);
 		
 		txtCodConsulta = new JTextField();
-		txtCodConsulta.setBounds(106, 10, 191, 20);
+		txtCodConsulta.setBounds(129, 10, 191, 20);
 		panel.add(txtCodConsulta);
 		txtCodConsulta.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Paciente");
-		lblNewLabel_1.setBounds(10, 60, 46, 14);
+		lblNewLabel_1.setBounds(10, 64, 86, 14);
 		panel.add(lblNewLabel_1);
 		
 		txtDatosPaciente = new JTextField();
 		txtDatosPaciente.setEditable(false);
-		txtDatosPaciente.setBounds(106, 57, 191, 20);
+		txtDatosPaciente.setBounds(129, 61, 191, 20);
 		panel.add(txtDatosPaciente);
 		txtDatosPaciente.setColumns(10);
 		
 		JLabel lblNewLabel_2 = new JLabel("Medico:");
-		lblNewLabel_2.setBounds(336, 60, 46, 14);
+		lblNewLabel_2.setBounds(359, 64, 46, 14);
 		panel.add(lblNewLabel_2);
 		
 		txtDatosMedico = new JTextField();
 		txtDatosMedico.setEditable(false);
 		txtDatosMedico.setColumns(10);
-		txtDatosMedico.setBounds(392, 57, 191, 20);
+		txtDatosMedico.setBounds(415, 61, 191, 20);
 		panel.add(txtDatosMedico);
 		
 		JButton btnBuscar = new JButton("Buscar");
@@ -119,6 +120,20 @@ public class DatosConsultas extends JDialog {
 						consulta = Clinica.getInstance().buscarConsultaByCod(txtCodConsulta.getText().toString());
 						txtDatosPaciente.setText(cargarPaciente(consulta).getNombre());
 						txtDatosMedico.setText(consulta.getMiMedico().getNombre()+" "+consulta.getMiMedico().getApellido());
+						
+						txtDiagnostico.setText(consulta.getDiagnostico());
+						txtSintomas.setText(consulta.getSintomas());
+						
+						loadEnfermedades(txtCodConsulta.getText().toString());
+						loadVacunas(cargarPaciente(consulta).getCedula());
+						
+					}else {
+						JOptionPane.showMessageDialog(null, "Esta consulta no existe", "Error", JOptionPane.ERROR_MESSAGE);
+						txtDatosPaciente.setText(" ");
+						txtDatosMedico.setText(" ");
+						txtCodConsulta.setText(" ");
+						txtDiagnostico.setText(" ");
+						txtSintomas.setText(" ");
 					}
 					
 				} catch (SQLException e1) {
@@ -127,7 +142,7 @@ public class DatosConsultas extends JDialog {
 				}
 			}
 		});
-		btnBuscar.setBounds(315, 7, 89, 23);
+		btnBuscar.setBounds(338, 9, 89, 23);
 		panel.add(btnBuscar);
 		
 		JPanel panel_1 = new JPanel();
@@ -146,21 +161,11 @@ public class DatosConsultas extends JDialog {
 		panel_1.add(panelTextFieldDiagnostico);
 		panelTextFieldDiagnostico.setLayout(null);
 		
-		textDiagnostico = new JTextField();
-		textDiagnostico.setBounds(10, 11, 152, 280);
-		panelTextFieldDiagnostico.add(textDiagnostico);
-		textDiagnostico.setColumns(10);
-		
-		JPanel panelSintomas = new JPanel();
-		panelSintomas.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelSintomas.setBounds(192, 36, 397, 128);
-		panel_1.add(panelSintomas);
-		panelSintomas.setLayout(null);
-		
-		textField = new JTextField();
-		textField.setBounds(10, 11, 377, 106);
-		panelSintomas.add(textField);
-		textField.setColumns(10);
+		txtDiagnostico = new JTextField();
+		txtDiagnostico.setEditable(false);
+		txtDiagnostico.setBounds(10, 11, 152, 280);
+		panelTextFieldDiagnostico.add(txtDiagnostico);
+		txtDiagnostico.setColumns(10);
 		
 		JPanel panelEnfs = new JPanel();
 		panelEnfs.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -183,7 +188,7 @@ public class DatosConsultas extends JDialog {
 		
 		JPanel panelVacuna = new JPanel();
 		panelVacuna.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelVacuna.setBounds(617, 36, 172, 302);
+		panelVacuna.setBounds(192, 36, 397, 128);
 		panel_1.add(panelVacuna);
 		panelVacuna.setLayout(new BorderLayout(0, 0));
 		
@@ -194,22 +199,35 @@ public class DatosConsultas extends JDialog {
 		tableVacunas = new JTable();
 		tableVacunas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		String[] heardersVac = {"Codigo","Nombre","Fabricante"};
-		modelEnfermades = new DefaultTableModel();
-		tableVacunas.setModel(modelVacuna);
+		modelVacuna = new DefaultTableModel();
+		//tableVacunas.setModel(modelVacuna);
 		modelVacuna.setColumnIdentifiers(heardersVac);
+		tableVacunas.setModel(modelVacuna);
 		scrollPaneVacuna.setViewportView(tableVacunas);
 		
 		JLabel lblNewLabel_4 = new JLabel("Sintomas");
-		lblNewLabel_4.setBounds(196, 11, 46, 14);
+		lblNewLabel_4.setBounds(606, 11, 138, 14);
 		panel_1.add(lblNewLabel_4);
 		
 		JLabel lblNewLabel_3_1 = new JLabel("Enfermedades diagnosticadas:");
-		lblNewLabel_3_1.setBounds(196, 185, 172, 14);
+		lblNewLabel_3_1.setBounds(196, 185, 299, 14);
 		panel_1.add(lblNewLabel_3_1);
 		
 		JLabel lblNewLabel_5 = new JLabel("Vacunas:");
-		lblNewLabel_5.setBounds(617, 11, 46, 14);
+		lblNewLabel_5.setBounds(192, 11, 138, 14);
 		panel_1.add(lblNewLabel_5);
+		
+		JPanel panelSintomas = new JPanel();
+		panelSintomas.setBounds(606, 36, 172, 302);
+		panel_1.add(panelSintomas);
+		panelSintomas.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelSintomas.setLayout(null);
+		
+		txtSintomas = new JTextField();
+		txtSintomas.setEditable(false);
+		txtSintomas.setBounds(10, 11, 152, 280);
+		panelSintomas.add(txtSintomas);
+		txtSintomas.setColumns(10);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -217,6 +235,12 @@ public class DatosConsultas extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton cancelButton = new JButton("Salir");
+				cancelButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						dispose();
+					}
+				});
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
 			}
@@ -247,21 +271,27 @@ public class DatosConsultas extends JDialog {
 	
 	
 	
-	public void loadEnfermedades() throws SQLException {
+	public void loadEnfermedades(String cod_consulta) throws SQLException {
 		
 		modelEnfermades.setRowCount(0);
 		rowsEnfermades = new Object[modelEnfermades.getColumnCount()];
 		
 		
-		String queryTipoEnf = "";
+		String queryTipoEnf = "select enfermedad_diagnosticada_consulta.*,enfermedad.* "
+				+ "from enfermedad_diagnosticada_consulta "
+				+ "inner join enfermedad "
+				+ "on enfermedad.cod_enf = enfermedad_diagnosticada_consulta.cod_enf "
+				+ "and enfermedad_diagnosticada_consulta.cod_consulta = ? "
+				+ "order by nombre_enf asc";
 		
 		PreparedStatement stamentTipo = ConexionSQL.getInstance().getConexion().prepareStatement(queryTipoEnf);
+		stamentTipo.setString(1, cod_consulta);
 		ResultSet res2 = stamentTipo.executeQuery();
 		
 		while(res2.next()) {
 			rowsEnfermades[0]=res2.getString("cod_enf");
 			rowsEnfermades[1]=res2.getString("nombre_enf");
-			rowsEnfermades[2]=res2.getString("nombre_tipo");
+			rowsEnfermades[2]=res2.getString("cod_tipo");
 			modelEnfermades.addRow(rowsEnfermades);
 		}
 		
@@ -270,14 +300,18 @@ public class DatosConsultas extends JDialog {
 		
 	}
 	
-	public void loadVacunas() throws SQLException {
+	public void loadVacunas(String cod_paciente) throws SQLException {
 		
 		modelVacuna.setRowCount(0);
 		rowsVacuna = new Object[modelVacuna.getColumnCount()];
 		
+		String queryVacFab = "select vacuna.*,fabricante.nombre_fab from vacuna,historia_clinica,vacuna_contenida_historia,fabricante "
+				+ "where historia_clinica.cod_historia = vacuna_contenida_historia.cod_historia "
+				+ "and vacuna.cod_vacuna = vacuna_contenida_historia.cod_vacuna and vacuna.cod_fab = fabricante.cod_fab "
+				+ " and historia_clinica.ced_paciente = ?";
 		
-		String queryVacFab = "";
 		PreparedStatement stamentFab = ConexionSQL.getInstance().getConexion().prepareStatement(queryVacFab);
+		stamentFab.setString(1, cod_paciente);
 		ResultSet res2 = stamentFab.executeQuery();
 		
 		while( res2.next()) {

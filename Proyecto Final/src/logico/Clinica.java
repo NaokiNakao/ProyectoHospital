@@ -578,8 +578,8 @@ public class Clinica {
 		
 		while(resul.next()) {
 			
-			medico = new Medico(cod, resul.getString("username"), "Contrase�a", resul.getString("nombre"), resul.getString("apellido"),
-					resul.getString("telefono"));
+			medico = new Medico(cod, resul.getString("username"),resul.getString("encrypted_password") , resul.getString("nombre"), resul.getString("apellido"),
+					resul.getString("telefono"),buscarEspecialidadByCod(resul.getInt("cod_especialidad")));
 			
 		}
 		consul.close();
@@ -704,11 +704,32 @@ public class Clinica {
 		String InsertConsul = null;
 		PreparedStatement consulta = null;
 		
-		if(med.getId().contains("M")) {
+	if(med.getId().contains("M")) {
 		
-			 InsertConsul = "Insert Into medico (cod_medico,nombre,apellido,username,encrypted_password,telefono) Values (?,?,?,?,?,?)";
+		 InsertConsul = "Insert Into medico (cod_medico,nombre,apellido,username,encrypted_password,telefono,cod_especialidad) Values (?,?,?,?,?,?,?)";
 
-		try {
+		 if(buscarCodEspecialidadByNombre(especialidad)== 0) {
+				
+				String InsertConsul2 = "Insert Into especialidad (nombre_especialidad) Values (?)";
+				PreparedStatement consulta2 = null;
+				
+				try {
+					consulta2 = ConexionSQL.getConexion().prepareStatement(InsertConsul2);
+					consulta2.setString(1,especialidad);
+					consulta2.executeUpdate();
+				
+				} catch (SQLException e) {
+					
+					System.out.println("Fallo la consulta de insertar especialidad");
+					e.printStackTrace();
+				}finally {
+					
+					if(consulta2 != null)
+						consulta2.close();
+					}
+				}
+		 
+	try {
 		consulta = ConexionSQL.getConexion().prepareStatement(InsertConsul);
 		consulta.setBytes(1, med.getId().getBytes());
 		consulta.setString(2,med.getNombre());
@@ -716,6 +737,7 @@ public class Clinica {
 		consulta.setString(4,med.getLogin());
 		consulta.setBytes(5,med.getPassword().getBytes());
 		consulta.setString(6,med.getTelefono());
+		consulta.setInt(7, buscarCodEspecialidadByNombre(especialidad));
 		
 		consulta.executeUpdate();
 		} catch (SQLException e) {
@@ -727,48 +749,7 @@ public class Clinica {
 			if(consulta != null)
 			consulta.close();
 		}
-		
-		if(buscarCodEspecialidadByNombre(especialidad)== 0) {
-		
-		String InsertConsul2 = "Insert Into especialidad (nombre_especialidad) Values (?)";
-		PreparedStatement consulta2 = null;
-		
-		try {
-			consulta2 = ConexionSQL.getConexion().prepareStatement(InsertConsul2);
-			consulta2.setString(1,especialidad);
-			consulta2.executeUpdate();
-		
-		} catch (SQLException e) {
-			
-			System.out.println("Fallo la consulta de insertar especialidad");
-			e.printStackTrace();
-		}finally {
-			
-			if(consulta2 != null)
-				consulta2.close();
-			}
-		}
-	/*	
-		String InsertConsul3 = "Insert Into medico_especialidad (cod_medico,cod_especialidad) Values (?,?)";
-		PreparedStatement consulta3 = null;
-		
-		try {
-			consulta3 = ConexionSQL.getConexion().prepareStatement(InsertConsul3);
-			consulta3.setString(1,med.getId());
-			consulta3.setInt(2,buscarCodEspecialidadByNombre(especialidad));
-			consulta3.executeUpdate();
-		
-		} catch (SQLException e) {
-			
-			System.out.println("Fallo la consulta medico especialidad");
-			e.printStackTrace();
-		}finally {
-			
-			if(consulta3 != null)
-				consulta3.close();
-			
-			}*/
-		}else if (med.getId().contains("A")) {
+	}else if (med.getId().contains("A")) {
 			 InsertConsul = "Insert Into administrador (cod_admin,puesto_laboral,nombre,apellido,username,encrypted_password,telefono)"
 						+ "values (?,?,?,?,?,?,?)";
 			 try {
@@ -1115,12 +1096,13 @@ public class Clinica {
 		
 		String query = "select * from consulta where cod_consulta = ?";
 		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setString(1, cod);
 		ResultSet resul = stament.executeQuery();
 		
 		while(resul.next()) {
 			
 			consul = new Consulta(cod, resul.getString("fecha_consulta"), resul.getString("sintomas"), resul.getString("diagnostico")
-					, buscarMedicoByCodigo(resul.getString("cod_medico")), resul.getString("receta"), resul.getString("fecha_consulta"));
+					, buscarMedicoByCodigo(resul.getString("cod_medico")), resul.getString("fecha_consulta"));
 		}
 		return consul;
 	}

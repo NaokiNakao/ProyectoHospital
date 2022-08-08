@@ -208,7 +208,8 @@ public class PanelUsuario extends JDialog {
 			btnConsulta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					
-					 Medico med = new Medico(user.getId(), user.getLogin(), user.getPassword(), user.getNombre(), user.getApellido(), user.getApellido());
+					 Medico med = new Medico(user.getId(), user.getLogin(), user.getPassword(), user.getNombre(),
+							 user.getApellido(), user.getTelefono(),((Medico)user).getEspecialidad());
 					
 					try {
 						if(CitasPendientes(med)==0) {			
@@ -268,7 +269,7 @@ public class PanelUsuario extends JDialog {
 			txtTipo.setText(((Administrador) user).getPuestoLaboral());
 		}
 		else if (user.getId().contains("M") && user!= null) {
-			txtTipo.setText(Clinica.getInstance().buscarEspecialidadCodByCodMedico(user.getId()));
+			txtTipo.setText(Clinica.getInstance().buscarEspecialidadByCodMedico(user.getId()));
 		}
 		
 		panelAgenda = new JPanel();
