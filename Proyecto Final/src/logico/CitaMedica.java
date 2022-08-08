@@ -6,7 +6,7 @@ import java.util.Date;
 public class CitaMedica {
 
 	private String codigo;
-	private String fechaCita;
+	private Date fechaCita;
 	private Medico medico;
 	private Paciente paciente;
 	private String estado;
@@ -20,7 +20,7 @@ public class CitaMedica {
 	//private Date fechaN;
 	
 	
-	public CitaMedica(String codigo, String fechaCita, Medico medico, Paciente paciente, String estado) {
+	public CitaMedica(String codigo, Date fechaCita, Medico medico, Paciente paciente, String estado) {
 		this.codigo = codigo;
 		this.fechaCita = fechaCita;
 		this.medico = medico;
@@ -39,7 +39,7 @@ public class CitaMedica {
 		return codigo;
 	}
 
-	public String getFechaCita() {
+	public Date getFechaCita() {
 		return fechaCita;
 	}
 	
@@ -67,7 +67,7 @@ public class CitaMedica {
 		this.codigo = codigo;
 	}
 
-	public void setFechaCita(String fechaCita) {
+	public void setFechaCita(Date fechaCita) {
 		this.fechaCita = fechaCita;
 	}
 	

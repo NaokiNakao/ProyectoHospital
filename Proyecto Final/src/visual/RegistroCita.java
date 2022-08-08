@@ -134,7 +134,7 @@ public class RegistroCita extends JDialog {
 							txtDireccion.setText(paciente.getDireccion());
 							txtTelefono.setText(paciente.getTelefono());
 							
-							if(paciente.getGenero().equalsIgnoreCase("Masculino")) {
+							if(paciente.getGenero().equalsIgnoreCase("M")) {
 									String sexo = "Masculino";
 									cbxSexoPersona.setSelectedItem(sexo);
 								}else {
@@ -249,7 +249,7 @@ public class RegistroCita extends JDialog {
 					Date fechaActual = new Date();
 					
 					try {
-						if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), dateAux.toString()) != null) {
+						if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), dateAux) != null) {
 							JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
 							
 						}else {
@@ -329,14 +329,15 @@ public class RegistroCita extends JDialog {
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
-						Date fechaCita = (Date) spnFechaCita.getValue();
-						Date fechaActual = new Date();
+						java.sql.Date fechaCita = (java.sql.Date) spnFechaCita.getValue();
+						java.sql.Date fechaActual = new java.sql.Date();
 						
 						SimpleDateFormat r = new SimpleDateFormat("MM/DD/YYY");
 						String	fecha2 = r.format(fechaCita);
 						
-						Date date1 = null;
+						//Date date1 = null;
 						try {
+							Date date1 = null;
 							date1 = new SimpleDateFormat("MM/DD/YYY").parse(fecha2);
 						} catch (ParseException e1) {
 							// TODO Auto-generated catch block
@@ -346,7 +347,7 @@ public class RegistroCita extends JDialog {
 						Date fechaNacimiento = (Date) spnNacimiento.getValue();
 						
 					try {
-						if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), fechaCita.toString()) != null) {
+						if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), fechaCita) != null) {
 							JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
 						}else {
 							
@@ -367,7 +368,7 @@ public class RegistroCita extends JDialog {
 											}else {
 												CitaMedica cita;
 												try {
-													cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita.toString(),
+													cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita,
 															selectedMedico, Clinica.getInstance().buscarPaciente(txtCedula.getText().toString()), "pendiente");
 													
 													Clinica.getInstance().insertarCita(cita);
