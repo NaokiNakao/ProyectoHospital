@@ -439,8 +439,11 @@ public class ConsultasVisual extends JDialog {
 		rowsEnfermedades = new Object[modelEnfermedades.getColumnCount()];
 		
 		
-		String queryTipoEnf = "select enfermedad.*, tipo_enfermedad.nombre_tipo from enfermedad, tipo_enfermedad "
-							+ "where enfermedad.cod_tipo = tipo_enfermedad.cod_tipo";
+		String queryTipoEnf = "select enfermedad.*, tipo_enfermedad.nombre_tipo  "
+				+ "from enfermedad  "
+				+ "inner join tipo_enfermedad "
+				+ "on enfermedad.cod_tipo = tipo_enfermedad.cod_tipo "
+				+ "order by nombre_enf ";
 		
 		PreparedStatement stamentTipo = ConexionSQL.getInstance().getConexion().prepareStatement(queryTipoEnf);
 		ResultSet res2 = stamentTipo.executeQuery();
@@ -463,7 +466,7 @@ public class ConsultasVisual extends JDialog {
 		rowsVacunas = new Object[modelVacunas.getColumnCount()];
 		
 		
-		String queryVacFab = "select vacuna.*,fabricante.nombre_fab from vacuna,fabricante where vacuna.cod_fab = fabricante.cod_fab";
+		String queryVacFab = "select vacuna.*,fabricante.nombre_fab from vacuna inner join fabricante on vacuna.cod_fab = fabricante.cod_fab";
 		PreparedStatement stamentFab = ConexionSQL.getInstance().getConexion().prepareStatement(queryVacFab);
 		ResultSet res2 = stamentFab.executeQuery();
 		
