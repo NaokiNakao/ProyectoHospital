@@ -418,9 +418,8 @@ public class RegistroCita extends JDialog {
 		modelMedicos.setRowCount(0);
 		rowsMedicos = new Object[modelMedicos.getColumnCount()];
 		
-		String query = "select medico.*, especialidad.* from especialidad,medico,medico_especialidad "
-				+ "where medico_especialidad.cod_medico = medico.cod_medico "
-				+ "and medico_especialidad.cod_especialidad = especialidad.cod_especialidad";
+		String query = "select medico.*, especialidad.* from especialidad inner join medico "
+				+ " on medico.cod_especialidad = especialidad.cod_especialidad ";
 		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
 		ResultSet resul = stament.executeQuery();
 		

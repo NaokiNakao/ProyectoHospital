@@ -351,8 +351,8 @@ public class ListadoUsuario extends JDialog {
 			sql = "delete medico from medico "
 					+ "where cod_medico = ?";
 			
-			sql2 = "delete medico_especialidad from medico_especialidad "
-					+ "where cod_medico = ?";
+			/*sql2 = "delete medico_especialidad from medico_especialidad "
+					+ "where cod_medico = ?";*/
 			
 		}else if (selectedUser.getId().contains("A")) {
 			sql = "delete administrador from administrador "
@@ -366,9 +366,9 @@ public class ListadoUsuario extends JDialog {
 				statement.executeUpdate();
 				statement.close();
 				
-				statement = ConexionSQL.getConexion().prepareStatement(sql2);
+			/*	statement = ConexionSQL.getConexion().prepareStatement(sql2);
 				statement.executeUpdate();
-				statement.close();
+				statement.close();*/
 				
 			} catch (SQLException e) {
 				e.printStackTrace();

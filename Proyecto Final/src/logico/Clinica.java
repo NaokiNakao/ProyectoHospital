@@ -748,7 +748,7 @@ public class Clinica {
 				consulta2.close();
 			}
 		}
-		
+	/*	
 		String InsertConsul3 = "Insert Into medico_especialidad (cod_medico,cod_especialidad) Values (?,?)";
 		PreparedStatement consulta3 = null;
 		
@@ -767,7 +767,7 @@ public class Clinica {
 			if(consulta3 != null)
 				consulta3.close();
 			
-			}
+			}*/
 		}else if (med.getId().contains("A")) {
 			 InsertConsul = "Insert Into administrador (cod_admin,puesto_laboral,nombre,apellido,username,encrypted_password,telefono)"
 						+ "values (?,?,?,?,?,?,?)";
@@ -879,13 +879,12 @@ public class Clinica {
 		return especialidad;
 	}
 	
-	public String buscarEspecialidadByCodMedico(String cod) throws SQLException {
+	public String buscarEspecialidadByCodMedico(String cod) throws SQLException { //cambiada  medico_especialidad
 		
 		String especialidad = null;
 		
-		String query = "select especialidad.* from especialidad,medico,medico_especialidad "
-				+ "where medico_especialidad.cod_medico = medico.cod_medico "
-				+ "and medico_especialidad.cod_especialidad = especialidad.cod_especialidad and medico.cod_medico = ?";
+		String query = "select medico.*, especialidad.* from especialidad inner join medico "
+				+ "on  medico.cod_especialidad = especialidad.cod_especialidad and medico.cod_medico = ? ";
 		PreparedStatement statement = ConexionSQL.getConexion().prepareStatement(query);
 		statement.setString(1, cod);
 		
@@ -924,20 +923,19 @@ public class Clinica {
 		return puestoLaboral;
 	}
 	
-	public String buscarEspecialidadCodByCodMedico(String cod) throws SQLException {
+	public String buscarEspecialidadCodByCodMedico(String cod) throws SQLException {//modificada  medico_especialidad
 		
 		String especialidad = null;
 		
-		String query = "select especialidad.* from especialidad,medico,medico_especialidad "
-				+ "where medico_especialidad.cod_medico = medico.cod_medico "
-				+ "and medico_especialidad.cod_especialidad = especialidad.cod_especialidad and medico.cod_medico = ?";
+		String query = "select medico.*, especialidad.* from especialidad inner join medico "
+				+ "on  medico.cod_especialidad = especialidad.cod_especialidad and medico.cod_medico = ?;";
 		PreparedStatement statement = ConexionSQL.getConexion().prepareStatement(query);
 		statement.setString(1, cod);
 		
 		ResultSet res = statement.executeQuery();
 		
 		while(res.next()) {
-			especialidad = res.getString("nombre_especialidad");
+			especialidad = res.getString("cod_especialidad");
 		}
 		
 		return especialidad;
