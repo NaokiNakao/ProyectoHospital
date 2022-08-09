@@ -364,6 +364,8 @@ public class RegistroVacuna extends JDialog {
 							if(okButton.getText().toString().equalsIgnoreCase("agregar") && 
 									Clinica.getInstance().buscarVacunaByCodigo(txtCodigo.getText().toString())!= null) {
 								
+								dispose();
+								
 								if(Clinica.getInstance().eliminarVacuna(txtCodigo.getText().toString())) {
 									dispose();
 						
