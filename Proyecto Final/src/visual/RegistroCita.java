@@ -46,6 +46,8 @@ import javax.swing.SpinnerDateModel;
 import java.util.Calendar;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFormattedTextField$AbstractFormatter;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 
 public class RegistroCita extends JDialog {
 
@@ -71,6 +73,7 @@ public class RegistroCita extends JDialog {
 	private JSpinner spnNacimiento;
 	private JFormattedTextField TxtFechaCita;
 	private JFormattedTextField txtHoraCita;
+	private JFormattedTextField TxtFechaCita_1;
 	
 	/**
 	 * Launch the application.
@@ -226,6 +229,8 @@ public class RegistroCita extends JDialog {
 			
 			spnNacimiento = new JSpinner();
 			spnNacimiento.setEnabled(false);
+			spnNacimiento.setVisible(false);
+			spnNacimiento.setEnabled(false);
 			Date date = new Date();
 			spnNacimiento.setModel(new SpinnerDateModel(date, null, null, Calendar.DAY_OF_MONTH));
 			JSpinner.DateEditor de_spnFecha = new JSpinner.DateEditor(spnNacimiento,"dd/MMM/yyyy");
@@ -241,6 +246,11 @@ public class RegistroCita extends JDialog {
 			//JSpinner.DateEditor FechaCita = new JSpinner.DateEditor(spnFechaCita,"yyyy-MM-dd hh:mm:ss");
 		//	spnFechaCita.setEditor(FechaCita);
 			spnFechaCita.setEnabled(false);
+			
+			TxtFechaCita_1 = new JFormattedTextField((AbstractFormatter) null);
+			TxtFechaCita_1.setColumns(10);
+			TxtFechaCita_1.setBounds(576, 131, 144, 23);
+			panelDatosCliente.add(TxtFechaCita_1);
 			spnFechaCita.setVisible(false);
 			
 			JPanel panelDatosConsulta = new JPanel();
