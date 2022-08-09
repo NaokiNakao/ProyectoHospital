@@ -637,12 +637,19 @@ public class Clinica {
 	}
 	
 	/*NECESARIA NAOKI*/
-	public boolean insertarCita(CitaMedica cita) {
+	public boolean insertarCita(CitaMedica cita) throws SQLException {
 		boolean realizado = false;
+		
+		if(buscarPaciente(cita.getPaciente().getCedula()) == null) {
+			insertarPaciente(cita.getPaciente());
+		}
+		
+		
+		
 		PreparedStatement statement = null;
 		String sql = "insert into cita_medica (cod_cita, fecha_hora_cita, cod_medico, ced_paciente) "
 				+ "values (?, ?, ?, ?)";
-		
+
 		try {
 			statement = ConexionSQL.getConexion().prepareStatement(sql);
 			statement.setString(1, cita.getCodigo());
@@ -790,7 +797,7 @@ public class Clinica {
 		
 		
 	String updateCita = "update cita_medica "
-			+ "set estado = 'Completada' "
+			+ "set estado = 'Realizada' "
 			+ "where cod_cita = ?";
 	
 	 stamentcambio = ConexionSQL.getConexion().prepareStatement(updateCita);
@@ -1409,6 +1416,30 @@ public class Clinica {
 			e.printStackTrace();
 		}
 	}
+	
+	public boolean insertarPaciente(Paciente p) throws SQLException {
+		
+		boolean bandera = true;
+		
+		String query = "insert into paciente (ced_paciente,nombre,apellido,fecha_nac,telefono,genero,cod_ciudad) values (?,?,?,?,?,?,?)";
+		
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setString(1, p.getCedula());
+		stament.setString(2, p.getNombre());
+		stament.setString(3, p.getNombre());
+		stament.setString(4, p.getFechaNacimiento());
+		stament.setString(5, p.getTelefono());
+		if(p.getGenero().equalsIgnoreCase("Masculino")) {
+			stament.setString(7, "M");
+		}else {
+			stament.setString(7, "F");
+		}
+		
+		stament.setString(7,);
+		
+		return bandera;
+	}
+	
 	
 }
 
