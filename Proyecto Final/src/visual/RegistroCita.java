@@ -253,11 +253,11 @@ public class RegistroCita extends JDialog {
 					
 					Date dateAux = (Date) spnFechaCita.getValue();
 					Date fechaActual = new Date();
-					//System.out.println( TxtFechaCita.getText()+" "+ txtHoraCita.getText());
-					System.out.println(	Clinica.getInstance().formatoFechaHora(TxtFechaCita.getText()+"T"+txtHoraCita.getText()));
+					String aux = TxtFechaCita.getText() + " " + txtHoraCita.getText();
+					//System.out.println(	Clinica.getInstance().formatoFechaHora(TxtFechaCita.getText()+"T"+txtHoraCita.getText()));
 					
 					try {
-						if(Clinica.getInstance().citaByCedula(txtCedula.getText(), Clinica.getInstance().formatoFechaHora(TxtFechaCita.getText()+"T"+txtHoraCita.getText())) != null) {
+						if(Clinica.getInstance().citaByCedula(txtCedula.getText(), aux) != null) {
 							JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
 							
 						}else {

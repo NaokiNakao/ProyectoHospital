@@ -674,7 +674,7 @@ public class Clinica {
 			ResultSet result = statement.executeQuery();
 			
 			while(result.next()) {
-				cita = new CitaMedica(result.getString("cod_cita"), result.getDate("fecha_cita"), 
+				cita = new CitaMedica(result.getString("cod_cita"), result.getString("fecha_cita"), 
 						(Medico) buscarUsuarioById(result.getString("cod_medico")), buscarPaciente(result.getString("ced_paciente")),
 						result.getString("estado"));
 			}
@@ -834,14 +834,13 @@ public class Clinica {
 	}
 	
 	/*NECESARIA MISAEL*/
-	public CitaMedica citaByCedula(String cedula, Date fecha) throws SQLException {
+	public CitaMedica citaByCedula(String cedula, String fecha) throws SQLException {
 		CitaMedica cita = null;
-		//System.out.println(fecha.toString());
 		
 		String query = "select * from cita_medica where ced_paciente = ? and fecha_hora_cita = ?";
 		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
 		stament.setString(1, cedula);
-		stament.setString(2, formatoFechaHora(fecha.toString()));
+		stament.setString(2, fecha);
 		ResultSet resul = stament.executeQuery();
 		
 		while(resul.next()) {
