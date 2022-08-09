@@ -95,9 +95,10 @@ public class InicioSesion extends JDialog {
 					
 					PanelUsuario frame;
 					try {
+						dispose();
 						frame = new PanelUsuario(user);
 						frame.setVisible(true);
-						dispose();
+						
 						
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block

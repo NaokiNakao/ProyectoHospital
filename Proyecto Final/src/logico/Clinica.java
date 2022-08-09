@@ -790,7 +790,7 @@ public class Clinica {
 		
 		
 	String updateCita = "update cita_medica "
-			+ "set estado = 'completada' "
+			+ "set estado = 'Completada' "
 			+ "where cod_cita = ?";
 	
 	 stamentcambio = ConexionSQL.getConexion().prepareStatement(updateCita);
