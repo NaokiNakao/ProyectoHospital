@@ -368,7 +368,7 @@ public class ConsultasVisual extends JDialog {
 								HistoriaClinica h = new HistoriaClinica("His-"+cita.getPaciente().getCedula());
 								
 								Paciente p = new Paciente(cita.getPaciente().getCedula(), cita.getPaciente().getNombre(), cita.getPaciente().getGenero(), cita.getPaciente().getFechaNacimiento(), 
-										cita.getPaciente().getDireccion(), cita.getPaciente().getTelefono());
+										cita.getPaciente().getCod_ciudad(), cita.getPaciente().getTelefono());
 								
 					
 								

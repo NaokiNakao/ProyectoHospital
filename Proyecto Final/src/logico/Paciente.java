@@ -8,17 +8,17 @@ public class Paciente {
 	private String cedula;
 	private String nombre;
 	private String genero;
-	private Date fechaNacimiento;
-	private String direccion;
+	private String fechaNacimiento;
+	private int cod_ciudad;
 	private String telefono;
 	private HistoriaClinica historial;
 	
-	public Paciente(String cedula, String nombre, String genero, Date fechaNacimiento, String direccion, String telefono) {
+	public Paciente(String cedula, String nombre, String genero, String fechaNacimiento, int cod_ciudad, String telefono) {
 		this.cedula = cedula;
 		this.nombre = nombre;
 		this.genero = genero;
 		this.fechaNacimiento = fechaNacimiento;
-		this.direccion = direccion;
+		this.cod_ciudad = cod_ciudad;
 		this.telefono = telefono;
 	}
 
@@ -34,12 +34,8 @@ public class Paciente {
 		return genero;
 	}
 
-	public Date getFechaNacimiento() {
+	public String getFechaNacimiento() {
 		return fechaNacimiento;
-	}
-
-	public String getDireccion() {
-		return direccion;
 	}
 
 	public String getTelefono() {
@@ -62,12 +58,8 @@ public class Paciente {
 		this.genero = genero;
 	}
 
-	public void setFechaNacimiento(Date fechaNacimiento) {
+	public void setFechaNacimiento(String fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
-	}
-
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
 	}
 
 	public void setTelefono(String telefono) {
@@ -76,6 +68,14 @@ public class Paciente {
 
 	public void setHistorial(HistoriaClinica historial) {
 		this.historial = historial;
+	}
+
+	public int getCod_ciudad() {
+		return cod_ciudad;
+	}
+
+	public void setCod_ciudad(int cod_ciudad) {
+		this.cod_ciudad = cod_ciudad;
 	}
 	
 }

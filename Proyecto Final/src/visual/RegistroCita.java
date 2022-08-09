@@ -46,12 +46,12 @@ import javax.swing.SpinnerDateModel;
 import java.util.Calendar;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFormattedTextField$AbstractFormatter;
+//import javax.swing.JFormattedTextField$AbstractFormatter;
 
 public class RegistroCita extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField txtCedula;
+	private JFormattedTextField txtCedula;
 	private JTextField txtNombre;
 	private JTextField txtTelefono;
 	private JTextField txtDireccion;
@@ -72,7 +72,7 @@ public class RegistroCita extends JDialog {
 	private JSpinner spnNacimiento;
 	private JFormattedTextField TxtFechaCita;
 	private JFormattedTextField txtHoraCita;
-	private JFormattedTextField TxtFechaCita_1;
+	private JFormattedTextField txtNacimiento;
 	
 	/**
 	 * Launch the application.
@@ -113,7 +113,15 @@ public class RegistroCita extends JDialog {
 			panel.add(panelDatosCliente);
 			panelDatosCliente.setLayout(null);
 			
-			txtCedula = new JTextField();
+			MaskFormatter formatoCedula = null;
+			try {
+				formatoCedula = new MaskFormatter("###-#######-#");
+			} catch (ParseException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
+			txtCedula = new JFormattedTextField(formatoCedula);
 			txtCedula.setBounds(83, 31, 143, 23);
 			panelDatosCliente.add(txtCedula);
 			txtCedula.setColumns(10);
@@ -137,7 +145,7 @@ public class RegistroCita extends JDialog {
 							
 							paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText());
 							txtNombre.setText(paciente.getNombre());
-							txtDireccion.setText(paciente.getDireccion());
+							txtDireccion.setText(Clinica.getInstance().buscarNombreByCiudad(paciente.getCod_ciudad())+", "+Clinica.getInstance().buscarNombreProvinciaBycodCiudad(paciente.getCod_ciudad()));
 							txtTelefono.setText(paciente.getTelefono());
 							
 							if(paciente.getGenero().equalsIgnoreCase("M")) {
@@ -234,7 +242,7 @@ public class RegistroCita extends JDialog {
 			spnNacimiento.setModel(new SpinnerDateModel(date, null, null, Calendar.DAY_OF_MONTH));
 			JSpinner.DateEditor de_spnFecha = new JSpinner.DateEditor(spnNacimiento,"dd/MMM/yyyy");
 			spnNacimiento.setEditor(de_spnFecha);
-			spnNacimiento.setBounds(576, 131, 144, 23);
+			spnNacimiento.setBounds(576, 31, 144, 23);
 			panelDatosCliente.add(spnNacimiento);
 			
 			spnFechaCita = new JSpinner();
@@ -246,10 +254,18 @@ public class RegistroCita extends JDialog {
 		//	spnFechaCita.setEditor(FechaCita);
 			spnFechaCita.setEnabled(false);
 			
-			TxtFechaCita_1 = new JFormattedTextField((AbstractFormatter) null);
-			TxtFechaCita_1.setColumns(10);
-			TxtFechaCita_1.setBounds(576, 131, 144, 23);
-			panelDatosCliente.add(TxtFechaCita_1);
+			MaskFormatter formatoFecha = null;
+			try {
+				formatoFecha = new MaskFormatter("####/##/##");
+			} catch (ParseException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
+			txtNacimiento = new JFormattedTextField(formatoFecha);
+			txtNacimiento.setColumns(10);
+			txtNacimiento.setBounds(576, 131, 144, 23);
+			panelDatosCliente.add(txtNacimiento);
 			spnFechaCita.setVisible(false);
 			
 			JPanel panelDatosConsulta = new JPanel();
@@ -351,13 +367,6 @@ public class RegistroCita extends JDialog {
 			scrollPane.setViewportView(tableDoctoresDisponibles);
 			//Date date2 = new Date();
 			
-			MaskFormatter formatoFecha = null;
-			try {
-				formatoFecha = new MaskFormatter("####/##/##");
-			} catch (ParseException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
 			TxtFechaCita = new JFormattedTextField(formatoFecha);		
 			TxtFechaCita.setBounds(313, 31, 116, 20);
 			panelDatosConsulta.add(TxtFechaCita);
@@ -442,10 +451,13 @@ public class RegistroCita extends JDialog {
 												
 												if(cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("Masculino")) {
 													 paciente = new Paciente(txtCedula.getText().toString(), txtNombre.getText().toString(),
-															"M", (Date) spnNacimiento.getValue(), txtDireccion.getText().toString(), txtTelefono.getText().toString());
+															"M", txtNacimiento.getText(), Clinica.getInstance().buscarCodByCiudad(txtDireccion.getText())
+															
+															
+															, txtTelefono.getText().toString());
 												}else if (cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("Femenino")) {
 													 paciente = new Paciente(txtCedula.getText().toString(), txtNombre.getText().toString(),
-															"F", (Date) spnNacimiento.getValue(), txtDireccion.getText().toString(), txtTelefono.getText().toString());
+															"F", txtNacimiento.getText(), Clinica.getInstance().buscarCodByCiudad(txtDireccion.getText()), txtTelefono.getText().toString());
 												
 												}
 												

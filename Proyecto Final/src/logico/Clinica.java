@@ -271,8 +271,8 @@ public class Clinica {
 		ResultSet result = statement.executeQuery();
 		
 		while(result.next()) {
-		paciente = new Paciente(cedula, result.getString("nombre"), result.getString("genero"), result.getDate("fecha_nac"), 
-				result.getString("cod_ciudad"),result.getString("telefono"));
+		paciente = new Paciente(cedula, result.getString("nombre"), result.getString("genero"), result.getString("fecha_nac"), 
+				result.getInt("cod_ciudad"),result.getString("telefono"));
 		}
 		result.close();
 		statement.close();
@@ -1417,6 +1417,7 @@ public class Clinica {
 		}
 	}
 	
+
 	public boolean insertarPaciente(Paciente p) throws SQLException {
 		
 		boolean bandera = true;
@@ -1435,12 +1436,100 @@ public class Clinica {
 			stament.setString(7, "F");
 		}
 		
-		stament.setString(7,);
+		stament.setInt(7,p.getCod_ciudad());
 		
 		return bandera;
 	}
 	
+
+	public String buscarNombreProvinciaByCod(int codProvincia) {
+		String nombreProvincia = null;
+		String query = "select nombre_provincia "
+				+ "from provincia "
+				+ "where cod_provincia = ?";
+		PreparedStatement statement = null;
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(query);
+			statement.setInt(1, codProvincia);
+			ResultSet result = statement.executeQuery();
+			
+			while(result.next()) {
+				nombreProvincia = result.getString("nombre_provincia");
+			}
+			
+			statement.close();
+			result.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return nombreProvincia;
+	}
 	
+	
+	public int buscarCodByCiudad(String ciudad) throws SQLException {
+		
+		int codigo = 0;
+		
+		
+		String query = "select * from ciudad where nombre_ciudad = ?";
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setString(1, ciudad);
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			codigo = resul.getInt("cod_ciudad");
+		}
+		
+		stament.close();
+		resul.close();
+		
+		return codigo;
+	}
+
+public String buscarNombreByCiudad(int cod) throws SQLException {
+		
+		String nombre = null;
+		
+		
+		String query = "select * from ciudad where cod_ciudad = ?";
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setInt(1, cod);
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			nombre = resul.getString("nombre_ciudad");
+		}
+		
+		stament.close();
+		resul.close();
+		
+		return nombre;
+	}
+
+	public String buscarNombreProvinciaBycodCiudad(int cod_ciudad) throws SQLException {
+		
+		String nombre = null;
+		
+		String query = "select provincia.* from provincia inner join ciudad "
+				+ "on ciudad.cod_provincia = provincia.cod_provincia and ciudad.cod_ciudad = ?";
+		
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setInt(1, cod_ciudad);
+		
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			nombre = resul.getString("nombre_provincia");
+		}
+		
+		stament.close();
+		resul.close();
+		
+		return nombre;
+	}
+
 }
 
 
