@@ -45,6 +45,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import java.util.Calendar;
 import javax.swing.JComboBox;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 //import javax.swing.JFormattedTextField$AbstractFormatter;
 
@@ -73,6 +74,8 @@ public class RegistroCita extends JDialog {
 	private JFormattedTextField TxtFechaCita;
 	private JFormattedTextField txtHoraCita;
 	private JFormattedTextField txtNacimiento;
+	private JComboBox cbxProvincia;
+	private JComboBox cbxCiudad;
 	
 	/**
 	 * Launch the application.
@@ -142,6 +145,7 @@ public class RegistroCita extends JDialog {
 							txtTelefono.setEditable(false);
 							cbxSexoPersona.setEnabled(false);
 							spnNacimiento.setEnabled(false);
+							txtDireccion.setVisible(true);
 							
 							paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText());
 							txtNombre.setText(paciente.getNombre());
@@ -162,7 +166,7 @@ public class RegistroCita extends JDialog {
 						}else if(Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())== null) {
 							
 							
-							
+							txtDireccion.setVisible(false);
 							txtNombre.setText("");
 							txtDireccion.setText("");
 							txtTelefono.setText("");
@@ -266,6 +270,14 @@ public class RegistroCita extends JDialog {
 			txtNacimiento.setColumns(10);
 			txtNacimiento.setBounds(576, 131, 144, 23);
 			panelDatosCliente.add(txtNacimiento);
+			
+			cbxProvincia = new JComboBox();
+			cbxProvincia.setBounds(83, 108, 143, 23);
+			panelDatosCliente.add(cbxProvincia);
+			
+			cbxCiudad = new JComboBox();
+			cbxCiudad.setBounds(250, 108, 143, 23);
+			panelDatosCliente.add(cbxCiudad);
 			spnFechaCita.setVisible(false);
 			
 			JPanel panelDatosConsulta = new JPanel();
@@ -562,6 +574,48 @@ public class RegistroCita extends JDialog {
 		spnNacimiento.setValue(hoy);
 		//spnFechaCita.setValue(hoy);
 		
+		
+	}
+	
+	public void cargarCiudad(String cod_provincia) throws SQLException {
+		
+		DefaultComboBoxModel model = new DefaultComboBoxModel();
+		cbxProvincia.setModel( model);
+		
+		String query = "select * from provincia";
+		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			
+			model.addElement(resul.getString("nombre_provincia"));
+			
+		}
+		
+		stament.close();
+		resul.close()
+		
+	}
+	
+	
+	public void CargarProvincia() throws SQLException {
+		
+		
+		DefaultComboBoxModel model = new DefaultComboBoxModel();
+		cbxProvincia.setModel( model);
+		
+		String query = "select * from provincia";
+		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			
+			model.addElement(resul.getString("nombre_provincia"));
+			
+		}
+		
+		stament.close();
+		resul.close();
 		
 	}
 }
