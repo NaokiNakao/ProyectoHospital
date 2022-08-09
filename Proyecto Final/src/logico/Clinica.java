@@ -1393,6 +1393,22 @@ public class Clinica {
 		
 	}
 	
+	public void insertHistoriaClinica(String codHistoria, String cedPaciente) {
+		String sql = "insert into historia_clinica (cod_historia, ced_paciente) "
+				+ "values (?, ?)";
+		PreparedStatement statement = null;
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(sql);
+			statement.setString(1, codHistoria);
+			statement.setString(2, cedPaciente);
+			statement.executeUpdate();
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }
 
 
