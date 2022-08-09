@@ -1410,6 +1410,31 @@ public class Clinica {
 		}
 	}
 	
+	public String buscarNombreProvinciaByCod(int codProvincia) {
+		String nombreProvincia = null;
+		String query = "select nombre_provincia "
+				+ "from provincia "
+				+ "where cod_provincia = ?";
+		PreparedStatement statement = null;
+		
+		try {
+			statement = ConexionSQL.getConexion().prepareStatement(query);
+			statement.setInt(1, codProvincia);
+			ResultSet result = statement.executeQuery();
+			
+			while(result.next()) {
+				nombreProvincia = result.getString("nombre_provincia");
+			}
+			
+			statement.close();
+			result.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return nombreProvincia;
+	}
+	
 }
 
 
