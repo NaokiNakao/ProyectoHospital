@@ -640,8 +640,8 @@ public class Clinica {
 	public boolean insertarCita(CitaMedica cita) {
 		boolean realizado = false;
 		PreparedStatement statement = null;
-		String sql = "insert into cita (cod_cita, fecha_cita, cod_medico, ced_paciente) "
-				+ "values (?, ?, ?, ?);";
+		String sql = "insert into cita_medica (cod_cita, fecha_hora_cita, cod_medico, ced_paciente) "
+				+ "values (?, ?, ?, ?)";
 		
 		try {
 			statement = ConexionSQL.getConexion().prepareStatement(sql);
@@ -695,7 +695,7 @@ public class Clinica {
 		
 		try {
 		consulta = ConexionSQL.getConexion().prepareStatement(InsertConsul);
-		consulta.setDate(1, (java.sql.Date) c.getFechaConsulta());
+		consulta.setString(1, c.getFechaConsulta());
 		consulta.setString(2, c.getDiagnostico());
 		consulta.setString(3, medico.getId());
 		consulta.setString(4, b.getCodigo());
@@ -723,13 +723,20 @@ public class Clinica {
 	try {	
 		 stamentConsul = ConexionSQL.getConexion().prepareStatement(queryConsul);
 		stamentConsul.setString(1, c.getCodigo());
-		stamentConsul.setDate(2, (java.sql.Date) c.getFechaConsulta());
+		stamentConsul.setString(2,c.getFechaConsulta());
 		stamentConsul.setString(3, c.getDiagnostico());
 		stamentConsul.setString(4, medico.getId());
 		stamentConsul.setString(5, b.getCodigo());
 		stamentConsul.setString(6, c.getSintomas());
 		
+		
 		int resulConsul = stamentConsul.executeUpdate();
+		
+		if(resulConsul>0) {
+			System.out.println("Se inserto en la consulta");
+		}else {
+			System.out.println("No Se inserto en la consulta");
+		}
 		
 	}catch (SQLException e) {
 			bandera = false;
@@ -754,6 +761,12 @@ public class Clinica {
 		
 		int resulEnfDiag= stamentEnfDig.executeUpdate();
 		
+		if(resulEnfDiag>0) {
+			System.out.println("Se inserto en la enfermedad_diagnosticada_consulta");
+		}else {
+			System.out.println("No Se inserto en la enfermedad_diagnosticada_consulta");
+		}
+		
 		}catch (SQLException e) {
 			bandera = false;
 			System.out.println("Fallo al insertar la enfermedad en enfermedad diagnosticada");
@@ -771,6 +784,13 @@ public class Clinica {
 		stamentEnfH.setString(2,b.getCodigo());
 		
 		int resulEnfH = stamentEnfH.executeUpdate();
+		
+		if(resulEnfH>0) {
+			System.out.println("Se inserto en la enfermedad_contenida_historia");
+		}else {
+			System.out.println("No Se inserto en la enfermedad_contenida_historia");
+		}
+		
 		
 		}catch (SQLException e) {
 			bandera = false;
@@ -793,6 +813,13 @@ public class Clinica {
 		try {
 			
 		int resulVac = StamentVac.executeUpdate();
+		
+		if(resulVac>0) {
+			System.out.println("Se inserto en la vacuna_contenida_historia");
+		}else {
+			System.out.println("No Se inserto en la vacuna_contenida_historia");
+		}
+		
 		
 		}catch (SQLException e) {
 			bandera = false;
@@ -818,6 +845,12 @@ public class Clinica {
 	stamentcambio.setString(1, cita.getCodigo());
 	
 	int resulCambio = stamentcambio.executeUpdate();
+	
+	if(resulCambio>0) {
+		System.out.println("Se inserto en la cita_medica");
+	}else {
+		System.out.println("No Se inserto en la cita_medica");
+	}
 	
 	stamentcambio.close();
 	
@@ -887,7 +920,7 @@ public class Clinica {
 		 
 	try {
 		consulta = ConexionSQL.getConexion().prepareStatement(InsertConsul);
-		consulta.setBytes(1, med.getId().getBytes());
+		consulta.setString(1, med.getId());
 		consulta.setString(2,med.getNombre());
 		consulta.setString(3,med.getApellido());
 		consulta.setString(4,med.getLogin());
@@ -1267,8 +1300,8 @@ public class Clinica {
 		
 		while(resul.next()) {
 			
-			consul = new Consulta(cod, resul.getDate("fecha_consulta"), resul.getString("sintomas"), resul.getString("diagnostico")
-					, buscarMedicoByCodigo(resul.getString("cod_medico")), resul.getDate("fecha_consulta"));
+			consul = new Consulta(cod, resul.getString("fecha_consulta"), resul.getString("sintomas"), resul.getString("diagnostico")
+					, buscarMedicoByCodigo(resul.getString("cod_medico")), resul.getString("fecha_consulta"));
 		}
 		return consul;
 	}

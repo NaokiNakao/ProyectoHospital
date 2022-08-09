@@ -7,30 +7,30 @@ import java.util.Date;
 public class Consulta {
 
 	private String codigo;
-	private Date fechaConsulta;
+	private String fechaConsulta;
 	private String sintomas;
 	private String diagnostico;
 	private Enfermedad enfermedad;
 	private Medico miMedico;
 	private Vacuna misVacunas;
 	private String receta;
-	private Date fechaT;
+	private String fechaT;
 	
-	public Consulta(String codigo, Date fechaConsulta, String sintomas, String diagnostico, Medico miMedico, Date fechaT) {
+	public Consulta(String codigo, String string, String sintomas, String diagnostico, Medico miMedico, String string2) {
 		this.codigo = codigo;
-		this.fechaConsulta = fechaConsulta;
+		this.fechaConsulta = string;
 		this.sintomas = sintomas;
 		this.diagnostico = diagnostico;
 		this.miMedico = miMedico;
 		//this.receta = receta;
-		this.fechaT = fechaT;
+		this.fechaT = string2;
 	}
 
 	public String getCodigo() {
 		return codigo;
 	}
 
-	public Date getFechaConsulta() {
+	public String getFechaConsulta() {
 		return fechaConsulta;
 	}
 
@@ -54,7 +54,7 @@ public class Consulta {
 		this.codigo = codigo;
 	}
 
-	public void setFechaConsulta(Date fechaConsulta) {
+	public void setFechaConsulta(String fechaConsulta) {
 		this.fechaConsulta = fechaConsulta;
 	}
 
@@ -90,11 +90,11 @@ public class Consulta {
 		this.receta = receta;
 	}
 
-	public Date getFechaT() {
+	public String getFechaT() {
 		return fechaT;
 	}
 
-	public void setFechaT(Date fechaT) {
+	public void setFechaT(String fechaT) {
 		this.fechaT = fechaT;
 	}
 

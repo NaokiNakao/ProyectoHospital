@@ -383,7 +383,7 @@ public class PanelUsuario extends JDialog {
 		while(resul.next()) {
 			
 			sgtCita = new CitaMedica(resul.getString("cod_cita"),
-					resul.getDate("fecha_hora_cita"), med, 
+					resul.getString("fecha_hora_cita"), med, 
 					Clinica.getInstance().buscarPaciente(resul.getString("ced_paciente")),resul.getString("estado"));
 		}
 		

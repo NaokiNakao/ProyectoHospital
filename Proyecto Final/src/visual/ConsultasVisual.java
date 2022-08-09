@@ -361,10 +361,12 @@ public class ConsultasVisual extends JDialog {
 								dispose();
 								PanelUsuario u = new PanelUsuario(medico);
 								u.setVisible(true);
+								}else {
+									JOptionPane.showMessageDialog(null, "Algo fallo", "Error", JOptionPane.ERROR_MESSAGE);
 								}
 							}
 							}else {
-								HistoriaClinica h = new HistoriaClinica("Historial-"+cita.getPaciente().getCedula());
+								HistoriaClinica h = new HistoriaClinica("His-"+cita.getPaciente().getCedula());
 								
 								Paciente p = new Paciente(cita.getPaciente().getCedula(), cita.getPaciente().getNombre(), cita.getPaciente().getGenero(), cita.getPaciente().getFechaNacimiento(), 
 										cita.getPaciente().getDireccion(), cita.getPaciente().getTelefono());
