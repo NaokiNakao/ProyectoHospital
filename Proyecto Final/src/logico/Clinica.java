@@ -836,7 +836,7 @@ public class Clinica {
 	/*NECESARIA MISAEL*/
 	public CitaMedica citaByCedula(String cedula, Date fecha) throws SQLException {
 		CitaMedica cita = null;
-		System.out.println(fecha.toString());
+		//System.out.println(fecha.toString());
 		
 		String query = "select * from cita_medica where ced_paciente = ? and fecha_hora_cita = ?";
 		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);

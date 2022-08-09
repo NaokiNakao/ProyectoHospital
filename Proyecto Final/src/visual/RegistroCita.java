@@ -65,6 +65,8 @@ public class RegistroCita extends JDialog {
 	private String fecha;
 	private JComboBox cbxSexoPersona;
 	private JSpinner spnNacimiento;
+	private JTextField TxtFechaCita;
+	private JTextField txtHoraCita;
 	
 	/**
 	 * Launch the application.
@@ -247,10 +249,11 @@ public class RegistroCita extends JDialog {
 					
 					Date dateAux = (Date) spnFechaCita.getValue();
 					Date fechaActual = new Date();
-					System.out.println(spnFechaCita.getValue());
+					//System.out.println( TxtFechaCita.getText()+" "+ txtHoraCita.getText());
+					System.out.println(	Clinica.getInstance().formatoFechaHora(TxtFechaCita.getText()+"T"+txtHoraCita.getText()));
 					
 					try {
-						if(Clinica.getInstance().citaByCedula(txtCedula.getText(), dateAux) != null) {
+						if(Clinica.getInstance().citaByCedula(txtCedula.getText(), Clinica.getInstance().formatoFechaHora(TxtFechaCita.getText()+"T"+txtHoraCita.getText())) != null) {
 							JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
 							
 						}else {
@@ -315,10 +318,20 @@ public class RegistroCita extends JDialog {
 			
 			spnFechaCita = new JSpinner();
 			spnFechaCita.setModel(new SpinnerDateModel(date2, null, null, Calendar.DAY_OF_MONTH));
-			JSpinner.DateEditor FechaCita = new JSpinner.DateEditor(spnFechaCita,"yyyy-MM-dd'T'hh:mm:ss");
+			JSpinner.DateEditor FechaCita = new JSpinner.DateEditor(spnFechaCita,"yyyy-MM-dd hh:mm:ss");
 			spnFechaCita.setEditor(FechaCita);
 			spnFechaCita.setBounds(327, 31, 165, 23);
 			panelDatosConsulta.add(spnFechaCita);
+			
+			TxtFechaCita = new JTextField();
+			TxtFechaCita.setBounds(226, 11, 152, 20);
+			panelDatosConsulta.add(TxtFechaCita);
+			TxtFechaCita.setColumns(10);
+			
+			txtHoraCita = new JTextField();
+			txtHoraCita.setColumns(10);
+			txtHoraCita.setBounds(415, 11, 152, 20);
+			panelDatosConsulta.add(txtHoraCita);
 
 		}
 		{
@@ -370,7 +383,7 @@ public class RegistroCita extends JDialog {
 											}else if(selectedMedico != null && Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null) {
 												CitaMedica cita;
 												try {
-													cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita.toString(),
+													cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita,
 															selectedMedico, Clinica.getInstance().buscarPaciente(txtCedula.getText().toString()), "pendiente");
 													
 													if(Clinica.getInstance().insertarCita(cita)) {
@@ -394,7 +407,7 @@ public class RegistroCita extends JDialog {
 												
 												}
 												
-												CitaMedica	cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita.toString(),
+												CitaMedica	cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita,
 														selectedMedico, paciente, "pendiente");
 												
 												if(Clinica.getInstance().insertarCita(cita)) {
@@ -491,5 +504,4 @@ public class RegistroCita extends JDialog {
 		
 		
 	}
-	
 }
