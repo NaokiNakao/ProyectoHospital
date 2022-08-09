@@ -6,10 +6,12 @@ import java.awt.HeadlessException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 
 import logico.CitaMedica;
 import logico.Clinica;
@@ -24,6 +26,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
 import java.awt.event.ActionEvent;
@@ -65,8 +69,8 @@ public class RegistroCita extends JDialog {
 	private String fecha;
 	private JComboBox cbxSexoPersona;
 	private JSpinner spnNacimiento;
-	private JTextField TxtFechaCita;
-	private JTextField txtHoraCita;
+	private JFormattedTextField TxtFechaCita;
+	private JFormattedTextField txtHoraCita;
 	
 	/**
 	 * Launch the application.
@@ -323,16 +327,30 @@ public class RegistroCita extends JDialog {
 			spnFechaCita.setBounds(327, 31, 165, 23);
 			panelDatosConsulta.add(spnFechaCita);
 			
-			TxtFechaCita = new JTextField();
+			MaskFormatter formatoFecha = null;
+			try {
+				formatoFecha = new MaskFormatter("####/##/##");
+			} catch (ParseException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			TxtFechaCita = new JFormattedTextField(formatoFecha);		
 			TxtFechaCita.setBounds(226, 11, 152, 20);
 			panelDatosConsulta.add(TxtFechaCita);
 			TxtFechaCita.setColumns(10);
 			
-			txtHoraCita = new JTextField();
+			MaskFormatter formatoHora = null;
+			try {
+				formatoHora = new MaskFormatter("##:##:##");
+			} catch (ParseException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			
+			txtHoraCita = new JFormattedTextField(formatoHora);
 			txtHoraCita.setColumns(10);
 			txtHoraCita.setBounds(415, 11, 152, 20);
 			panelDatosConsulta.add(txtHoraCita);
-
 		}
 		{
 			JPanel buttonPane = new JPanel();
