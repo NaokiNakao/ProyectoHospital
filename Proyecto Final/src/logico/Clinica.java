@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -838,12 +840,12 @@ public class Clinica {
 		String query = "select * from cita_medica where ced_paciente = ? and fecha_hora_cita = ?";
 		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
 		stament.setString(1, cedula);
-		stament.setDate(2, (java.sql.Date) fecha);
+		stament.setString(2, fecha.toString());
 		ResultSet resul = stament.executeQuery();
 		
 		while(resul.next()) {
 			
-			cita = new CitaMedica(resul.getString("cod_cita"), fecha, buscarMedicoByCodigo(resul.getString("cod_medico")),
+			cita = new CitaMedica(resul.getString("cod_cita"), fecha.toString(), buscarMedicoByCodigo(resul.getString("cod_medico")),
 					buscarPaciente(cedula), "pendiente");
 		}
 		
@@ -855,8 +857,6 @@ public class Clinica {
 	
 	
 	public void insertarUsuario(Usuario med,String especialidad) throws SQLException { ///probada
-		
-		
 		String InsertConsul = null;
 		PreparedStatement consulta = null;
 		
@@ -1195,9 +1195,19 @@ public class Clinica {
 		
 	}
 	
-	public LocalDateTime formatoFechaHora(String fechaHora) {
-		String formato = "yyyy-mm-dd hh:mm:ss";
-		return LocalDateTime.parse(fechaHora, DateTimeFormatter.ofPattern(formato));
+	public String formatoFechaHora(String fechaHora) {
+		String fecha = null;
+		
+		try {
+			SimpleDateFormat formatoOriginal = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+			SimpleDateFormat formatoFinal = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			Date fechaAux = formatoOriginal.parse(fechaHora);
+			fecha = formatoFinal.format(fechaAux);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return fecha;
 	}
 	
 	
@@ -1283,8 +1293,8 @@ public class Clinica {
 		return p;
 	}
 	
-	
 }
+
 
 
 

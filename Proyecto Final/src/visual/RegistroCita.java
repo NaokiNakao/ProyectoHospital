@@ -249,7 +249,7 @@ public class RegistroCita extends JDialog {
 					Date fechaActual = new Date();
 					
 					try {
-						if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), dateAux) != null) {
+						if(Clinica.getInstance().citaByCedula(txtCedula.getText(), dateAux) != null) {
 							JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
 							
 						}else {
@@ -257,7 +257,8 @@ public class RegistroCita extends JDialog {
 								JOptionPane.showMessageDialog(null, "Favor introducir una fecha valida.", "Error", JOptionPane.ERROR_MESSAGE);	
 							}else {
 								String dateAux2 = (String) spnFechaCita.getValue();
-								SimpleDateFormat de = new SimpleDateFormat("MM/DD/YYY HH:mm");
+								//SimpleDateFormat de = new SimpleDateFormat("MM/DD/YYY HH:mm");
+								SimpleDateFormat de = new SimpleDateFormat("yyyy-mm-dd hh:mm");
 								fecha = de.format(dateAux2);
 								try {
 									loadMedicos(dateAux2);
@@ -313,7 +314,7 @@ public class RegistroCita extends JDialog {
 			
 			spnFechaCita = new JSpinner();
 			spnFechaCita.setModel(new SpinnerDateModel(date2, null, null, Calendar.DAY_OF_MONTH));
-			JSpinner.DateEditor FechaCita = new JSpinner.DateEditor(spnFechaCita,"dd/MMM/yyyy  HH:mm");
+			JSpinner.DateEditor FechaCita = new JSpinner.DateEditor(spnFechaCita,"yyyy-MM-dd hh:mm:ss");
 			spnFechaCita.setEditor(FechaCita);
 			spnFechaCita.setBounds(327, 31, 165, 23);
 			panelDatosConsulta.add(spnFechaCita);
@@ -368,7 +369,7 @@ public class RegistroCita extends JDialog {
 											}else if(selectedMedico != null && Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null) {
 												CitaMedica cita;
 												try {
-													cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita,
+													cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita.toString(),
 															selectedMedico, Clinica.getInstance().buscarPaciente(txtCedula.getText().toString()), "pendiente");
 													
 													if(Clinica.getInstance().insertarCita(cita)) {
@@ -392,7 +393,7 @@ public class RegistroCita extends JDialog {
 												
 												}
 												
-												CitaMedica	cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita,
+												CitaMedica	cita = new CitaMedica(txtCodigoCita.getText().toString(),fechaCita.toString(),
 														selectedMedico, paciente, "pendiente");
 												
 												if(Clinica.getInstance().insertarCita(cita)) {

@@ -7,8 +7,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 public class MainPrueba {
 
@@ -161,7 +163,34 @@ public class MainPrueba {
 		
 		//System.out.println(Clinica.getInstance().buscarCodVacunaByNombreFab("Moderna"));
 		
-		System.out.println(Clinica.getInstance().buscarTipoEnfByNombre("Parkinson"));
+		//System.out.println(Clinica.getInstance().buscarTipoEnfByNombre("Parkinson"));
 
-		System.out.println();
+		//System.out.println();
+		
+		//String formato = "yyyy-mm-dd hh:mm:ss";
+		//return LocalDateTime.parse(fechaHora, DateTimeFormatter.ofPattern(formato));
+		
+		try {
+			SimpleDateFormat formatoOriginal = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+			SimpleDateFormat formatoFinal = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			Date fecha = formatoOriginal.parse("2022-08-08T15:30:10");
+			System.out.println(formatoFinal.format(fecha));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println(Clinica.getInstance().formatoFechaHora("2022-08-08T15:30:10"));
 }}
+
+
+
+
+
+
+
+
+
+
+
+
