@@ -47,7 +47,6 @@ import java.util.Calendar;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JFormattedTextField$AbstractFormatter;
-import javax.swing.JFormattedTextField.AbstractFormatter;
 
 public class RegistroCita extends JDialog {
 
@@ -239,7 +238,7 @@ public class RegistroCita extends JDialog {
 			panelDatosCliente.add(spnNacimiento);
 			
 			spnFechaCita = new JSpinner();
-			spnFechaCita.setBounds(536, 31, 165, 23);
+			spnFechaCita.setBounds(482, 52, 165, 23);
 			panelDatosCliente.add(spnFechaCita);
 		//	Date date2 = ;
 			//spnFechaCita.setModel(new SpinnerDateModel(date2, null, null, Calendar.DAY_OF_MONTH));
