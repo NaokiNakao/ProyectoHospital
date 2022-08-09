@@ -170,7 +170,7 @@ public class MainPrueba {
 		//String formato = "yyyy-mm-dd hh:mm:ss";
 		//return LocalDateTime.parse(fechaHora, DateTimeFormatter.ofPattern(formato));
 		
-		try {
+		/*try {
 			SimpleDateFormat formatoOriginal = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
 			SimpleDateFormat formatoFinal = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 			Date fecha = formatoOriginal.parse("2022-08-08T15:30:10");
@@ -180,7 +180,10 @@ public class MainPrueba {
 			e.printStackTrace();
 		}
 		
-		System.out.println(Clinica.getInstance().formatoFechaHora("2022-08-08T15:30:10"));
+		System.out.println(Clinica.getInstance().formatoFechaHora("2022-08-08T15:30:10"));*/
+		
+		Clinica.getInstance().insertarConsulta(null, null, null, null, null);
+		
 }}
 
 

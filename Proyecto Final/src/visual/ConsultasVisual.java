@@ -336,27 +336,26 @@ public class ConsultasVisual extends JDialog {
 								
 								Paciente p = Clinica.getInstance().buscarPaciente(cita.getPaciente().getCedula());
 								
-								if(p.getHistorial()!= null) {
+								if(Clinica.getInstance().buscarHistoriaByCedPaciente(p.getCedula())!= null) {
 									
-								HistoriaClinica h = p.getHistorial();
+									HistoriaClinica h = Clinica.getInstance().buscarHistoriaByCedPaciente(p.getCedula());
 
 								
-								Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(),
+									Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(),
 										textPaneDiagnostico.getText().toString(),
 										medico,cita.getFechaCita());
 								
-							
-								if(selectedEnfermedad!=null) {
-									n.setEnfermedad(selectedEnfermedad);
-									h.getPadecimientos().add(selectedEnfermedad);
-								}
-								
-								if(selectedVacuna != null) {
-									n.setMisVacunas(selectedVacuna);
-									h.getMisVacunas().add(selectedVacuna);
-								}
-								
 								if(Clinica.getInstance().insertarConsultaV2(n, medico, cita, p, h)) {
+									
+									if(selectedEnfermedad!=null) {
+										Clinica.getInstance().InsertarEnHistoria(h, null, selectedEnfermedad, n);
+									}
+									
+									if(selectedVacuna != null) {
+										Clinica.getInstance().InsertarEnHistoria(h, selectedVacuna, null, n);
+									}
+									
+								
 								JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
 								dispose();
 								PanelUsuario u = new PanelUsuario(medico);
@@ -371,28 +370,31 @@ public class ConsultasVisual extends JDialog {
 								Paciente p = new Paciente(cita.getPaciente().getCedula(), cita.getPaciente().getNombre(), cita.getPaciente().getGenero(), cita.getPaciente().getFechaNacimiento(), 
 										cita.getPaciente().getDireccion(), cita.getPaciente().getTelefono());
 								
-								p.setHistorial(h);
+								p.setHistorial(h);///Insertar historial
 								
 								Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(), textPaneDiagnostico.getText().toString(),
 										medico,cita.getFechaCita());
 								
-								if(selectedEnfermedad!=null) {
-									n.setEnfermedad(selectedEnfermedad);
-									h.getPadecimientos().add(selectedEnfermedad);
+								
+								
+								if(Clinica.getInstance().insertarConsulta(n, medico, cita, p, h)) {
+									
+									if(selectedEnfermedad!=null) {
+										Clinica.getInstance().InsertarEnHistoria(h, null, selectedEnfermedad, n);
+									}
+									
+									if(selectedVacuna != null) {
+										Clinica.getInstance().InsertarEnHistoria(h, selectedVacuna, null, n);
+									}
+									
+									
+									JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
+									dispose();
+									
+									PanelUsuario u = new PanelUsuario(medico);
+									u.setVisible(true);
 								}
-								
-								if(selectedVacuna != null) {
-									n.setMisVacunas(selectedVacuna);
-									h.getMisVacunas().add(selectedVacuna);
-								}
-								
-								
-								Clinica.getInstance().insertarConsulta(n, medico, cita, p, h);
-								JOptionPane.showMessageDialog(null, "Consulta Completada", "Exito", JOptionPane.INFORMATION_MESSAGE);
-								dispose();
-								
-								PanelUsuario u = new PanelUsuario(medico);
-								u.setVisible(true);
+			
 							}
 						} catch (HeadlessException | SQLException e1) {
 							// TODO Auto-generated catch block

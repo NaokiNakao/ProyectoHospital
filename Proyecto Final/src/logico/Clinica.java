@@ -688,7 +688,9 @@ public class Clinica {
 		return cita;
 	}
 	
-	/*sql*//*Probar Main*/public void insertarConsulta(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) {
+	/*sql*//*Probar Main*/public boolean insertarConsulta(Consulta c, Medico medico,CitaMedica cita, Paciente p,HistoriaClinica b) throws SQLException {
+		
+		boolean bandera = true;
 		
 		String InsertConsul = "Insert Into consulta(fecha_consulta,diagnostico,cod_medico,cod_historia) Values (?,?,?,?)";
 		PreparedStatement consulta = null;
@@ -703,13 +705,48 @@ public class Clinica {
 		consulta.executeUpdate();
 		
 		} catch (SQLException e) {
-			
+			bandera = false;
 			System.out.println("Fallo la consulta");
 			e.printStackTrace();
 			
+		}finally {
+			consulta.close();
 		}
 		
 		
+		
+		PreparedStatement stamentcambio = null;
+		
+		try {
+			
+			
+		String updateCita = "update cita_medica "
+				+ "set estado = 'completada' "
+				+ "where cod_cita = ?";
+		
+		 stamentcambio = ConexionSQL.getConexion().prepareStatement(updateCita);
+		stamentcambio.setString(1, cita.getCodigo());
+		
+		int resulCambio = stamentcambio.executeUpdate();
+		
+		if(resulCambio>0) {
+			System.out.println("Se inserto en la cita_medica");
+		}else {
+			System.out.println("No Se inserto en la cita_medica");
+		}
+		
+		stamentcambio.close();
+		
+		}catch (SQLException e) {
+			bandera = false;
+			System.out.println("Fallo al cambiar estado cita");
+			e.printStackTrace();
+		}finally {
+			stamentcambio.close();
+		}
+		
+		
+		return bandera;
 	}
 	
 	/*REVISION*/
@@ -745,91 +782,6 @@ public class Clinica {
 		}finally {
 			stamentConsul.close();
 		}
-	
-	
-	PreparedStatement stamentEnfDig = null;
-	
-	if(c.getEnfermedad() != null) {
-		
-		String queryEnfDiagnosticada = 	"insert into enfermedad_diagnosticada_consulta (cod_enf,cod_consulta)"
-				+ " values(?,?)";
-		
-		try {	
-		stamentEnfDig = ConexionSQL.getConexion().prepareStatement(queryEnfDiagnosticada);
-		stamentEnfDig.setString(1, c.getEnfermedad().getCodigo());
-		stamentEnfDig.setString(2, c.getCodigo());
-		
-		int resulEnfDiag= stamentEnfDig.executeUpdate();
-		
-		if(resulEnfDiag>0) {
-			System.out.println("Se inserto en la enfermedad_diagnosticada_consulta");
-		}else {
-			System.out.println("No Se inserto en la enfermedad_diagnosticada_consulta");
-		}
-		
-		}catch (SQLException e) {
-			bandera = false;
-			System.out.println("Fallo al insertar la enfermedad en enfermedad diagnosticada");
-			e.printStackTrace();
-		}finally {
-			stamentEnfDig.close();
-		}
-		
-		PreparedStatement stamentEnfH = null;
-		
-		try {
-		String queryEnfHistoria = "insert into enfermedad_contenida_historia (cod_enf,cod_historia) values(?,?)";
-		 stamentEnfH = ConexionSQL.getConexion().prepareStatement(queryEnfHistoria);
-		stamentEnfH.setString(1, c.getEnfermedad().getCodigo());
-		stamentEnfH.setString(2,b.getCodigo());
-		
-		int resulEnfH = stamentEnfH.executeUpdate();
-		
-		if(resulEnfH>0) {
-			System.out.println("Se inserto en la enfermedad_contenida_historia");
-		}else {
-			System.out.println("No Se inserto en la enfermedad_contenida_historia");
-		}
-		
-		
-		}catch (SQLException e) {
-			bandera = false;
-			System.out.println("Fallo al insertar la enfermedad en historia");
-			e.printStackTrace();
-		}finally {
-			stamentEnfH.close();
-		}
-		
-	}
-	
-	if(c.getMisVacunas() != null) {
-		PreparedStatement StamentVac = null;
-		
-		String vac = "insert into vacuna_contenida_historia (cod_vacuna,cod_historia) values (?,?)";
-		 StamentVac = ConexionSQL.getConexion().prepareStatement(vac);
-		StamentVac.setString(1, c.getMisVacunas().getCodigo());
-		StamentVac.setString(2, b.getCodigo());
-		
-		try {
-			
-		int resulVac = StamentVac.executeUpdate();
-		
-		if(resulVac>0) {
-			System.out.println("Se inserto en la vacuna_contenida_historia");
-		}else {
-			System.out.println("No Se inserto en la vacuna_contenida_historia");
-		}
-		
-		
-		}catch (SQLException e) {
-			bandera = false;
-			System.out.println("Fallo al insertar la vacuna historia");
-			e.printStackTrace();
-		}finally {
-			StamentVac.close();
-		}
-		
-	}
 	
 	
 	PreparedStatement stamentcambio = null;
@@ -1324,6 +1276,121 @@ public class Clinica {
 		resul.close();
 		
 		return p;
+	}
+	
+	public HistoriaClinica buscarHistoriaByCedPaciente(String cedula) throws SQLException {
+		
+		HistoriaClinica historia = null;
+		
+		String query = "select * from historia_clinica where ced_paciente = ?";
+		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		ResultSet resul = stament.executeQuery();
+		
+		while(resul.next()) {
+			
+			historia = new HistoriaClinica(resul.getString("cod_historia"));
+			
+		}
+		
+		return historia;
+	}
+	
+	
+	public void InsertarEnHistoria(HistoriaClinica historia, Vacuna vacuna, Enfermedad enfermedad,Consulta c) throws SQLException {
+		
+		boolean bandera = true;
+
+			
+		PreparedStatement stamentEnfDig = null;
+			
+			if(enfermedad!= null) {
+				
+				String queryEnfDiagnosticada = 	"insert into enfermedad_diagnosticada_consulta (cod_enf,cod_consulta)"
+						+ " values(?,?)";
+				
+				try {	
+				stamentEnfDig = ConexionSQL.getConexion().prepareStatement(queryEnfDiagnosticada);
+				stamentEnfDig.setString(1, enfermedad.getCodigo());
+				stamentEnfDig.setString(2, c.getCodigo());
+				
+				int resulEnfDiag= stamentEnfDig.executeUpdate();
+				
+				if(resulEnfDiag>0) {
+					bandera = true;
+					System.out.println("Se inserto en la enfermedad_diagnosticada_consulta");
+				}else {
+					System.out.println("No Se inserto en la enfermedad_diagnosticada_consulta");
+					bandera = false;
+				}
+				
+				}catch (SQLException e) {
+					bandera = false;
+					System.out.println("Fallo al insertar la enfermedad en enfermedad diagnosticada");
+					e.printStackTrace();
+				}finally {
+					stamentEnfDig.close();
+				}
+				
+				PreparedStatement stamentEnfH = null;
+				
+				try {
+				String queryEnfHistoria = "insert into enfermedad_contenida_historia (cod_enf,cod_historia) values(?,?)";
+				 stamentEnfH = ConexionSQL.getConexion().prepareStatement(queryEnfHistoria);
+				stamentEnfH.setString(1, enfermedad.getCodigo());
+				stamentEnfH.setString(2,historia.getCodigo());
+				
+				int resulEnfH = stamentEnfH.executeUpdate();
+				
+				if(resulEnfH>0) {
+					System.out.println("Se inserto en la enfermedad_contenida_historia");
+				}else {
+					System.out.println("No Se inserto en la enfermedad_contenida_historia");
+				}
+				
+				
+				}catch (SQLException e) {
+					bandera = false;
+					System.out.println("Fallo al insertar la enfermedad en historia");
+					e.printStackTrace();
+				}finally {
+					stamentEnfH.close();
+				}
+				
+			}
+			
+			PreparedStatement StamentVac = null;
+			if(vacuna != null) {
+				
+				
+				String vac = "insert into vacuna_contenida_historia (cod_vacuna,cod_historia) values (?,?)";
+				 StamentVac = ConexionSQL.getConexion().prepareStatement(vac);
+				StamentVac.setString(1, vacuna.getCodigo());
+				StamentVac.setString(2, historia.getCodigo());
+				
+				try {
+					
+				int resulVac = StamentVac.executeUpdate();
+				
+				if(resulVac>0) {
+					System.out.println("Se inserto en la vacuna_contenida_historia");
+				}else {
+					System.out.println("No Se inserto en la vacuna_contenida_historia");
+				}
+				
+				
+				}catch (SQLException e) {
+					bandera = false;
+					System.out.println("Fallo al insertar la vacuna historia");
+					e.printStackTrace();
+				}finally {
+					StamentVac.close();
+				}
+				
+			
+			
+		}
+		
+		
 	}
 	
 }
