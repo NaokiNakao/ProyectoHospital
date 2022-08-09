@@ -370,12 +370,12 @@ public class ConsultasVisual extends JDialog {
 								Paciente p = new Paciente(cita.getPaciente().getCedula(), cita.getPaciente().getNombre(), cita.getPaciente().getGenero(), cita.getPaciente().getFechaNacimiento(), 
 										cita.getPaciente().getDireccion(), cita.getPaciente().getTelefono());
 								
-								p.setHistorial(h);///Insertar historial
+					
 								
 								Consulta n = new Consulta(lblCodigoConsulta.getText().toString(), cita.getFechaCita(), textPaneSintomas.getText().toString(), textPaneDiagnostico.getText().toString(),
 										medico,cita.getFechaCita());
 								
-								
+								Clinica.getInstance().insertHistoriaClinica(h.getCodigo(), p.getCedula());
 								
 								if(Clinica.getInstance().insertarConsulta(n, medico, cita, p, h)) {
 									
