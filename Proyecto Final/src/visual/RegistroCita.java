@@ -146,11 +146,13 @@ public class RegistroCita extends JDialog {
 							cbxSexoPersona.setEnabled(false);
 							spnNacimiento.setEnabled(false);
 							txtDireccion.setVisible(true);
+							txtNacimiento.setEnabled(false);
 							
 							paciente = Clinica.getInstance().buscarPaciente(txtCedula.getText());
 							txtNombre.setText(paciente.getNombre());
 							txtDireccion.setText(Clinica.getInstance().buscarNombreByCiudad(paciente.getCod_ciudad())+", "+Clinica.getInstance().buscarNombreProvinciaBycodCiudad(paciente.getCod_ciudad()));
 							txtTelefono.setText(paciente.getTelefono());
+							txtNacimiento.setText(paciente.getFechaNacimiento());
 							
 							if(paciente.getGenero().equalsIgnoreCase("M")) {
 									String sexo = "Masculino";
@@ -165,13 +167,16 @@ public class RegistroCita extends JDialog {
 							
 						}else if(Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())== null) {
 							
-							
+							CargarProvincia();
 							txtDireccion.setVisible(false);
 							txtNombre.setText("");
 							txtDireccion.setText("");
 							txtTelefono.setText("");
 							cbxSexoPersona.setSelectedItem(-1);
 							spnNacimiento.setValue(new Date());
+							
+							cbxCiudad.setVisible(true);
+							cbxProvincia.setVisible(true);
 							
 							txtNombre.setEditable(true);
 							txtDireccion.setEditable(true);
@@ -272,11 +277,23 @@ public class RegistroCita extends JDialog {
 			panelDatosCliente.add(txtNacimiento);
 			
 			cbxProvincia = new JComboBox();
-			cbxProvincia.setBounds(83, 108, 143, 23);
+			cbxProvincia.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						cargarCiudad(cbxProvincia.getSelectedIndex()+1);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+			cbxProvincia.setVisible(false);
+			cbxProvincia.setBounds(83, 131, 143, 23);
 			panelDatosCliente.add(cbxProvincia);
 			
 			cbxCiudad = new JComboBox();
-			cbxCiudad.setBounds(250, 108, 143, 23);
+			cbxCiudad.setVisible(false);
+			cbxCiudad.setBounds(250, 131, 220, 23);
 			panelDatosCliente.add(cbxCiudad);
 			spnFechaCita.setVisible(false);
 			
@@ -313,6 +330,8 @@ public class RegistroCita extends JDialog {
 					try {
 						
 						Date dataFormateada = formato.parse(TxtFechaCita.getText());
+						
+				if(Clinica.getInstance().buscarPaciente(txtCedula.getText()) != null) {
 					
 					if(Clinica.getInstance().citaByCedula(txtCedula.getText(), aux) != null) {
 							JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -335,6 +354,46 @@ public class RegistroCita extends JDialog {
 								}
 							}
 						}
+					}else if (Clinica.getInstance().buscarPaciente(txtCedula.getText()) == null){
+						Paciente p = null;
+						
+						if(cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("Masculino")) {
+							 p = new Paciente(txtCedula.getText().toString(), txtNombre.getText().toString(),
+									"M", txtNacimiento.getText(), Clinica.getInstance().buscarCodByCiudad(cbxCiudad.getSelectedItem().toString())
+									, txtTelefono.getText().toString());
+							
+						}else {
+							 p = new Paciente(txtCedula.getText().toString(), txtNombre.getText().toString(),
+									"F", txtNacimiento.getText(), Clinica.getInstance().buscarCodByCiudad(cbxCiudad.getSelectedItem().toString())
+									, txtTelefono.getText().toString());
+						}
+						
+						if(Clinica.getInstance().citaByCedula(p.getCedula(), aux) != null) {
+							JOptionPane.showMessageDialog(null, "Ya este paciente tiene una cita a esa hora.", "Error", JOptionPane.ERROR_MESSAGE);
+							txtHoraCita.setText("");
+							TxtFechaCita.setText("");
+							
+						}else {
+							if(dataFormateada.compareTo(fechaActual)< 0) {
+								
+								JOptionPane.showMessageDialog(null, "Favor introducir una fecha valida.", "Error", JOptionPane.ERROR_MESSAGE);	
+								txtHoraCita.setText("");
+								TxtFechaCita.setText("");
+								loadMedicos(null);
+							}else {
+								try {
+									loadMedicos(aux);
+								} catch (SQLException e1) {
+									// TODO Auto-generated catch block
+									e1.printStackTrace();
+								}
+							}
+						}
+						
+						Clinica.getInstance().insertarPaciente(p);
+						
+						
+					}
 					} catch (HeadlessException | SQLException | ParseException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -414,85 +473,90 @@ public class RegistroCita extends JDialog {
 				JButton okButton = new JButton("Aceptar");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-
-						Date fechaActual = new Date();
-						String aux = TxtFechaCita.getText() + " " + txtHoraCita.getText();
-						SimpleDateFormat formato = new SimpleDateFormat("yy/MM/dd");
-						Date fechaNacimiento = (Date) spnNacimiento.getValue();
-						
-						
+					
 					try {
-						Date dataFormateada = formato.parse(TxtFechaCita.getText());
-						
-						if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), aux) != null ) {
-							JOptionPane.showMessageDialog(null, "Ya este paciente tiene un cita en esa fecha", "Error", JOptionPane.ERROR_MESSAGE);
-						}else {
+						if(Clinica.getInstance().buscarPaciente(txtCedula.getText()) != null) {
+							Date fechaActual = new Date();
+							String aux = TxtFechaCita.getText() + " " + txtHoraCita.getText();
+							SimpleDateFormat formato = new SimpleDateFormat("yy/MM/dd");
+							Date fechaNacimiento = (Date) spnNacimiento.getValue();
 							
-								if(espaciosVacios()) {
-									JOptionPane.showMessageDialog(null, "Favor completar todos los datos requeridos.", "Error", JOptionPane.ERROR_MESSAGE);
-								}else {
-									
-									if( dataFormateada.compareTo(fechaActual)< 0) {
-										JOptionPane.showMessageDialog(null, "Favor introducir una fecha valida.", "Error", JOptionPane.ERROR_MESSAGE);
+							
+						try {
+							Date dataFormateada = formato.parse(TxtFechaCita.getText());
+							
+							if(Clinica.getInstance().citaByCedula(txtCedula.getText().toString(), aux) != null ) {
+								JOptionPane.showMessageDialog(null, "Ya este paciente tiene un cita en esa fecha", "Error", JOptionPane.ERROR_MESSAGE);
+							}else {
+								
+									if(espaciosVacios()) {
+										JOptionPane.showMessageDialog(null, "Favor completar todos los datos requeridos.", "Error", JOptionPane.ERROR_MESSAGE);
 									}else {
-									
-										if(fechaNacimiento.compareTo(fechaActual) > 0 ) {
-											JOptionPane.showMessageDialog(null, "Favor introducir una fecha de nacimiento valida.", "Error", JOptionPane.ERROR_MESSAGE);
-											spnNacimiento.setValue(null);
+										
+										if( dataFormateada.compareTo(fechaActual)< 0) {
+											JOptionPane.showMessageDialog(null, "Favor introducir una fecha valida.", "Error", JOptionPane.ERROR_MESSAGE);
 										}else {
-											
-											if(selectedMedico == null) {
-												JOptionPane.showMessageDialog(null, "Favor seleccionar un medico.", "Error", JOptionPane.ERROR_MESSAGE);
-											}else if(selectedMedico != null && Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null) {
-												CitaMedica cita;
-												try {
-													cita = new CitaMedica(txtCodigoCita.getText().toString(),aux,
-															selectedMedico, Clinica.getInstance().buscarPaciente(txtCedula.getText().toString()), "pendiente");
+										
+											if(fechaNacimiento.compareTo(fechaActual) > 0 ) {
+												JOptionPane.showMessageDialog(null, "Favor introducir una fecha de nacimiento valida.", "Error", JOptionPane.ERROR_MESSAGE);
+												spnNacimiento.setValue(null);
+											}else {
+												
+												if(selectedMedico == null) {
+													JOptionPane.showMessageDialog(null, "Favor seleccionar un medico.", "Error", JOptionPane.ERROR_MESSAGE);
+												}else if(selectedMedico != null && Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())!= null) {
+													CitaMedica cita;
+													try {
+														cita = new CitaMedica(txtCodigoCita.getText().toString(),aux,
+																selectedMedico, Clinica.getInstance().buscarPaciente(txtCedula.getText().toString()), "pendiente");
+														
+														if(Clinica.getInstance().insertarCita(cita)) {
+															JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
+															vacearEspacios();
+														}
+													} catch (SQLException e1) {
+														// TODO Auto-generated catch block
+														e1.printStackTrace();
+													}
+												}else if (selectedMedico != null && Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())== null) {
+													
+													Paciente paciente = null;
+													
+													if(cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("Masculino")) {
+														 paciente = new Paciente(txtCedula.getText().toString(), txtNombre.getText().toString(),
+																"M", txtNacimiento.getText(), Clinica.getInstance().buscarCodByCiudad(cbxCiudad.getSelectedItem().toString())
+																, txtTelefono.getText().toString());
+														 
+													}else if (cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("Femenino")) {
+														 paciente = new Paciente(txtCedula.getText().toString(), txtNombre.getText().toString(),
+																"F", txtNacimiento.getText(),Clinica.getInstance().buscarCodByCiudad(cbxCiudad.getSelectedItem().toString()), txtTelefono.getText().toString());
+													
+													}
+													
+													CitaMedica	cita = new CitaMedica(txtCodigoCita.getText().toString(),aux,
+															selectedMedico, paciente, "pendiente");
 													
 													if(Clinica.getInstance().insertarCita(cita)) {
 														JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
 														vacearEspacios();
 													}
-												} catch (SQLException e1) {
-													// TODO Auto-generated catch block
-													e1.printStackTrace();
-												}
-											}else if (selectedMedico != null && Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())== null) {
-												
-												Paciente paciente = null;
-												
-												if(cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("Masculino")) {
-													 paciente = new Paciente(txtCedula.getText().toString(), txtNombre.getText().toString(),
-															"M", txtNacimiento.getText(), Clinica.getInstance().buscarCodByCiudad(txtDireccion.getText())
-															
-															
-															, txtTelefono.getText().toString());
-												}else if (cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("Femenino")) {
-													 paciente = new Paciente(txtCedula.getText().toString(), txtNombre.getText().toString(),
-															"F", txtNacimiento.getText(), Clinica.getInstance().buscarCodByCiudad(txtDireccion.getText()), txtTelefono.getText().toString());
-												
-												}
-												
-												CitaMedica	cita = new CitaMedica(txtCodigoCita.getText().toString(),aux,
-														selectedMedico, paciente, "pendiente");
-												
-												if(Clinica.getInstance().insertarCita(cita)) {
-													JOptionPane.showMessageDialog(null, "Registro Exitoso", "Exito", JOptionPane.INFORMATION_MESSAGE);
-													vacearEspacios();
+													
 												}
 												
 											}
-											
 										}
 									}
 								}
-							}
-					} catch (HeadlessException | SQLException | ParseException e1) {
+						} catch (HeadlessException | SQLException | ParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						}
+					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					}
-				});
+				}});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
@@ -550,7 +614,7 @@ public class RegistroCita extends JDialog {
 		
 		if(txtCedula.getText().toString().equalsIgnoreCase("") || txtNombre.getText().toString().equalsIgnoreCase("") 
 				|| txtTelefono.getText().toString().equalsIgnoreCase("") ||
-				txtDireccion.getText().toString().equalsIgnoreCase("") || txtCodigoCita.getText().toString().equalsIgnoreCase("") /*|| selectedMedico==null */
+			     txtCodigoCita.getText().toString().equalsIgnoreCase("") /*|| selectedMedico==null */
 				|| cbxSexoPersona.getSelectedItem().toString().equalsIgnoreCase("<<Seleccione>>") || spnNacimiento.getValue().equals(hoy) 
 				|| txtHoraCita.getText().equalsIgnoreCase("")|| TxtFechaCita.getText().equalsIgnoreCase("")) {
 			
@@ -577,23 +641,25 @@ public class RegistroCita extends JDialog {
 		
 	}
 	
-	public void cargarCiudad(String cod_provincia) throws SQLException {
+	public void cargarCiudad(int cod_provincia) throws SQLException {
 		
 		DefaultComboBoxModel model = new DefaultComboBoxModel();
-		cbxProvincia.setModel( model);
+		cbxCiudad.setModel( model);
 		
-		String query = "select * from provincia";
+		String query = "select * from ciudad inner join provincia "
+				+ "on ciudad.cod_provincia = provincia.cod_provincia and provincia.cod_provincia = ?";
 		PreparedStatement stament = ConexionSQL.getInstance().getConexion().prepareStatement(query);
+		stament.setInt(1, cod_provincia);
 		ResultSet resul = stament.executeQuery();
 		
 		while(resul.next()) {
 			
-			model.addElement(resul.getString("nombre_provincia"));
+			model.addElement(resul.getString("nombre_ciudad"));
 			
 		}
 		
 		stament.close();
-		resul.close()
+		resul.close();
 		
 	}
 	
@@ -616,6 +682,7 @@ public class RegistroCita extends JDialog {
 		
 		stament.close();
 		resul.close();
+		
 		
 	}
 }
