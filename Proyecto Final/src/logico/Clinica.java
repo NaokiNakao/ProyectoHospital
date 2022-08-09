@@ -836,16 +836,17 @@ public class Clinica {
 	/*NECESARIA MISAEL*/
 	public CitaMedica citaByCedula(String cedula, Date fecha) throws SQLException {
 		CitaMedica cita = null;
+		System.out.println(fecha.toString());
 		
 		String query = "select * from cita_medica where ced_paciente = ? and fecha_hora_cita = ?";
 		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
 		stament.setString(1, cedula);
-		stament.setString(2, fecha.toString());
+		stament.setString(2, formatoFechaHora(fecha.toString()));
 		ResultSet resul = stament.executeQuery();
 		
 		while(resul.next()) {
 			
-			cita = new CitaMedica(resul.getString("cod_cita"), fecha.toString(), buscarMedicoByCodigo(resul.getString("cod_medico")),
+			cita = new CitaMedica(resul.getString("cod_cita"), fecha, buscarMedicoByCodigo(resul.getString("cod_medico")),
 					buscarPaciente(cedula), "pendiente");
 		}
 		
@@ -1268,7 +1269,7 @@ public class Clinica {
 		while(resul.next()) {
 			
 			consul = new Consulta(cod, resul.getDate("fecha_consulta"), resul.getString("sintomas"), resul.getString("diagnostico")
-					, buscarMedicoByCodigo(resul.getString("cod_medico")), resul.getDate("fecha_consulta"))
+					, buscarMedicoByCodigo(resul.getString("cod_medico")), resul.getDate("fecha_consulta"));
 		}
 		return consul;
 	}

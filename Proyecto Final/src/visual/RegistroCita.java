@@ -247,6 +247,7 @@ public class RegistroCita extends JDialog {
 					
 					Date dateAux = (Date) spnFechaCita.getValue();
 					Date fechaActual = new Date();
+					System.out.println(spnFechaCita.getValue());
 					
 					try {
 						if(Clinica.getInstance().citaByCedula(txtCedula.getText(), dateAux) != null) {
@@ -314,7 +315,7 @@ public class RegistroCita extends JDialog {
 			
 			spnFechaCita = new JSpinner();
 			spnFechaCita.setModel(new SpinnerDateModel(date2, null, null, Calendar.DAY_OF_MONTH));
-			JSpinner.DateEditor FechaCita = new JSpinner.DateEditor(spnFechaCita,"yyyy-MM-dd hh:mm:ss");
+			JSpinner.DateEditor FechaCita = new JSpinner.DateEditor(spnFechaCita,"yyyy-MM-dd'T'hh:mm:ss");
 			spnFechaCita.setEditor(FechaCita);
 			spnFechaCita.setBounds(327, 31, 165, 23);
 			panelDatosConsulta.add(spnFechaCita);
