@@ -1284,6 +1284,7 @@ public class Clinica {
 		
 		String query = "select * from historia_clinica where ced_paciente = ?";
 		PreparedStatement stament = ConexionSQL.getConexion().prepareStatement(query);
+		stament.setString(1, cedula);
 		ResultSet resul = stament.executeQuery();
 		
 		while(resul.next()) {
