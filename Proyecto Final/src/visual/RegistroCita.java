@@ -518,7 +518,7 @@ public class RegistroCita extends JDialog {
 														// TODO Auto-generated catch block
 														e1.printStackTrace();
 													}
-												}else if (selectedMedico != null && Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())== null) {
+												}else if (Clinica.getInstance().buscarPaciente(txtCedula.getText().toString())== null) {
 													
 													Paciente paciente = null;
 													
@@ -532,6 +532,9 @@ public class RegistroCita extends JDialog {
 																"F", txtNacimiento.getText(),Clinica.getInstance().buscarCodByCiudad(cbxCiudad.getSelectedItem().toString()), txtTelefono.getText().toString());
 													
 													}
+													
+													
+													Clinica.getInstance().insertarPaciente(paciente);
 													
 													CitaMedica	cita = new CitaMedica(txtCodigoCita.getText().toString(),aux,
 															selectedMedico, paciente, "pendiente");
@@ -550,7 +553,7 @@ public class RegistroCita extends JDialog {
 						} catch (HeadlessException | SQLException | ParseException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
-						}
+						}	
 						}
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
